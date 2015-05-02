@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Bussiness : MonoBehaviour {
+public abstract class Business : MonoBehaviour {
 
 	private Inventory myInventory;
 

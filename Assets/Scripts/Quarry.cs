@@ -7,6 +7,6 @@ using System.Collections;
 public abstract class Quarry : Building {
 
 	/** The resource this quarry produces */
-	public readonly int resourceProduced;
+	public Resource resourceProduced;
 
 }
