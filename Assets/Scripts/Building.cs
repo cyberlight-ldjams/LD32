@@ -7,9 +7,16 @@ using System.Collections;
 public abstract class Building : MonoBehaviour {
 
 	/** Who owns this building */
-	public int lot; //TODO: change int to lot
+	public Lot lot;
+
+	/** The building game object */
+	public GameObject building;
 
 	public void Demolish() {
 		Destroy (this.gameObject);
+	}
+
+	public void Make(Vector3 location) {
+		Instantiate (building, location, Quaternion.identity);
 	}
 }
