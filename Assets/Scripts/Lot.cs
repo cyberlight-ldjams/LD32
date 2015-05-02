@@ -34,6 +34,10 @@ public class Lot : MonoBehaviour {
 		return newBuilding;
 	}
 
+	public void placeLotPlane(Vector3 loc) {
+		LotPlane_ = (GameObject) Instantiate(LotPlane, loc, Quaternion.identity);
+	}
+
 	public void setLotPlane(GameObject lp) {
 		LotPlane_ = lp;
 		LotPlane = lp;
