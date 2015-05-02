@@ -47,6 +47,7 @@ public class Inventory : MonoBehaviour {
 				return i.quantity;
 			}
 		}
+		return 0.0;
 	}
 
 	public void setAmountOfAt(Resource resource, Site site, double amount) {
@@ -57,7 +58,7 @@ public class Inventory : MonoBehaviour {
 			}
 		}
 
-		return 0.0;
+
 
 
 
