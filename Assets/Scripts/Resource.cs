@@ -1,4 +1,4 @@
 public enum Resource
 {
-	Clay, Pottery
+	Empty=-1, Clay, Pottery
 };

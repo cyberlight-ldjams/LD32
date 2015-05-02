@@ -2,14 +2,12 @@
 using System.Collections;
 
 public class Lot : MonoBehaviour {
-	public Site Site { get; private set; }
+	public Site Site { get; set; }
 	public Building Building { get; private set; }
 	public Business Owner { get; set; }
 	public Resource? Resource { get; private set; }
-
-	public Lot (Site site) {
-		Site = site;
-	}
+	public GameObject LotPlane { get; set; }
+	public Vector3 Location { get; set; }
 
 	public void DestroyBuilding () {
 		if (Building != null) {
@@ -24,15 +22,5 @@ public class Lot : MonoBehaviour {
 		BuildingT newBuilding = new BuildingT ();
 		Building = newBuilding;
 		return newBuilding;
-	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
