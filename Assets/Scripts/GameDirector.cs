@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour {
 
 	public int lotsPerSite;
 
 	public GameObject selectedObject;
+
+	public GameObject player;
+
+	public List<GameObject> enemyAI;
 	
 	public Site site;
 
@@ -30,6 +35,19 @@ public class GameDirector : MonoBehaviour {
 			//Lot l = selectedObject.GetComponent<Lot>();
 			//l.NewBuilding(b);
 			//site.Lots[0].NewBuilding(b);
+		}
+	}
+
+	private void randomAssign() {
+
+
+		foreach(Lot l in site.Lots) {
+			int winner = Random.Range (0, 1);
+			if(winner == 0) {
+				l.Owner = player;
+			} else {
+				l.Owner = enemyAI[0];
+			}
 		}
 	}
 
