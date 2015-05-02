@@ -57,6 +57,8 @@ public class Inventory : MonoBehaviour {
 			}
 		}
 
+		return 0.0;
+
 
 
 	}
