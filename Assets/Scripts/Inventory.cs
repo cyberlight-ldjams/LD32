@@ -13,21 +13,8 @@ public class Inventory : MonoBehaviour {
 	/** contains all valid resource items */
 	private List<Item> items; 
 
-	public Inventory(double genericCurrency) {
-		this (genericCurrency, null);
-	}
 	/** Create a new inventory (only needed by business class) */
-	public Inventory(List<double> items) {
-		this (0.0, items);
-	}
-
-	/** Create a new inventory (only needed by business class) */
-	public Inventory() {
-		this (0.0, null);
-		}
-
-	/** Create a new inventory (only needed by business class) */
-	public Inventory(double genericCurrency, List<double> items) {
+	public Inventory(double genericCurrency, List<Item> items) {
 
 		this.genericCurrency = genericCurrency;
 		this.items = items;
@@ -39,7 +26,19 @@ public class Inventory : MonoBehaviour {
 	 */
 	public List<Item> getInventory() {
 			return items;
-		}
+	}
+
+	public double getBaseCurrency() {
+		return genericCurrency;
+	}
+
+	/** 
+	 * Modifies the currency currently held by the business
+	 * @param double change the currency to add (can be negative to subtrack funds)
+	 */
+	public void addBaseCurrency(double change) {
+		genericCurrency = genericCurrency + change;
+	}
 
 	/** Container object for inventory items */
 	public class Item {
