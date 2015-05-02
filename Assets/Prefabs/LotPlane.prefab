@@ -85,6 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

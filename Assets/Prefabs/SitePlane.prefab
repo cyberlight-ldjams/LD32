@@ -17,7 +17,7 @@ GameObject:
   - 114: {fileID: 11464794}
   - 114: {fileID: 11407330}
   - 114: {fileID: 11479276}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SitePlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!114 &11416492
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -101,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!114 &11441124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!114 &11464794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -123,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!114 &11468296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,6 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!114 &11479276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

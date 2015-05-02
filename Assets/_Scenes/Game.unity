@@ -266,6 +266,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lotsPerSite: 6
+  selectedObject: {fileID: 0}
+  player: {fileID: 0}
+  enemyAI: []
   site: {fileID: 420523482}
 --- !u!4 &420523484
 Transform:
@@ -290,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialLotPlane: {fileID: 108298, guid: 285f9b17dc3eacc47923b9d3384ddf2f, type: 2}
 --- !u!114 &420523486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,10 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d013285f4adbbe4fbc51aa2683494fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lot: {fileID: 420523485}
+  lot: {fileID: 0}
   building: {fileID: 100818, guid: 54606507d7b2cb04ea4fc49f190b7630, type: 2}
-  resourceUsed: 0
-  goodProduced: 1
 --- !u!1 &1051612612
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +318,7 @@ GameObject:
   - 33: {fileID: 1051612615}
   - 64: {fileID: 1051612614}
   - 23: {fileID: 1051612613}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BackgroundPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +375,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1051612612}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.00999999978, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}

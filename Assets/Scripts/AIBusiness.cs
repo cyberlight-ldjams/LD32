@@ -15,6 +15,11 @@ public class AIBusiness : MonoBehaviour {
 
 	public const int FOREST_AFFINITY = 5;
 
+
+	public AIBusiness() {
+
+	}
+
 	// Use this for initialization
 	void Start () {
 	

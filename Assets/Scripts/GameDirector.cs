@@ -23,6 +23,8 @@ public class GameDirector : MonoBehaviour {
 		for (int i = 0; i < lotsPerSite; i++) {
 			site.NewLot();
 		}
+		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
+		selection.SetActive(false);
 	}
 
 	public void MakeBuilding(Building b) {
@@ -34,15 +36,10 @@ public class GameDirector : MonoBehaviour {
 					break;
 				}
 			}
-			//Lot l = selectedObject.GetComponent<Lot>();
-			//l.NewBuilding(b);
-			//site.Lots[0].NewBuilding(b);
 		}
 	}
 
 	private void randomAssign() {
-
-
 		foreach(Lot l in site.Lots) {
 			int winner = Random.Range (0, 1);
 			if(winner == 0) {
@@ -62,11 +59,7 @@ public class GameDirector : MonoBehaviour {
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
-			if (selection != null) {
-				Object.Destroy(selection);
-			}
-			GameObject go = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
-			selection = Instantiate(go);
+			selection.SetActive(true);
 			selection.layer = 2;
 			Renderer r = selection.GetComponent<Renderer>();
 			r.material.color = Color.red;
