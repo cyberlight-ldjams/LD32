@@ -4,8 +4,8 @@ using System.Collections;
 public class PotteryWorkshop : Workshop {
 
 	public PotteryWorkshop () {
-		resourceUsed = Resources.Clay;
-		goodProduced = Resources.Pottery;
+		resourceUsed = Resource.Clay;
+		goodProduced = Resource.Pottery;
 	}
 
 	void Start () {
