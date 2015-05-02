@@ -321,7 +321,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d34c82f19a74f1e9ef8eb16265c799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myInventory: {fileID: 0}
 --- !u!1 &709637721
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,8 +348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5298d348aa33bb4894ed03d6baffa4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clayText: {fileID: 0}
-  potteryText: {fileID: 0}
+  clayText: {fileID: 1136454909}
+  potteryText: {fileID: 953962905}
   business: {fileID: 0}
   currentSite: {fileID: 0}
 --- !u!4 &709637723
