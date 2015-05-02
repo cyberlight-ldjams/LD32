@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerBusiness : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
+public class PlayerBusiness : Business {
 	
 	// Update is called once per frame
 	void Update () {

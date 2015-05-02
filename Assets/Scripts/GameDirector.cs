@@ -14,10 +14,17 @@ public class GameDirector : MonoBehaviour {
 	
 	public Site site;
 
+	public PlayerBusiness playerBusiness;
+
+	public HeadsUpDisplay headsUpDisplay;
+
 	private GameObject selection;
 
 	// Use this for initialization
 	void Start () {
+		headsUpDisplay.currentSite = site;
+		headsUpDisplay.business = playerBusiness;
+
 		GameObject go = (GameObject)Instantiate (site.SitePlane);
 		site.SitePlane = go;
 		for (int i = 0; i < lotsPerSite; i++) {

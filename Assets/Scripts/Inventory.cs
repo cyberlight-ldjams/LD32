@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Inventory : MonoBehaviour {
+public class Inventory {
 
 
 
