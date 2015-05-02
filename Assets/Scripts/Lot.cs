@@ -8,7 +8,8 @@ public class Lot : MonoBehaviour {
 	private GameObject oldBuilding;
 	public Business Owner { get; set; }
 	public Resource? Resource { get; private set; }
-	public GameObject LotPlane { get; set; }
+	public GameObject LotPlane;
+	private GameObject LotPlane_;
 	public Vector3 Location { get; set; }
 
 	public void DemolishBuilding() {
@@ -31,5 +32,14 @@ public class Lot : MonoBehaviour {
 		building = (GameObject) Instantiate(newBuilding.building, LotPlane.transform.position, LotPlane.transform.rotation);
 		DestroyBuilding ();
 		return newBuilding;
+	}
+
+	public void setLotPlane(GameObject lp) {
+		LotPlane_ = lp;
+		LotPlane = lp;
+	}
+
+	public GameObject getLotPlane() {
+		return LotPlane_;
 	}
 }

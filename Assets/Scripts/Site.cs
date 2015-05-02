@@ -24,8 +24,7 @@ public class Site : MonoBehaviour {
 			current.y++;
 		}
 		
-		GameObject go = (GameObject) Instantiate(LotPlane, new Vector3(current.x * 10.1f,0.1f,current.y * 10.1f), SitePlane.transform.rotation);
-		newLot.LotPlane = go;
+		Instantiate(LotPlane, new Vector3(current.x * 10.1f,0.1f,current.y * 10.1f), SitePlane.transform.rotation);
 		current.x++;
 		return newLot;
 	}

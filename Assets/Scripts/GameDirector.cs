@@ -14,6 +14,8 @@ public class GameDirector : MonoBehaviour {
 	
 	public Site site;
 
+	private GameObject selection;
+
 	// Use this for initialization
 	void Start () {
 		GameObject go = (GameObject)Instantiate (site.SitePlane);
@@ -44,9 +46,9 @@ public class GameDirector : MonoBehaviour {
 		foreach(Lot l in site.Lots) {
 			int winner = Random.Range (0, 1);
 			if(winner == 0) {
-				l.Owner = player;
+				//l.Owner = player;
 			} else {
-				l.Owner = enemyAI[0];
+				//sl.Owner = enemyAI[0];
 			}
 		}
 	}
@@ -60,6 +62,17 @@ public class GameDirector : MonoBehaviour {
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
+			if (selection != null) {
+				Object.Destroy(selection);
+			}
+			GameObject go = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
+			selection = Instantiate(go);
+			selection.layer = 2;
+			Renderer r = selection.GetComponent<Renderer>();
+			r.material.color = Color.red;
+			selection.transform.position = 
+				new Vector3(hit.collider.gameObject.transform.position.x, hit.collider.gameObject.transform.position.y - 0.01f, hit.collider.gameObject.transform.position.z);
+			selection.transform.localScale = new Vector3(hit.collider.gameObject.transform.localScale.x + 0.02f, 1, hit.collider.gameObject.transform.localScale.z + 0.02f);
 			return hit.collider.gameObject;
 		}
 	}
