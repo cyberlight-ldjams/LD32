@@ -20,6 +20,13 @@ public class AIBusiness : MonoBehaviour {
 
 	}
 
+	/**
+	 * Method called on the failure of an AI business
+	 */
+	public void Failure() {
+
+	}
+
 	// Use this for initialization
 	void Start () {
 	
