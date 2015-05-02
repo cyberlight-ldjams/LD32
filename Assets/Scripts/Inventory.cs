@@ -24,13 +24,14 @@ public class Inventory : MonoBehaviour {
 	/** get the items in your inventory
 	 * @return a list of <Item>s
 	 */
-	public List<Item> getInventory() {
+	private List<Item> getInventory() {
 			return items;
 	}
 
 	public double getBaseCurrency() {
 		return genericCurrency;
 	}
+
 
 	/** 
 	 * Modifies the currency currently held by the business
@@ -40,10 +41,30 @@ public class Inventory : MonoBehaviour {
 		genericCurrency = genericCurrency + change;
 	}
 
+	public double getAmountOfAt(Resource resource, Site site) {
+		foreach(Item i in items) {
+			if(i.itemType.Equals(resource)) {
+				return i.quantity;
+			}
+		}
+	}
+
+	public void setAmountOfAt(Resource resource, Site site, double amount) {
+		foreach (Item i in items) {
+			if(i.itemType.Equals(resource) && i.location.Equals(site)) {
+				i.quantity = amount;
+				break;
+			}
+		}
+
+
+
+	}
+
 	/** Container object for inventory items */
 	public class Item {
 
-			public int itemType { get; private set; }
+			public Resource itemType { get; private set; }
 
 			public double quantity { get; set; }
 
@@ -54,7 +75,7 @@ public class Inventory : MonoBehaviour {
 			 * @param double quantity how much of the item we have here
 			 * @param Site the location the inventory item is in
 			 */
-			public Item (int itemType, double quantity, Site site) {
+			public Item (Resource itemType, double quantity, Site site) {
 				this.itemType = itemType;
 				this.quantity = quantity;
 				location = site;
