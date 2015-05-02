@@ -8,9 +8,14 @@ public class Lot : MonoBehaviour {
 	private GameObject oldBuilding;
 	public Business Owner { get; set; }
 	public Resource? Resource { get; private set; }
-	public GameObject LotPlane;
+	public GameObject InitialLotPlane;
+	public GameObject LotPlane { get { return getLotPlane (); } set { setLotPlane (value); } }
 	private GameObject LotPlane_;
 	public Vector3 Location { get; set; }
+
+	public Lot() {
+		LotPlane = InitialLotPlane;
+	}
 
 	public void DemolishBuilding() {
 		oldBuilding = building;
@@ -34,13 +39,8 @@ public class Lot : MonoBehaviour {
 		return newBuilding;
 	}
 
-	public void placeLotPlane(Vector3 loc) {
-		LotPlane_ = (GameObject) Instantiate(LotPlane, loc, Quaternion.identity);
-	}
-
 	public void setLotPlane(GameObject lp) {
 		LotPlane_ = lp;
-		LotPlane = lp;
 	}
 
 	public GameObject getLotPlane() {

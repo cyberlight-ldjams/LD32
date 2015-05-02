@@ -40,10 +40,6 @@ public class GameDirector : MonoBehaviour {
 		}
 	}
 
-	public Lot findLot() {
-
-	}
-
 	private void randomAssign() {
 
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Site : MonoBehaviour {
 	public GameObject SitePlane;
+	public GameObject LotPlane;
 	public List<Lot> Lots { get; private set; }
 	public int rows = 3;
 	public int cols = 2;
@@ -22,8 +23,7 @@ public class Site : MonoBehaviour {
 			current.x = -rows/2.0f + 0.5f;
 			current.y++;
 		}
-		
-		newLot.placeLotPlane (new Vector3 (current.x, 0.1f, current.y));
+		newLot.LotPlane = (GameObject) Instantiate (this.LotPlane, new Vector3 (current.x * 10.1f, 0.1f, current.y * 10.1f), this.gameObject.transform.rotation);
 		current.x++;
 		return newLot;
 	}
