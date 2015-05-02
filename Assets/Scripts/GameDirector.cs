@@ -19,7 +19,18 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	public void MakeBuilding(Building b) {
-		site.Lots[0].NewBuilding (b);
+		print (selectedObject);
+		if (selectedObject.name.Contains("LotPlane")) {
+			foreach (Lot l in site.Lots) {
+				if (selectedObject == l.LotPlane) {
+					l.NewBuilding(b);
+					break;
+				}
+			}
+			//Lot l = selectedObject.GetComponent<Lot>();
+			//l.NewBuilding(b);
+			//site.Lots[0].NewBuilding(b);
+		}
 	}
 
 	private GameObject calculateSelectedObject() {
@@ -28,7 +39,11 @@ public class GameDirector : MonoBehaviour {
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit);
 		Debug.Log ("Hit at: " + hit.point);
-		return hit.collider.gameObject;
+		if (hit.collider == null) {
+			return selectedObject;
+		} else {
+			return hit.collider.gameObject;
+		}
 	}
 	// Update is called once per frame
 	void Update () {

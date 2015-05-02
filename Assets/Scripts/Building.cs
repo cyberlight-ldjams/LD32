@@ -13,10 +13,10 @@ public abstract class Building : MonoBehaviour {
 	public GameObject building;
 
 	public void Demolish() {
-		Destroy (this.gameObject);
+		Object.Destroy (this);
 	}
 
 	public void Make(Vector3 location) {
-		Instantiate (building, location, Quaternion.identity);
+		building = (GameObject) Instantiate (building, location, Quaternion.identity);
 	}
 }
