@@ -38,19 +38,6 @@ public class GameDirector : MonoBehaviour {
 		}
 	}
 
-	private void randomAssign() {
-
-
-		foreach(Lot l in site.Lots) {
-			int winner = Random.Range (0, 1);
-			if(winner == 0) {
-				l.Owner = player;
-			} else {
-				l.Owner = enemyAI[0];
-			}
-		}
-	}
-
 	private GameObject calculateSelectedObject() {
 		Debug.Log ("Click");
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
