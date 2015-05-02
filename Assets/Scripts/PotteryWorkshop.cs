@@ -2,9 +2,6 @@
 using System.Collections;
 
 public class PotteryWorkshop : Workshop {
-
-	public PotteryWorkshop () {
-		resourceUsed = Resource.Clay;
-		goodProduced = Resource.Pottery;
-	}	
+	public override Resource resourceUsed { get { return Resource.Clay; } }
+	public override Resource goodProduced { get { return Resource.Pottery; } }
 }
