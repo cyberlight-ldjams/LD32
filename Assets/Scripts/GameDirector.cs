@@ -4,7 +4,7 @@ using System.Collections;
 public class GameDirector : MonoBehaviour {
 
 	public int lotsPerSite;
-
+	
 	public Site site;
 
 	// Use this for initialization
@@ -13,6 +13,10 @@ public class GameDirector : MonoBehaviour {
 		for (int i = 0; i < lotsPerSite; i++) {
 			site.NewLot();
 		}
+	}
+
+	public void MakeBuilding(Building b) {
+		site.Lots[0].NewBuilding (b);
 	}
 	
 	// Update is called once per frame

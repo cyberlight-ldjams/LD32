@@ -16,11 +16,11 @@ public class Lot : MonoBehaviour {
 		}
 	}
 
-	public BuildingT NewBuilding<BuildingT> () where BuildingT : Building, new() {
+	public BuildingT NewBuilding<BuildingT> (BuildingT newBuilding) where BuildingT : Building {
 		DestroyBuilding ();
 
-		BuildingT newBuilding = new BuildingT ();
 		Building = newBuilding;
+		Instantiate(newBuilding.building);
 		return newBuilding;
 	}
 }

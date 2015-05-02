@@ -16,7 +16,7 @@ public class Site : MonoBehaviour {
 	}
 
 	public Lot NewLot() {
-		Lot newLot = this.LotPlane.AddComponent<Lot>();
+		Lot newLot = this.gameObject.AddComponent<Lot>();
 		newLot.Site = this;
 		Lots.Add (newLot);
 		if (current.x > (rows/2.0f)) {
