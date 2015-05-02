@@ -20,7 +20,8 @@ public class Lot : MonoBehaviour {
 		DestroyBuilding ();
 
 		Building = newBuilding;
-		Instantiate(newBuilding.building, LotPlane.transform.localPosition, LotPlane.transform.localRotation);
+		Instantiate(newBuilding.building, LotPlane.transform.position, LotPlane.transform.rotation);
+		Debug.Log (LotPlane.transform.position);
 		return newBuilding;
 	}
 }

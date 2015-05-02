@@ -16,7 +16,7 @@ public class Site : MonoBehaviour {
 	}
 
 	public Lot NewLot() {
-		Lot newLot = this.gameObject.AddComponent<Lot>();
+		Lot newLot = SitePlane.AddComponent<Lot>();
 		newLot.Site = this;
 		Lots.Add (newLot);
 		if (current.x > (rows/2.0f)) {
@@ -24,9 +24,8 @@ public class Site : MonoBehaviour {
 			current.y++;
 		}
 		
-		Instantiate(LotPlane, new Vector3(current.x * 10.1f,0.1f,current.y * 10.1f), Quaternion.identity);
-		newLot.LotPlane = LotPlane;
-		print ("Make!");
+		GameObject go = (GameObject) Instantiate(LotPlane, new Vector3(current.x * 10.1f,0.1f,current.y * 10.1f), SitePlane.transform.rotation);
+		newLot.LotPlane = go;
 		current.x++;
 		return newLot;
 	}
