@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2349966}
   - 114: {fileID: 11474526}
   m_Layer: 0
-  m_Name: StoneQuarry
+  m_Name: ClayPit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 138290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72295870273d09c43818d85c573b7d3c, type: 3}
+  m_Script: {fileID: 11500000, guid: c00b16f7d82d03c4e8b2ddf6e6c79855, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lot: {fileID: 0}

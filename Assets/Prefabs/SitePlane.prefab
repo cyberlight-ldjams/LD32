@@ -11,12 +11,6 @@ GameObject:
   - 33: {fileID: 3338216}
   - 64: {fileID: 6452014}
   - 23: {fileID: 2320410}
-  - 114: {fileID: 11468296}
-  - 114: {fileID: 11441124}
-  - 114: {fileID: 11416492}
-  - 114: {fileID: 11464794}
-  - 114: {fileID: 11407330}
-  - 114: {fileID: 11479276}
   m_Layer: 2
   m_Name: SitePlane
   m_TagString: Untagged
@@ -79,78 +73,6 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11407330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
---- !u!114 &11416492
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
---- !u!114 &11441124
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
---- !u!114 &11464794
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
---- !u!114 &11468296
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
---- !u!114 &11479276
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 118660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
