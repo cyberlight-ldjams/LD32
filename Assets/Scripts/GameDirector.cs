@@ -39,6 +39,19 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 	}
 
+	private void platformSpecific() {
+		switch (Application.platform) {
+		case RuntimePlatform.OSXPlayer:
+		case RuntimePlatform.WindowsPlayer:
+		case RuntimePlatform.LinuxPlayer:
+			if (Input.GetKeyDown (KeyCode.Escape)) {
+				Application.Quit ();
+			}
+			break;
+		}
+
+	}
+
 	public void InstallBuilding (Building b) {
 		Lot.InstallBuilding (selectedObject, site, b);
 	}
@@ -94,6 +107,8 @@ public class GameDirector : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		platformSpecific ();
+
 		if (Input.GetMouseButtonDown (0)) {
 			selectedObject = calculateSelectedObject ();
 		}
