@@ -15,7 +15,7 @@ public class Lot {
 	public Lot(Site site, Business owner, Vector3 position, Quaternion rotation) {
 		Site = site;
 		Owner = owner;
-		LotPlane = (GameObject) Site.Instantiate (Resources.Load ("LotPlane"), position, rotation);
+		LotPlane = (GameObject) Object.Instantiate (Resources.Load ("LotPlane"), position, rotation);
 	}
 
 	public void DemolishBuilding() {

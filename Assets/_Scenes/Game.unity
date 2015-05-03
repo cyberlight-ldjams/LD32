@@ -229,7 +229,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 420523484}
   - 114: {fileID: 420523483}
-  - 114: {fileID: 420523482}
   - 114: {fileID: 420523486}
   - 114: {fileID: 420523487}
   m_Layer: 0
@@ -239,21 +238,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &420523482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 420523481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e990b1ffadebdc244b6a00f16ff9fe0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SitePlane: {fileID: 118660, guid: 498f9a66ec068b34683cc940590f206b, type: 2}
-  LotPlane: {fileID: 108298, guid: 285f9b17dc3eacc47923b9d3384ddf2f, type: 2}
-  rows: 3
-  cols: 2
 --- !u!114 &420523483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +253,6 @@ MonoBehaviour:
   selectedObject: {fileID: 0}
   player: {fileID: 0}
   enemyAI: []
-  site: {fileID: 420523482}
   playerBusiness: {fileID: 420523487}
   headsUpDisplay: {fileID: 709637722}
 --- !u!4 &420523484
@@ -427,7 +410,6 @@ MonoBehaviour:
   clayText: {fileID: 1136454909}
   potteryText: {fileID: 953962905}
   business: {fileID: 0}
-  currentSite: {fileID: 0}
 --- !u!4 &709637723
 Transform:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class GameDirector : MonoBehaviour {
 
 	public List<GameObject> enemyAI;
 	
-	public Site site;
+	private Site site;
 
 	public PlayerBusiness playerBusiness;
 
@@ -22,14 +22,11 @@ public class GameDirector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		site = new Site(lotsPerSite, playerBusiness);
+
 		headsUpDisplay.currentSite = site;
 		headsUpDisplay.business = playerBusiness;
 
-		GameObject go = (GameObject)Instantiate (site.SitePlane);
-		site.SitePlane = go;
-		for (int i = 0; i < lotsPerSite; i++) {
-			site.NewLot(playerBusiness);
-		}
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.SetActive(false);
 	}
