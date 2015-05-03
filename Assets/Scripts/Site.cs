@@ -41,7 +41,7 @@ public class Site {
 			}
 
 				l.getLotPlane().transform.position = 
-					new Vector3 (current.x * 10.1f + SitePlane.transform.position.x, SitePlane.transform.position.y + 0.05f, 
+					new Vector3 (current.x * 10.1f + SitePlane.transform.position.x, SitePlane.transform.position.y + 1.0f, 
 					             current.y * 10.1f + SitePlane.transform.position.z);
 
 				current.x++;
