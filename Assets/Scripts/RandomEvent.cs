@@ -6,13 +6,13 @@ public class RandomEvent {
 
 	public int minTimer = 10;
 
-	private string title;
+	public string title{ get; private set; }
 
-	private string description;
+	public string description{ get; private set; }
 
-	private List<Option> options;
+	public List<Option> options{ get; private set; }
 
-	private float timer;
+	public float timer{ get; private set; }
 
 
 	public RandomEvent(string title, string desc, List<Option> options, float timeSec) {
@@ -26,18 +26,16 @@ public class RandomEvent {
 
 	}
 
-	public float getCountdownTimer() {
-		return timer;
-	}
+
 
 
 	public class Option {
 
-		private string optionText;
+		public string optionText{ get; private set; }
 
 		private List<Affect> affects;
 
-		private string afterText;
+		public string afterText{ get; private set; }
 
 		public Option (string opText, List<Affect> affects, string result) {
 			optionText = opText;
@@ -63,8 +61,6 @@ public class RandomEvent {
 
 			affectedBusiness = b;
 			affectedResource = r;
-			this.currencyChange = currencyChange;
-			this.resourceChange = resourceChange;
 			affectedSite = site;
 
 			int temp;

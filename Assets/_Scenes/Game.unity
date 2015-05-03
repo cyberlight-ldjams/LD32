@@ -841,7 +841,6 @@ MonoBehaviour:
   clayText: {fileID: 1136454909}
   potteryText: {fileID: 953962905}
   gameDirector: {fileID: 420523483}
-  dialog: {fileID: 1143281008}
 --- !u!4 &709637723
 Transform:
   m_ObjectHideFlags: 0
@@ -974,7 +973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &905439182
 RectTransform:
   m_ObjectHideFlags: 0

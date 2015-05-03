@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class RandomEventManager : MonoBehaviour {
+public class EventManager : MonoBehaviour {
 
 	private int timer;
 
@@ -16,40 +16,42 @@ public class RandomEventManager : MonoBehaviour {
 
 	private RandomEventPool choices;
 	private List<RandomEvent> used;
-	private RandomEvent current;
-	private float currentTime, endTime;
+	private RandomEvent currentEvent;
+	private float currentTime, randTime;
 
 	public GameObject dialog;
 	
-	private Button eventBtn1, eventBtn2, eventBtn3, eventBtn4;
+	private List<Button> buttons;
 	
 	private Slider eventTimerSlider;
 	private Text title, description, afterText;
 
 
-	public RandomEventManager(List<Business> businesses, List<Site> sites) {
+	public EventManager(List<Business> businesses, List<Site> sites) {
 		this.businesses = businesses;
 		this.sites = sites;
 	}
 
 	// Use this for initialization
 	void Start () {
+
+		//Initialize random event info
 		choices = RandomEventPool.get (businesses, sites);
 		used = new List<RandomEvent>();
 		Button [] b;
 		foreach(Button but in Object.FindObjectsOfType<Button>()) {
 			switch(but.name) {
 				case "REButton1":
-				eventBtn1 = but;
+				buttons[0] = but;
 				break;
 				case "REButton2":
-				eventBtn2 = but;
+				buttons[1] = but;
 				break;
 				case "REButton3":
-				eventBtn3 = but;
+				buttons[2] = but;
 				break;
 				case "REButton4":
-				eventBtn4 = but;
+				buttons[3] = but;
 				break;
 			}
 		}	
@@ -81,11 +83,27 @@ public class RandomEventManager : MonoBehaviour {
 
 		pick ();
 	}
+
+	private void randButton(List<RandomEvent.Option> o) {
+		int count = 0;
+		for (int i = 0; i < buttons.Count; i++) {
+			if (count <= i) {
+				
+			}
+		}
+	}
+
+
+
+	private void populateRandomEventUI() {
+		title.text = currentEvent.title;
+		description.text = currentEvent.description;
+	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (currentTime >= endTime) {
+		if (currentTime >= randTime) {
 			//TODO: Fire the random event... somehow.
 
 			pick ();
@@ -96,9 +114,9 @@ public class RandomEventManager : MonoBehaviour {
 
 	private void pick() {
 		timer = UnityEngine.Random.Range (minTimer, maxTimer);
-		current = choices [UnityEngine.Random.Range (0, choices.Count - 1)];
-		choices.Remove (current);
-		used.Add (current);
+		currentEvent = choices [UnityEngine.Random.Range (0, choices.Count - 1)];
+		choices.Remove (currentEvent);
+		used.Add (currentEvent);
 
 		if (choices.Count == 0) {
 			choices = RandomEventPool.get (businesses, sites);
@@ -106,7 +124,7 @@ public class RandomEventManager : MonoBehaviour {
 		}
 
 		currentTime = Time.time;
-		endTime = currentTime + (float)timer;
+		randTime = currentTime + (float)timer;
 	}
 
 
