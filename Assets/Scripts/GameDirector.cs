@@ -44,7 +44,7 @@ public class GameDirector : MonoBehaviour {
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
 		currentSite = homesite = new Site(lotsPerSite, playerBusiness);
-		playerBusiness.myInventory.SetEmployeesAt(homesite, 2);
+		playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
 
 		headsUpDisplay.currentSite = homesite;
 
