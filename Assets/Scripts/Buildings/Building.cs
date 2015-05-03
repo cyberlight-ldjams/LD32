@@ -19,6 +19,8 @@ public abstract class Building {
 
 	protected virtual string prefabName { get { return "Building"; } }
 
+	public int employees = 0;
+
 	public void Demolish() {
 		Object.Destroy (building);
 	}
