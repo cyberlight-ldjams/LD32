@@ -131,12 +131,8 @@ public class GameDirector : MonoBehaviour {
 		float x = s.SitePlane.transform.position.x;
 		float z = s.SitePlane.transform.position.z;
 
-<<<<<<< HEAD
-		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z);
 		sidebar.SetActive (true);
-=======
 		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z + -5.0f);
->>>>>>> d8b2141f0256abfaf9a3afee604ffb26bd485d45
 
 		setSiteLayers(IGNORE_RAYCAST);
 	}
