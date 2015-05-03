@@ -16,7 +16,7 @@ public class World : MonoBehaviour {
 		for (int i = 0; i < total; i++) {
 			Site s = new Site(6, AIBusiness.UNOWNED);
 			sites.Add(s);
-			s.placeSite(new Vector3 (0, 0.05f, 0));
+			s.placeSite(new Vector3 (0, 1.0f, 0));
 			float x = Random.Range(-worldSize, worldSize);
 			float z = Random.Range(-worldSize, worldSize);
 			for (int j = -1; j < sites.Count; j++) {

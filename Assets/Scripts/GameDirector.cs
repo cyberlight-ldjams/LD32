@@ -20,6 +20,14 @@ public class GameDirector : MonoBehaviour {
 
 	private GameObject selection;
 
+	private Vector3 WORLDVIEW = new Vector3(0, 800, 0);
+
+	private Vector3 HOMESITE = new Vector3(5, 20, 0);
+
+	private Vector3 desiredCameraPosition = new Vector3(5, 20, 0);
+
+	private int timer;
+
 	// Use this for initialization
 	void Start () {
 		site = new Site(lotsPerSite, playerBusiness);
@@ -73,11 +81,33 @@ public class GameDirector : MonoBehaviour {
 			return hit.collider.gameObject;
 		}
 	}
+
+	private void moveCamera() {
+		Debug.Log(Camera.main.transform.position);
+		Debug.Log(desiredCameraPosition);
+		Vector3 distance = (desiredCameraPosition - Camera.main.transform.position) / 3;
+		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
+		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (distance.x < 0.0001f && distance.y < 0.0001f && distance.z < 0.0001f)) {
+			Camera.main.transform.position = desiredCameraPosition;
+		} 
+	}
+
 	// Update is called once per frame
 	void Update () {
-
-		if (Input.GetMouseButtonDown (0))
+		if (Input.GetMouseButtonDown (0)) {
 			selectedObject = calculateSelectedObject ();
-	
+		}
+		if (Input.GetKeyDown(KeyCode.F2)) {
+			desiredCameraPosition = WORLDVIEW;
+			timer = 0;
+		}
+		if (Input.GetKeyDown(KeyCode.F1)) {
+			desiredCameraPosition = HOMESITE;
+			timer = 0;
+		}
+		if (Camera.main.transform.position != desiredCameraPosition) {
+			moveCamera();
+			timer++;
+		}
 	}
 }
