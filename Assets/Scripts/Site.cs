@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Site {
-	private GameObject SitePlane;
+	public GameObject SitePlane { get; private set; }
 	public List<Lot> Lots { get; private set; }
 	public int rows = 3;
 	public int cols = 2;
