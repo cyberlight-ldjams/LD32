@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   InitialLotPlane: {fileID: 108298, guid: 285f9b17dc3eacc47923b9d3384ddf2f, type: 2}
 --- !u!114 &420523486
 MonoBehaviour:
