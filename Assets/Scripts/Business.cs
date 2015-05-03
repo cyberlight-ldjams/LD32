@@ -8,7 +8,7 @@ public abstract class Business : MonoBehaviour {
 
 	private List<Lot> myLots;
 
-	private string name;
+	public string name;
 
 	public void Start() {
 		myInventory = new Inventory(genericCurrency: 0.0, items: new List<Inventory.Item>());
