@@ -31,8 +31,16 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 	}
 
-	public void MakeBuilding(Building b) {
-		Lot.MakeBuilding(selectedObject, site, b);
+	public void InstallBuilding (Building b) {
+		Lot.InstallBuilding (selectedObject, site, b);
+	}
+
+	public void InstallClayPit () {
+		InstallBuilding(new ClayPit());
+	}
+
+	public void InstallPotteryWorkshop () {
+		InstallBuilding(new PotteryWorkshop());
 	}
 
 	private void randomAssign() {

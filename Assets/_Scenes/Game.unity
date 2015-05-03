@@ -229,7 +229,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 420523484}
   - 114: {fileID: 420523483}
-  - 114: {fileID: 420523486}
   - 114: {fileID: 420523487}
   m_Layer: 0
   m_Name: GameDirector
@@ -267,18 +266,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!114 &420523486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 420523481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d013285f4adbbe4fbc51aa2683494fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  building: {fileID: 100818, guid: 54606507d7b2cb04ea4fc49f190b7630, type: 2}
 --- !u!114 &420523487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,6 +364,22 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 420523483}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InstallPotteryWorkshop
+      objectReference: {fileID: 0}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
   m_IsPrefabParent: 0
@@ -964,13 +967,20 @@ Prefab:
       objectReference: {fileID: 420523483}
     - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MakeBuilding
+      value: InstallClayPit
       objectReference: {fileID: 0}
     - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 11474526, guid: 2c01b35672164694db8e9b41807128ea,
-        type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11495936, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 16fc0b75bfe586e448464284badd5ca2, type: 2}
   m_IsPrefabParent: 0
