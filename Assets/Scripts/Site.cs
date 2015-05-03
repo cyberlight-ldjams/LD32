@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Site : MonoBehaviour {
 	public GameObject SitePlane;
-	public GameObject LotPlane;
 	public List<Lot> Lots { get; private set; }
 	public int rows = 3;
 	public int cols = 2;
