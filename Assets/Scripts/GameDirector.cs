@@ -32,9 +32,9 @@ public class GameDirector : MonoBehaviour {
 
 	private GameObject selection;
 
-	private Vector3 WORLDVIEW = new Vector3(0, 850, 0);
+	private Vector3 WORLDVIEW = new Vector3(0, 850.0f, -200.0f);
 
-	private Vector3 HOMESITE = new Vector3(5, 25, 0);
+	private Vector3 HOMESITE = new Vector3(5, 25, -5);
 
 	private Vector3 desiredCameraPosition;
 
@@ -144,7 +144,7 @@ public class GameDirector : MonoBehaviour {
 		float x = s.SitePlane.transform.position.x;
 		float z = s.SitePlane.transform.position.z;
 
-		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z);
+		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z + -5.0f);
 
 		setSiteLayers(IGNORE_RAYCAST);
 	}
