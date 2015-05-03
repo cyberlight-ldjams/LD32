@@ -85,7 +85,7 @@ public class HeadsUpDisplay : MonoBehaviour {
  		int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
 		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
 
-		double potteryAmount = business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
+		int potteryAmount = (int)business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
 		potteryText.GetComponent<Text> ().text = string.Format ("Pottery: {0}", potteryAmount);
 
 
