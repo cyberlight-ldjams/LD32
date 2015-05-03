@@ -9,6 +9,9 @@ public abstract class Building : MonoBehaviour {
 	/** Who owns this building */
 	public Lot lot;
 
+	public Business owner { get { return lot.Owner; } }
+	public Site site { get { return lot.Site; } }
+
 	/** The building game object */
 	public GameObject building;
 

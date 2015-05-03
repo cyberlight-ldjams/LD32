@@ -54,14 +54,13 @@ public class Inventory {
 		foreach (Item i in items) {
 			if(i.itemType.Equals(resource) && i.location.Equals(site)) {
 				i.quantity = amount;
-				break;
+				return;
 			}
 		}
 
+		// At this point, we've found that "resource" doesn't already exist in "items"
 
-
-
-
+		items.Add(new Item(resource, amount, site));
 	}
 
 	/** Container object for inventory items */
