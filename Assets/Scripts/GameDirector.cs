@@ -14,7 +14,7 @@ public class GameDirector : MonoBehaviour {
 
 	public GameObject selectedObject;
 
-	public GameObject player;
+	private GameObject player;
 
 	public List<GameObject> enemyAI;
 	
@@ -24,7 +24,7 @@ public class GameDirector : MonoBehaviour {
 
 	public World world;
 
-	public PlayerBusiness playerBusiness;
+	public PlayerBusiness playerBusiness { get; private set; }
 
 	public HeadsUpDisplay headsUpDisplay;
 
@@ -42,10 +42,10 @@ public class GameDirector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		playerBusiness = new PlayerBusiness ();
 		homesite = new Site(lotsPerSite, playerBusiness);
 
 		headsUpDisplay.currentSite = homesite;
-		headsUpDisplay.business = playerBusiness;
 
 		desiredCameraPosition = HOMESITE;
 
@@ -79,23 +79,10 @@ public class GameDirector : MonoBehaviour {
 		InstallBuilding(new PotteryWorkshop());
 	}
 
-	private void randomAssign() {
-		foreach(Lot l in homesite.Lots) {
-			int winner = Random.Range (0, 1);
-			if(winner == 0) {
-				//l.Owner = player;
-			} else {
-				//sl.Owner = enemyAI[0];
-			}
-		}
-	}
-
 	private GameObject calculateSelectedObject() {
-		Debug.Log ("Click");
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit);
-		Debug.Log ("Hit at: " + hit.point);
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
@@ -145,6 +132,7 @@ public class GameDirector : MonoBehaviour {
 		float z = s.SitePlane.transform.position.z;
 
 		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z);
+		sidebar.SetActive (true);
 
 		setSiteLayers(IGNORE_RAYCAST);
 	}

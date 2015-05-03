@@ -464,7 +464,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 420523484}
   - 114: {fileID: 420523483}
-  - 114: {fileID: 420523487}
   m_Layer: 0
   m_Name: GameDirector
   m_TagString: Untagged
@@ -485,10 +484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lotsPerSite: 6
   selectedObject: {fileID: 0}
-  player: {fileID: 0}
   enemyAI: []
   world: {fileID: 1051612617}
-  playerBusiness: {fileID: 420523487}
   headsUpDisplay: {fileID: 709637722}
   sidebar: {fileID: 1381132233}
 --- !u!4 &420523484
@@ -503,18 +500,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!114 &420523487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 420523481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4d34c82f19a74f1e9ef8eb16265c799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: 
 --- !u!1001 &422071593
 Prefab:
   m_ObjectHideFlags: 0
@@ -855,7 +840,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clayText: {fileID: 1136454909}
   potteryText: {fileID: 953962905}
-  business: {fileID: 0}
   gameDirector: {fileID: 420523483}
   dialog: {fileID: 1143281008}
 --- !u!4 &709637723

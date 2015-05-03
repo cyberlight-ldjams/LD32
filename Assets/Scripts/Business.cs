@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Business : MonoBehaviour {
+public abstract class Business {
 
 	public Inventory myInventory;
 
@@ -10,7 +10,7 @@ public abstract class Business : MonoBehaviour {
 
 	public string name;
 
-	public void Start() {
+	public void Init() {
 		myInventory = new Inventory(genericCurrency: 0.0, items: new List<Inventory.Item>());
 	}
 }

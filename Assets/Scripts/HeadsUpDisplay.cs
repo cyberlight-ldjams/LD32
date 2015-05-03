@@ -6,7 +6,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 	public GameObject clayText;
 	public GameObject potteryText;
-	public PlayerBusiness business;
+	public PlayerBusiness business { get; private set; }
 	public Site currentSite;
 	public GameDirector gameDirector;
 
@@ -49,6 +49,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 				eventBtn4 = but;
 				break;
 			}
+
 		}
 
 		Text [] temp = dialog.GetComponentsInChildren<Text> ();
@@ -75,11 +76,13 @@ public class HeadsUpDisplay : MonoBehaviour {
 				break;
 			}
 		}
+
+		business = gameDirector.playerBusiness;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		double clayAmount = business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
+ 		int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
 		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
 
 		double potteryAmount = business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
@@ -96,7 +99,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 				quarryBtn.enabled = true;
 			}
 		}
-
-		title.text = "Hello World!";
 	}
+
+
 }
