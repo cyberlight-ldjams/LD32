@@ -45,7 +45,7 @@ public class RandomEventManager : MonoBehaviour {
 
 		if (choices.Count == 0) {
 			choices = used;
-			used = new List<RandomEvent>()
+			used = new List<RandomEvent>();
 		}
 
 		currentTime = Time.time;
@@ -57,7 +57,7 @@ public class RandomEventManager : MonoBehaviour {
 		string title = "";
 		string description = "";
 		List<RandomEvent.Option> options = new List<RandomEvent.Option>();
-		float time = 0.0;
+		float time = 0.0f;
 
 		string text = "";
 		List<RandomEvent.Affect> affects = new List<RandomEvent.Affect>();
