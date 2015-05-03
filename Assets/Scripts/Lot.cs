@@ -6,7 +6,7 @@ public class Lot : MonoBehaviour {
 	public Building Building { get; private set; }
 	private GameObject building;
 	private GameObject oldBuilding;
-	public Business Owner { get; set; }
+	public Business Owner;
 	public Resource? Resource { get; private set; }
 	public GameObject InitialLotPlane;
 	public GameObject LotPlane { get { return getLotPlane (); } set { setLotPlane (value); } }
@@ -35,6 +35,7 @@ public class Lot : MonoBehaviour {
 		Building = newBuilding;
 		oldBuilding = building;
 		building = (GameObject) Instantiate(newBuilding.building, LotPlane.transform.position, LotPlane.transform.rotation);
+		building.GetComponent<BuildingT>().lot = this;
 		DestroyBuilding ();
 		return newBuilding;
 	}

@@ -28,7 +28,7 @@ public class GameDirector : MonoBehaviour {
 		GameObject go = (GameObject)Instantiate (site.SitePlane);
 		site.SitePlane = go;
 		for (int i = 0; i < lotsPerSite; i++) {
-			site.NewLot();
+			site.NewLot(playerBusiness);
 		}
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.SetActive(false);
