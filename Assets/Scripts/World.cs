@@ -5,32 +5,33 @@ using System.Collections.Generic;
 public class World : MonoBehaviour {
 
 	public GameObject worldPlane;
-	private List<Site> sites;
+	public List<Site> sites { get; private set; }
 	public int minSites = 5;
 	public int maxSites = 8;
 	
 	void Start () {
 		sites = new List<Site>();
 		int total = (int) Random.Range(minSites, maxSites);
-		float worldSize = worldPlane.transform.localScale.x * 4.9f;
+		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;
+		float worldSizeZ = worldPlane.transform.localScale.z * 4.5f;
 		for (int i = 0; i < total; i++) {
 			Site s = new Site(6, AIBusiness.UNOWNED);
 			sites.Add(s);
 			s.placeSite(new Vector3 (0, 1.0f, 0));
-			float x = Random.Range(-worldSize, worldSize);
-			float z = Random.Range(-worldSize, worldSize);
+			float x = Random.Range(-worldSizeX, worldSizeX);
+			float z = Random.Range(-worldSizeZ, worldSizeZ);
 			for (int j = -1; j < sites.Count; j++) {
-				if (j == -1 && ((Mathf.Abs(0 - x) < worldSize / 8.0f) && 
-				                  (Mathf.Abs(0 - z) < worldSize / 8.0f))) {
+				if (j == -1 && ((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
+				                  (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
 					j = -2; // Two because 1 is added before the next iteration
-				} else if ((Mathf.Abs(sites[i].getPlaneLocation().x - x) < worldSize / 8.0f) && 
-				    (Mathf.Abs(sites[i].getPlaneLocation().z - z) < worldSize / 8.0f)) {
-					x = Random.Range(-worldSize, worldSize);
-					z = Random.Range(-worldSize, worldSize);
+				} else if ((Mathf.Abs(sites[i].getPlaneLocation().x - x) < worldSizeX / 6.0f) && 
+				    (Mathf.Abs(sites[i].getPlaneLocation().z - z) < worldSizeZ / 6.0f)) {
+					x = Random.Range(-worldSizeX, worldSizeX);
+					z = Random.Range(-worldSizeZ, worldSizeZ);
 					j = -2;
 				}
 			}
-			s.placeSite(new Vector3 (x, 0.1f, z));
+			s.placeSite(new Vector3 (x, 1.0f, z));
 		}
 	}
 }

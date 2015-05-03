@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour {
 
+	public const int DEFAULT = 0;
+
+	public const int IGNORE_RAYCAST = 2;
+
+	private const float SITE_CAMERA_HEIGHT = 25.0f;
+
 	public int lotsPerSite;
 
 	public GameObject selectedObject;
@@ -12,30 +18,39 @@ public class GameDirector : MonoBehaviour {
 
 	public List<GameObject> enemyAI;
 	
-	private Site site;
+	private Site homesite;
+
+	private Site currentSite;
+
+	public World world;
 
 	public PlayerBusiness playerBusiness;
 
 	public HeadsUpDisplay headsUpDisplay;
 
+	public GameObject sidebar;
+
 	private GameObject selection;
 
-	private Vector3 WORLDVIEW = new Vector3(0, 800, 0);
+	private Vector3 WORLDVIEW = new Vector3(0, 850, 0);
 
-	private Vector3 HOMESITE = new Vector3(5, 20, 0);
+	private Vector3 HOMESITE = new Vector3(5, 25, 0);
 
-	private Vector3 desiredCameraPosition = new Vector3(5, 20, 0);
+	private Vector3 desiredCameraPosition;
 
 	private int timer;
 
 	// Use this for initialization
 	void Start () {
-		site = new Site(lotsPerSite, playerBusiness);
+		homesite = new Site(lotsPerSite, playerBusiness);
 
-		headsUpDisplay.currentSite = site;
+		headsUpDisplay.currentSite = homesite;
 		headsUpDisplay.business = playerBusiness;
 
+		desiredCameraPosition = HOMESITE;
+
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
+		selection.layer = IGNORE_RAYCAST;
 		selection.SetActive(false);
 	}
 
@@ -53,7 +68,7 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	public void InstallBuilding (Building b) {
-		Lot.InstallBuilding (selectedObject, site, b);
+		Lot.InstallBuilding (selectedObject, homesite, b);
 	}
 
 	public void InstallClayPit () {
@@ -65,7 +80,7 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	private void randomAssign() {
-		foreach(Lot l in site.Lots) {
+		foreach(Lot l in homesite.Lots) {
 			int winner = Random.Range (0, 1);
 			if(winner == 0) {
 				//l.Owner = player;
@@ -85,7 +100,6 @@ public class GameDirector : MonoBehaviour {
 			return selectedObject;
 		} else {
 			selection.SetActive(true);
-			selection.layer = 2;
 			Renderer r = selection.GetComponent<Renderer>();
 			r.material.color = Color.red;
 			selection.transform.position = 
@@ -102,7 +116,37 @@ public class GameDirector : MonoBehaviour {
 		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
 		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (distance.x < 0.0001f && distance.y < 0.0001f && distance.z < 0.0001f)) {
 			Camera.main.transform.position = desiredCameraPosition;
-		} 
+		}
+	}
+
+	private void setSiteLayers(int layer) {
+		foreach (Site s in world.sites) {
+			s.SitePlane.layer = layer;
+		}
+	}
+
+	private void worldview() {
+		timer = 0;
+
+		desiredCameraPosition = WORLDVIEW;
+		sidebar.SetActive(false);
+
+		setSiteLayers(DEFAULT);
+	}
+
+	private void toHomesite() {
+		toSite (homesite);
+	}
+
+	private void toSite(Site s) {
+		timer = 0;
+
+		float x = s.SitePlane.transform.position.x;
+		float z = s.SitePlane.transform.position.z;
+
+		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z);
+
+		setSiteLayers(IGNORE_RAYCAST);
 	}
 
 	// Update is called once per frame
@@ -113,16 +157,17 @@ public class GameDirector : MonoBehaviour {
 			selectedObject = calculateSelectedObject ();
 		}
 		if (Input.GetKeyDown(KeyCode.F2)) {
-			desiredCameraPosition = WORLDVIEW;
-			timer = 0;
+			worldview();
 		}
 		if (Input.GetKeyDown(KeyCode.F1)) {
-			desiredCameraPosition = HOMESITE;
-			timer = 0;
+			toHomesite();
 		}
 		if (Camera.main.transform.position != desiredCameraPosition) {
 			moveCamera();
 			timer++;
+		}
+		if (headsUpDisplay.currentSite != currentSite) {
+			headsUpDisplay.currentSite = currentSite;
 		}
 	}
 }
