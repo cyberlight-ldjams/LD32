@@ -11,4 +11,7 @@ public abstract class Workshop : Building {
 
 	/** The good this workshop produces */
 	public abstract Resource goodProduced { get; }
+
+	/** The goods out per goods put in */
+	public abstract float inOutRatio { get; }
 }
