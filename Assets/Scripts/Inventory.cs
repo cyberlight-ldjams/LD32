@@ -62,6 +62,19 @@ public class Inventory {
 		items.Add(new Item(resource, amount, site));
 	}
 
+	private Dictionary<Site, int> employees;
+
+	public int GetEmployeesAt(Site site) {
+		if (employees.ContainsKey(site))
+			return employees[site];
+		else
+			return 0;
+	}
+
+	public void SetEmployeesAt(Site site, int numEmployees) {
+		employees[site] = numEmployees;
+	}
+
 	/** Container object for inventory items */
 	public class Item {
 
