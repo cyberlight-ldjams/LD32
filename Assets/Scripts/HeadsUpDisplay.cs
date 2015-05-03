@@ -40,15 +40,15 @@ public class HeadsUpDisplay : MonoBehaviour {
 		potteryText.GetComponent<Text> ().text = string.Format ("Pottery: {0}", potteryAmount);
 
 
-		//dissalow placement before selection
-		if (gameDirector.selectedObject == null) {
-			quarryBtn.enabled = false;
-			workshopBtn.enabled = false;
-		} else {
-			quarryBtn.enabled = true;
-			quarryBtn.enabled = true;
+		if (quarryBtn != null && workshopBtn != null) {
+			//dissalow placement before selection
+			if ((gameDirector == null || gameDirector.selectedObject == null)) {
+				quarryBtn.enabled = false;
+				workshopBtn.enabled = false;
+			} else {
+				quarryBtn.enabled = true;
+				quarryBtn.enabled = true;
+			}
 		}
-
-
 	}
 }
