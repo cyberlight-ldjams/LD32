@@ -6,6 +6,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 	public GameObject clayText;
 	public GameObject potteryText;
+	public GameObject employeeText;
 	public PlayerBusiness business { get; private set; }
 	public Site currentSite;
 	public GameDirector gameDirector;
@@ -38,12 +39,15 @@ public class HeadsUpDisplay : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Debug.Log (currentSite);
  		int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
 		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
 
 		int potteryAmount = (int)business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
 		potteryText.GetComponent<Text> ().text = string.Format ("Pottery: {0}", potteryAmount);
 
+		int employees = business.myInventory.GetEmployeesAt(currentSite);
+		employeeText.GetComponent<Text>().text = string.Format ("Employees: {0}", employees);
 
 		if (quarryBtn != null && workshopBtn != null) {
 			//dissalow placement before selection

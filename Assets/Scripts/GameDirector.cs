@@ -43,7 +43,8 @@ public class GameDirector : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
-		homesite = new Site(lotsPerSite, playerBusiness);
+		currentSite = homesite = new Site(lotsPerSite, playerBusiness);
+		playerBusiness.myInventory.SetEmployeesAt(homesite, 2);
 
 		headsUpDisplay.currentSite = homesite;
 

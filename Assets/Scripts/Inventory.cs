@@ -62,7 +62,7 @@ public class Inventory {
 		items.Add(new Item(resource, amount, site));
 	}
 
-	private Dictionary<Site, int> employees;
+	private Dictionary<Site, int> employees = new Dictionary<Site, int>();
 
 	public int GetEmployeesAt(Site site) {
 		if (employees.ContainsKey(site))
