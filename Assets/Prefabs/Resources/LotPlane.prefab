@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3344602}
   - 64: {fileID: 6410476}
   - 23: {fileID: 2332388}
-  - 114: {fileID: 11466114}
   m_Layer: 0
   m_Name: LotPlane
   m_TagString: Untagged
@@ -74,18 +73,6 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11466114
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 108298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5866653856889204c991965158493537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InitialLotPlane: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

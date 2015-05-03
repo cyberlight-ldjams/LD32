@@ -16,15 +16,13 @@ public class Site : MonoBehaviour {
 	}
 
 	public Lot NewLot(Business owner) {
-		Lot newLot = SitePlane.AddComponent<Lot>();
-		newLot.Site = this;
-		Lots.Add (newLot);
 		if (current.x > (rows/2.0f)) {
 			current.x = -rows/2.0f + 0.5f;
 			current.y++;
 		}
-		newLot.LotPlane = (GameObject) Instantiate (this.LotPlane, new Vector3 (current.x * 10.1f, 0.1f, current.y * 10.1f), this.gameObject.transform.rotation);
-		newLot.Owner = owner;
+
+		Lot newLot = new Lot (this, owner, new Vector3 (current.x * 10.1f, 0.1f, current.y * 10.1f), this.gameObject.transform.rotation);
+		Lots.Add (newLot);
 
 		current.x++;
 		return newLot;

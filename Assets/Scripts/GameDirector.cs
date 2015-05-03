@@ -35,15 +35,7 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	public void MakeBuilding(Building b) {
-		//print (selectedObject);
-		if (selectedObject != null && selectedObject.name.Contains("LotPlane")) {
-			foreach (Lot l in site.Lots) {
-				if (selectedObject == l.LotPlane) {
-					l.NewBuilding(b);
-					break;
-				}
-			}
-		}
+		Lot.MakeBuilding(selectedObject, site, b);
 	}
 
 	private void randomAssign() {
