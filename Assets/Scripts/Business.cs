@@ -12,11 +12,39 @@ public abstract class Business {
 
 	public string name;
 
+	private Sales sales;
+
 	public void Init() {
 		myInventory = new Inventory(genericCurrency: STARTING_CURRENCY);
+		sales = GameDirector.THIS.sales;
 	}
 
 	public void LeaseLot(Lot toLease) {
-		GameDirector.THIS.sales.leaseLot(this, toLease);
+		sales.leaseLot(this, toLease);
+	}
+
+	public void SellResource(Site s, Resource r, int quantitity) {
+		sales.sell (this, s, r, quantitity);
+	}
+
+	public void BuyBuilding(Lot lot, Building build) {
+		sales.buyBuilding(this, lot, build);
+	}
+
+	public bool TransportGoods(Resource r, double quantity, Site a, Site b) {
+		if (myInventory.getAmountOfAt(r, a) >=  quantity) {
+			myInventory.setAmountOfAt(r, a, -quantity);
+
+			//TODO: TRANSPORT TIME
+
+			myInventory.setAmountOfAt(r, b, quantity);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public bool hireLabor(Building b, int amount) {
+		return false;
 	}
 }
