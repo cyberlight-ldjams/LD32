@@ -37,6 +37,16 @@ public class GameTime<T> : MonoBehaviour {
 		return list[i].result;
 	}
 
+	public void disable(int i) {
+		list[i].endTime = 0.0f;
+	}
+
+	public void enable(int i) {
+		int currentQuarter = (int) (Time.time / QUARTER) + 1;
+		float startTime = (currentQuarter * QUARTER) + 1;
+		list[i].endTime = startTime + (list[i].quarters * QUARTER);
+	}
+
 	void Update() {
 		if (list.Count > 0) {
 			foreach(GameTimer timer in list) {

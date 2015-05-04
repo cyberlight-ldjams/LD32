@@ -160,7 +160,9 @@ public class GameDirector : MonoBehaviour {
 
 	public void setCurrentSite(Site s) {
 		currentSite = s;
-		headsUpDisplay.currentSite = s;
+		if (headsUpDisplay != null ) {
+			headsUpDisplay.currentSite = s;
+		}
 	}
 
 	private void deselectObject() {
