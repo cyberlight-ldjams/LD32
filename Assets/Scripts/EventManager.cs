@@ -26,6 +26,7 @@ public class EventManager : MonoBehaviour {
 	
 	private Slider eventTimerSlider;
 	private Text title, description, afterText;
+	private GameDirector gd;
 
 
 
@@ -33,7 +34,7 @@ public class EventManager : MonoBehaviour {
 	void Start () {
 
 		World world = Object.FindObjectOfType<World> ();
-		GameDirector gd = Object.FindObjectOfType < GameDirector> ();
+		gd = Object.FindObjectOfType < GameDirector> ();
 		businesses = new List<Business> ();
 		businesses.Add (gd.playerBusiness);
 
@@ -164,13 +165,13 @@ public class EventManager : MonoBehaviour {
 	}
 
 	void Update () {
-		currentTime = Time.time;
-		if (currentTime >= randTime && !displayed) {
-			//TODO: Fire the random event... somehow.
-			
-			
-			pick ();
+		if (GameDirector.PAUSED || gd.stager.currentStage == Stage.Archaic) {
+			return;
+		}
 
+		currentTime = Time.time - GameDirector.timeCorrection;
+		if (currentTime >= randTime && !displayed) {
+			pick ();
 			populateRandomEventUI();
 		} else if (!displayed) {
 			dialog.SetActive(false);

@@ -39,6 +39,10 @@ public class HeadsUpDisplay : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GameDirector.PAUSED) {
+			return;
+		}
+
  		int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
 		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
 

@@ -18,6 +18,8 @@ public class GameDirector : MonoBehaviour {
 
 	public GameObject selectedObject;
 
+	public GameObject pauseScreen;
+
 	public List<GameObject> enemyAI;
 	
 	public Site homesite {get; set;}
@@ -65,6 +67,8 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 		List<Business> temp = new List<Business> ();
 		temp.Add (playerBusiness);
+
+
 	}
 
 	private void platformSpecific() {
@@ -74,6 +78,9 @@ public class GameDirector : MonoBehaviour {
 		case RuntimePlatform.LinuxPlayer:
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				Application.Quit ();
+			}
+			if (Input.GetKeyDown (KeyCode.P)) {
+				PAUSED = !PAUSED;
 			}
 			break;
 		}
@@ -190,9 +197,16 @@ public class GameDirector : MonoBehaviour {
 
 		if (PAUSED) {
 			timeCorrection += Time.deltaTime;
+			if (!pauseScreen.activeSelf) {
+				pauseScreen.SetActive(true);
+			}
 			return;
 		}
-		
+
+		if (pauseScreen.activeSelf) {
+			pauseScreen.SetActive(false);
+		}
+
 		if (!this.GetComponent<World>().enabled) {
 			world = this.GetComponent<World>();
 			world.player = playerBusiness;

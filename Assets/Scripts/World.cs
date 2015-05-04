@@ -74,7 +74,7 @@ public class World : MonoBehaviour {
 	}
 
 	void Update() {
-		if (sites == null) {
+		if (sites == null || GameDirector.PAUSED) {
 			return;
 		}
 
