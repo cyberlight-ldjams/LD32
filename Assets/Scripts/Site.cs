@@ -9,11 +9,13 @@ public class Site {
 	public int cols = 2;
 	private Vector2 current;
 	private string name;
+	public List<Site> neighbors { get; set; }
 
 	public Site (int lotsPerSite, Business owner) {
 		name = RandomNameGenerator.generatePlaceName();
 		Lots = new List<Lot> ();
 		current = new Vector2(0, 0);
+		neighbors = new List<Site> ();
 
 		GameObject go;
 		go = (GameObject) Object.Instantiate (Resources.Load ("SitePlane"));

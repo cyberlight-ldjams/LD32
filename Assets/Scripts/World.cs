@@ -73,9 +73,26 @@ public class World : MonoBehaviour {
 		sites[sites.Count - 1].placeSite(new Vector3 (xy.x, 1.0f, xy.y));
 	}
 
+	void Update() {
+		if (sites == null) {
+			return;
+		}
+
+		foreach (Site s in sites) {
+			if(s.neighbors == null ) {
+				Debug.Log("No Neighbors");
+				continue;
+			}
+			foreach(Site s1 in s.neighbors) {
+				Debug.DrawLine(s1.SitePlane.transform.position, s.SitePlane.transform.position);
+			}
+
+		}
+	}
+
 	private void connectSites() {
 
-		Debug.Log ("I am trying to connect sites");
+		Debug.Log ("trying to connect sites");
 
 
 		for (int i = 0; i < sites.Count -1; i++) {
@@ -96,11 +113,12 @@ public class World : MonoBehaviour {
 						doNotConnect = true;
 						break;
 					}
-
-					if (!doNotConnect) {
-						Debug.DrawLine (s1, s2);
-					}
 				}
+				if (!doNotConnect) {
+					sites[i].neighbors.Add(sites[j]);
+					sites[j].neighbors.Add(sites[i]);
+				}
+				
 			}
 		}
 	}
