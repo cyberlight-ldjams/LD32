@@ -167,6 +167,8 @@ public class EventManager : MonoBehaviour {
 	void Update () {
 		if (GameDirector.PAUSED || gd.stager.currentStage == Stage.Archaic) {
 			if (dialog.activeSelf) {
+				RectTransform rect = dialog.GetComponent<RectTransform> ();
+				rect.anchoredPosition = new Vector2 (0, 0);
 				dialog.SetActive(false);
 			}
 			return;
