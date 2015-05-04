@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Site {
 	public GameObject SitePlane { get; private set; }
@@ -26,6 +27,8 @@ public class Site {
 			NewLot(owner);
 		}
 		MoveLots();
+
+		AddLotResources();
 	}
 
 	private Lot NewLot(Business owner) {
@@ -50,6 +53,16 @@ public class Site {
 
 				current.x++;
 			
+		}
+	}
+
+	private void AddLotResources() {
+		int resourceCount = 3;
+		List<Resource> resources = ResourceExtensions.RandomResources(resourceCount);
+		List<Lot> lots = ResourceExtensions.ChooseRandom(Lots.ToArray(), resourceCount);
+
+		for (int i = 0; i < resourceCount; i++) {
+			lots[i].Resource = resources[i];
 		}
 	}
 

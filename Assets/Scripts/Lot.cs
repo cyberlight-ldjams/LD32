@@ -5,7 +5,8 @@ public class Lot {
 	public Site Site { get; set; }
 	public Building Building { get; private set; }
 	public Business Owner { get; set; }
-	public Resource? Resource { get; private set; }
+	public Resource? Resource { get { return Resource_; } set { SetResource(value); } }
+	private Resource? Resource_;
 	private GameObject LotPlane { get { return getLotPlane (); } set { setLotPlane (value); } }
 	private GameObject LotPlane_;
 	public Vector3 Location { get; set; }
@@ -49,5 +50,9 @@ public class Lot {
 
 	public GameObject getLotPlane() {
 		return LotPlane_;
+	}
+
+	public void SetResource(Resource? resource) {
+		Resource_ = resource;
 	}
 }
