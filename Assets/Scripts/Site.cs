@@ -19,7 +19,9 @@ public class Site {
 		neighbors = new List<Site> ();
 
 		GameObject go;
-		go = (GameObject) Object.Instantiate (Resources.Load ("SitePlane"));
+		go = (GameObject) Object.Instantiate (Resources.Load ("SitePlane2"));
+		TextMesh text = go.GetComponentInChildren<TextMesh>();
+		text.text = name;
 		SitePlane = go;
 		current = new Vector2 (-rows/2.0f + 0.5f + go.transform.position.x, 
 		                       -cols/2.0f + 0.5f + go.transform.position.z);
