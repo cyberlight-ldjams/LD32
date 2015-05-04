@@ -40,6 +40,7 @@ public class GameDirector : MonoBehaviour {
 
 	private int timer;
 
+
 	public EventManager em;
 	// Use this for initialization
 	void Start () {
