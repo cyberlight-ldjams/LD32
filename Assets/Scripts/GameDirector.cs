@@ -66,7 +66,7 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	public void InstallBuilding (Building b) {
-		Lot.InstallBuilding (selectedObject, homesite, b);
+		Lot.InstallBuilding (selectedObject, currentSite, b);
 	}
 
 	public void InstallClayPit () {

@@ -97,8 +97,6 @@ public class EventManager : MonoBehaviour {
 				break;
 			}
 		}
-
-		randTime = Time.time + 3.0f;
 	}
 
 	private void resetRandomEventUI() {
