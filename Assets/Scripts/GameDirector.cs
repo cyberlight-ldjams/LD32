@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour {
 
-	public bool PAUSED { get; set; }
+	public static float timeCorrection { get; private set; }
+
+	public static bool PAUSED { get; set; }
 
 	public const int DEFAULT = 0;
 
@@ -55,6 +57,8 @@ public class GameDirector : MonoBehaviour {
 
 		desiredCameraPosition = HOMESITE;
 
+		sales = new Sales(this);
+		timeCorrection = 0.0f;
 
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.layer = IGNORE_RAYCAST;
@@ -184,6 +188,11 @@ public class GameDirector : MonoBehaviour {
 	void Update () {
 		platformSpecific ();
 
+		if (PAUSED) {
+			timeCorrection += Time.deltaTime;
+			return;
+		}
+		
 		if (!this.GetComponent<World>().enabled) {
 			world = this.GetComponent<World>();
 			world.player = playerBusiness;
