@@ -10,12 +10,18 @@ public class RandomEvent {
 
 	public string description{ get; private set; }
 
+	public string result { get; private set; }
+
 	public List<Option> options{ get; private set; }
 
 	public float timer{ get; private set; }
 
+	public Option defaultOption{ get; private set; }
+
 
 	public RandomEvent(string title, string desc, List<Option> options, float timeSec) {
+		int optNum = Random.Range (0, options.Count - 1);
+		defaultOption = options [optNum];
 		this.title = title;
 		description = desc;
 		this.options = options;
@@ -26,8 +32,17 @@ public class RandomEvent {
 
 	}
 
+	/**
+	 * Execute the specified option, along with all of its Affects */
+	public void execute(Option choice) {
 
+		foreach (Affect a in choice.getAffects()) {
+			a.execute();
+		}
 
+		result = choice.afterText;
+
+	}
 
 	public class Option {
 
@@ -41,6 +56,10 @@ public class RandomEvent {
 			optionText = opText;
 			this.affects = affects;
 			afterText = result;
+		}
+
+		public List<Affect> getAffects() {
+			return affects;
 		}
 
 	}
@@ -83,6 +102,9 @@ public class RandomEvent {
 
 		}
 
+		/**
+		 * Exceutes an individual affect object
+		 */
 		public void execute() {
 
 			//resource adjustments

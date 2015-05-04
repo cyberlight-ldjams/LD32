@@ -39,7 +39,6 @@ public class GameDirector : MonoBehaviour {
 	private Vector3 desiredCameraPosition;
 
 	private int timer;
-
 	// Use this for initialization
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
@@ -53,6 +52,9 @@ public class GameDirector : MonoBehaviour {
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.layer = IGNORE_RAYCAST;
 		selection.SetActive(false);
+		List<Business> temp = new List<Business> ();
+		temp.Add (playerBusiness);
+
 	}
 
 	private void platformSpecific() {
