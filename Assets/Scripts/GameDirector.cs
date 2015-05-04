@@ -14,8 +14,6 @@ public class GameDirector : MonoBehaviour {
 
 	public GameObject selectedObject;
 
-	private GameObject player;
-
 	public List<GameObject> enemyAI;
 	
 	private Site homesite;
@@ -39,13 +37,12 @@ public class GameDirector : MonoBehaviour {
 	private Vector3 desiredCameraPosition;
 
 	private int timer;
+
+	public EventManager em;
 	// Use this for initialization
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
-		currentSite = homesite = new Site(lotsPerSite, playerBusiness);
-		playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
-
-		headsUpDisplay.currentSite = homesite;
+		//playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
 
 		desiredCameraPosition = HOMESITE;
 
@@ -54,9 +51,6 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 		List<Business> temp = new List<Business> ();
 		temp.Add (playerBusiness);
-
-		this.gameObject.AddComponent<EventManager>();
-
 	}
 
 	private void platformSpecific() {
@@ -69,7 +63,6 @@ public class GameDirector : MonoBehaviour {
 			}
 			break;
 		}
-
 	}
 
 	public void InstallBuilding (Building b) {
@@ -124,7 +117,7 @@ public class GameDirector : MonoBehaviour {
 	private void moveCamera() {
 		Vector3 distance = (desiredCameraPosition - Camera.main.transform.position) / 3;
 		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
-		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (distance.x < 0.0001f && distance.y < 0.0001f && distance.z < 0.0001f)) {
+		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (Mathf.Abs(distance.x) < 0.0001f && Mathf.Abs(distance.y) < 0.0001f && Mathf.Abs(distance.z) < 0.0001f)) {
 			Camera.main.transform.position = desiredCameraPosition;
 		}
 	}
@@ -149,7 +142,12 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	private void toSite(Site s) {
+		if (s == null) {
+			return;
+		}
+
 		timer = 0;
+		setCurrentSite(s);
 
 		float x = s.SitePlane.transform.position.x;
 		float z = s.SitePlane.transform.position.z;
@@ -160,25 +158,77 @@ public class GameDirector : MonoBehaviour {
 		setSiteLayers(IGNORE_RAYCAST);
 	}
 
+	public void setCurrentSite(Site s) {
+		currentSite = s;
+		headsUpDisplay.currentSite = s;
+	}
+
+	private void deselectObject() {
+		selectedObject = null;
+		selection.SetActive(false);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		platformSpecific ();
 
+		if (!this.GetComponent<World>().enabled) {
+			world = this.GetComponent<World>();
+			world.player = playerBusiness;
+			this.GetComponent<World>().enabled = true;
+		} else if (world.isReady) {
+			Debug.Log("World is ready!");
+			world.isReady = false;
+			this.GetComponent<EventManager>().enabled = true;
+			em = this.GetComponent<EventManager>();
+			headsUpDisplay = this.GetComponent<HeadsUpDisplay>();
+			setCurrentSite(currentSite);
+			this.GetComponent<HeadsUpDisplay>().enabled = true;
+		}
+
 		if (Input.GetMouseButtonDown (0)) {
 			selectedObject = calculateSelectedObject ();
+			if (selectedObject == null) {
+				// Do nothing!
+			} else {
+				if (desiredCameraPosition == WORLDVIEW) {
+					foreach (Site s in world.sites) {
+						if (s.SitePlane == selectedObject) {
+							toSite(s);
+							deselectObject();
+							break;
+						}
+					}
+				}
+				if (desiredCameraPosition == WORLDVIEW) {
+					foreach (Site s in world.sites) {
+						if (s.SitePlane == selectedObject) {
+							toSite(s);
+							deselectObject();
+							break;
+						}
+						foreach (Lot l in s.Lots) {
+							if (l.getLotPlane() == selectedObject) {
+								toSite(s);
+								deselectObject();
+								goto breakout;
+							}
+						}
+					}
+				}
+			breakout : {}
+			}
 		}
 		if (Input.GetKeyDown(KeyCode.F2)) {
 			worldview();
 		}
 		if (Input.GetKeyDown(KeyCode.F1)) {
 			toHomesite();
+
 		}
 		if (Camera.main.transform.position != desiredCameraPosition) {
 			moveCamera();
 			timer++;
-		}
-		if (headsUpDisplay.currentSite != currentSite) {
-			headsUpDisplay.currentSite = currentSite;
 		}
 	}
 }
