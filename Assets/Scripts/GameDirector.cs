@@ -119,7 +119,7 @@ public class GameDirector : MonoBehaviour {
 		Debug.Log(desiredCameraPosition);
 		Vector3 distance = (desiredCameraPosition - Camera.main.transform.position) / 3;
 		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
-		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (distance.x < 0.0001f && distance.y < 0.0001f && distance.z < 0.0001f)) {
+		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (Mathf.Abs(distance.x) < 0.0001f && Mathf.Abs(distance.y) < 0.0001f && Mathf.Abs(distance.z) < 0.0001f)) {
 			Camera.main.transform.position = desiredCameraPosition;
 		}
 	}
@@ -144,6 +144,10 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	private void toSite(Site s) {
+		if (s == null) {
+			return;
+		}
+
 		timer = 0;
 		setCurrentSite(s);
 
@@ -189,13 +193,32 @@ public class GameDirector : MonoBehaviour {
 			if (selectedObject == null) {
 				// Do nothing!
 			} else {
-				foreach (Site s in world.sites) {
-					if (s.SitePlane == selectedObject) {
-						toSite(s);
-						deselectObject();
-						break;
+				if (desiredCameraPosition == WORLDVIEW) {
+					foreach (Site s in world.sites) {
+						if (s.SitePlane == selectedObject) {
+							toSite(s);
+							deselectObject();
+							break;
+						}
 					}
 				}
+				if (desiredCameraPosition == WORLDVIEW) {
+					foreach (Site s in world.sites) {
+						if (s.SitePlane == selectedObject) {
+							toSite(s);
+							deselectObject();
+							break;
+						}
+						foreach (Lot l in s.Lots) {
+							if (l.getLotPlane() == selectedObject) {
+								toSite(s);
+								deselectObject();
+								goto breakout;
+							}
+						}
+					}
+				}
+			breakout : {}
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.F2)) {

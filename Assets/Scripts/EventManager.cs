@@ -97,8 +97,6 @@ public class EventManager : MonoBehaviour {
 		}
 	}
 
-		dialog.SetActive(false);
-
 		pick ();
 		//TODO REMOVE
 		populateRandomEventUI ();
@@ -142,9 +140,9 @@ public class EventManager : MonoBehaviour {
 			//still have options left
 			if(o.Count > 0) {
 				RandomEvent.Option pick = o[rand.Next(o.Count)];
-				Text t = buttons[i].GetComponentInChildren<Text>();
-				Debug.Log(t);
-				t.text = pick.optionText;
+				Text[] t = buttons[i].GetComponentsInChildren<Text>();
+				Debug.Log(t[0]);
+				t[0].text = pick.optionText;
 				buttons[i].onClick.AddListener(() => { currentEvent.execute(pick); switchRandomEventUI(); });
 				o.Remove(pick);
 			} else {

@@ -24,6 +24,7 @@ public class World : MonoBehaviour {
 		float z = Random.Range(-worldSizeZ, worldSizeZ);
 		homesite = new Site(6, player);
 		gameDirector.setCurrentSite(homesite);
+		sites.Add(homesite);
 		for (int a = 0; a < 1; a++) {
 			if (((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
 			                (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
