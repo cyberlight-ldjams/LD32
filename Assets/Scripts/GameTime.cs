@@ -48,9 +48,14 @@ public class GameTime<T> : MonoBehaviour {
 	}
 
 	void Update() {
+		if (GameDirector.PAUSED) {
+			return;
+		}
+
+		float time = Time.time - GameDirector.timeCorrection;
 		if (list.Count > 0) {
 			foreach(GameTimer timer in list) {
-				if (Time.time >= timer.endTime) {
+				if (time >= timer.endTime) {
 					timer.result = timer.function.Invoke();
 					if (timer.repeat) {
 						timer.endTime = timer.endTime + (QUARTER * timer.quarters);
