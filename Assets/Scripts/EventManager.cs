@@ -166,6 +166,9 @@ public class EventManager : MonoBehaviour {
 
 	void Update () {
 		if (GameDirector.PAUSED || gd.stager.currentStage == Stage.Archaic) {
+			if (dialog.activeSelf) {
+				dialog.SetActive(false);
+			}
 			return;
 		}
 
