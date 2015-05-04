@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 /**
@@ -14,9 +15,11 @@ public abstract class Workshop : Building {
 
 	/** The goods out per goods put in */
 	public abstract float inOutRatio { get; }
+	
+	public virtual double productionRate { get { return 0.1 * Math.Sqrt((double)employees); } }
 
 	public override void Produce () {
-		double inAmount = 0.1 / inOutRatio;
+		double inAmount = productionRate / inOutRatio;
 
 		double oldAmountInput = owner.myInventory.getAmountOfAt(resourceUsed, site);
 
@@ -24,7 +27,7 @@ public abstract class Workshop : Building {
 			owner.myInventory.setAmountOfAt(resourceUsed, site, oldAmountInput - inAmount);
 
 			double oldAmountOutput = owner.myInventory.getAmountOfAt(goodProduced, site);
-			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + 0.1);
+			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + productionRate);
 		}
 	}
 }

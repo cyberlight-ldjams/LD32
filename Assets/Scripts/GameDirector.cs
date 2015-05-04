@@ -43,7 +43,7 @@ public class GameDirector : MonoBehaviour {
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
 		currentSite = homesite = new Site(lotsPerSite, playerBusiness);
-		playerBusiness.myInventory.SetEmployeesAt(homesite, 2);
+		playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
 
 		headsUpDisplay.currentSite = homesite;
 
@@ -80,6 +80,26 @@ public class GameDirector : MonoBehaviour {
 
 	public void InstallPotteryWorkshop () {
 		InstallBuilding(new PotteryWorkshop());
+	}
+
+	public void DeployEmployee() {
+		Building building = Lot.FindLot(selectedObject, currentSite).Building;
+		int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
+
+		if (building != null && employeesAvailable > 0) {
+			playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable - 1);
+			building.employees++;
+		}
+	}
+
+	public void RecallEmployee() {
+		Building building = Lot.FindLot(selectedObject, currentSite).Building;
+
+		if (building != null && building.employees > 0) {
+			building.employees--;
+			int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
+			playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable + 1);
+		}
 	}
 
 	private GameObject calculateSelectedObject() {

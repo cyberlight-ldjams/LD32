@@ -1,6 +1,3 @@
-using System;
-namespace AssemblyCSharp {
-	public enum Stage {
-		Archaic = 1, Antiquity, Medieval, Renaissance, Machine
-	};
-}
+public enum Stage {
+	Archaic = 1, Antiquity = 2, Medieval = 3, Renaissance = 4, Machine = 5
+};

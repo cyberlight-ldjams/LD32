@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Demand : MonoBehaviour {
+public class Demand {
 
 	/** Denotes the demand of an item is increadibly low */
 	public const int GARBAGE = 0;
@@ -26,7 +26,22 @@ public class Demand : MonoBehaviour {
 		ageDemand = new Dictionary<Resource, float>();
 	}
 
-	public void generateFirstAgeDemand() {
+	public void generateAgeDemand(Stage age) {
+		switch (age) {
+		case Stage.Archaic: generateArchaicAgeDemand();
+			break;
+		case Stage.Antiquity: generateAntiquityAgeDemand();
+			break;
+		case Stage.Medieval: generateMedievalAgeDemand();
+			break;
+		case Stage.Renaissance: generateRenaissanceAgeDemand();
+			break;
+		case Stage.Machine: generateModernAgeDemand();
+			break;
+		}
+	}
+
+	public void generateArchaicAgeDemand() {
 		ageDemand = new Dictionary<Resource, float>();
 		ageDemand.Add(Resource.Brick, UnityEngine.Random.Range(0.6f, 0.8f));
 		ageDemand.Add(Resource.Clay, UnityEngine.Random.Range(0.3f, 0.6f));
@@ -45,9 +60,14 @@ public class Demand : MonoBehaviour {
 		ageDemand.Add(Resource.Stone, UnityEngine.Random.Range(0.4f, 0.6f));
 		ageDemand.Add(Resource.Timber, UnityEngine.Random.Range(0.5f, 0.7f));
 		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.8f, 0.9f));
+		ageDemand.Add(Resource.RailroadTie, UnityEngine.Random.Range(0.2f, 0.3f));
 	}
 
-	public void generateSecondAgeDemand() {
+	public void generateAntiquityAgeDemand() {
+		generateArchaicAgeDemand(); // currently these are the same
+	}
+
+	public void generateMedievalAgeDemand() {
 		ageDemand = new Dictionary<Resource, float>();
 		ageDemand.Add(Resource.Brick, UnityEngine.Random.Range(0.6f, 0.8f));
 		ageDemand.Add(Resource.Clay, UnityEngine.Random.Range(0.3f, 0.6f));
@@ -66,9 +86,10 @@ public class Demand : MonoBehaviour {
 		ageDemand.Add(Resource.Stone, UnityEngine.Random.Range(0.4f, 0.6f));
 		ageDemand.Add(Resource.Timber, UnityEngine.Random.Range(0.5f, 0.7f));
 		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.7f, 0.8f));
+		ageDemand.Add(Resource.RailroadTie, UnityEngine.Random.Range(0.3f, 0.5f));
 	}
 
-	public void generateThirdAgeDemand() {
+	public void generateRenaissanceAgeDemand() {
 		ageDemand = new Dictionary<Resource, float>();
 		ageDemand.Add(Resource.Brick, UnityEngine.Random.Range(0.6f, 0.8f));
 		ageDemand.Add(Resource.Clay, UnityEngine.Random.Range(0.2f, 0.45f));
@@ -86,10 +107,11 @@ public class Demand : MonoBehaviour {
 		ageDemand.Add(Resource.Pottery, UnityEngine.Random.Range(0.4f, 0.5f));
 		ageDemand.Add(Resource.Stone, UnityEngine.Random.Range(0.2f, 0.4f));
 		ageDemand.Add(Resource.Timber, UnityEngine.Random.Range(0.5f, 0.7f));
-		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.7f, 0.8f));
+		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.6f, 0.75f));
+		ageDemand.Add(Resource.RailroadTie, UnityEngine.Random.Range(0.7f, 0.8f));
 	}
 
-	public void generateFourthAgeDemand() {
+	public void generateModernAgeDemand() {
 		ageDemand = new Dictionary<Resource, float>();
 		ageDemand.Add(Resource.Brick, UnityEngine.Random.Range(0.4f, 0.6f));
 		ageDemand.Add(Resource.Clay, UnityEngine.Random.Range(0.15f, 0.4f));
@@ -107,7 +129,8 @@ public class Demand : MonoBehaviour {
 		ageDemand.Add(Resource.Pottery, UnityEngine.Random.Range(0.6f, 0.9f));
 		ageDemand.Add(Resource.Stone, UnityEngine.Random.Range(0.5f, 0.7f));
 		ageDemand.Add(Resource.Timber, UnityEngine.Random.Range(0.5f, 0.7f));
-		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.6f, 0.75f));
+		ageDemand.Add(Resource.Weapon, UnityEngine.Random.Range(0.4f, 0.55f));
+		ageDemand.Add(Resource.RailroadTie, UnityEngine.Random.Range(0.6f, 0.75f));
 	}
 
 	public int getItemCategory(Resource r) {

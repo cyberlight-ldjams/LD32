@@ -24,15 +24,21 @@ public class Lot {
 		Building.Install (this, LotPlane.transform.position, LotPlane.transform.rotation);
 	}
 
-	public static void InstallBuilding(GameObject selectedObject, Site site, Building b) {
-		if (selectedObject != null && selectedObject.name.Contains("LotPlane")) {
+	public static Lot FindLot(GameObject lotPlane, Site site) {
+		if (lotPlane != null && lotPlane.name.Contains("LotPlane")) {
 			foreach (Lot l in site.Lots) {
-				if (selectedObject == l.LotPlane) {
-					l.InstallBuildingAt (b);
-					break;
+				if (lotPlane == l.LotPlane) {
+					return l;
 				}
 			}
 		}
+
+		return null;
+	}
+
+	public static void InstallBuilding(GameObject selectedObject, Site site, Building b) {
+		Lot l = FindLot(selectedObject, site);
+		l.InstallBuildingAt(b);
 	}
 
 	public void setLotPlane(GameObject lp) {

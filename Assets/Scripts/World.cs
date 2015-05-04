@@ -14,34 +14,48 @@ public class World : MonoBehaviour {
 		int total = (int) Random.Range(minSites, maxSites);
 		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;
 		float worldSizeZ = worldPlane.transform.localScale.z * 4.5f;
+		float x = Random.Range(-worldSizeX, worldSizeX);
+		float z = Random.Range(-worldSizeZ, worldSizeZ);
+		for (int a = 0; a < 1; a++) {
+			if (((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
+			                (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
+				a = -1; // -2 because 1 is added before the next iteration
+				x = Random.Range(-worldSizeX, worldSizeX);
+				z = Random.Range(-worldSizeZ, worldSizeZ);
+			} else {
+				newSite(new Vector2(x, z));
+			}
+		}
+
 		for (int i = 0; i < total; i++) {
-			Site s = new Site(6, AIBusiness.UNOWNED);
-			sites.Add(s);
-			s.placeSite(new Vector3 (0, -1.0f, 0));
-			float x = Random.Range(-worldSizeX, worldSizeX);
-			float z = Random.Range(-worldSizeZ, worldSizeZ);
 			int count = 0;
-			for (int j = -1; j < sites.Count; j++) {
+			for (int j = 0; j < sites.Count; j++) {
 				//avoid potential infinite loop of death
-				if(count > 1000) {
+				if (count > 1000 && sites.Count > minSites || count > 5000) {
 					count = 0;
-					Debug.Log("I can't count that high");
+					if (count > 5000) {
+						Debug.Log("Some sites could not be added, " + 
+							"consider setting fewer for this size of world, or let them be closer together.");
+					}
+					x = 0;
+					z = 0;
 					continue;
-				}
-				if (j == -1 && ((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
-				                  (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
-					j = -2; // Two because 1 is added before the next iteration
-				} else if ((Mathf.Abs(sites[i].getPlaneLocation().x - x) < worldSizeX / 6.0f) && 
-				    (Mathf.Abs(sites[i].getPlaneLocation().z - z) < worldSizeZ / 6.0f)) {
+				} else if ((Mathf.Abs(sites[j].getPlaneLocation().x - x) < worldSizeX / 6.0f) && 
+				           (Mathf.Abs(sites[j].getPlaneLocation().z - z) < worldSizeZ / 6.0f)) {
 					x = Random.Range(-worldSizeX, worldSizeX);
 					z = Random.Range(-worldSizeZ, worldSizeZ);
-					j = -2;
+					j = -1;
 				}
-
 				count++;
-
 			}
-			s.placeSite(new Vector3 (x, 1.0f, z));
+			if (x != 0 && z != 0) {
+				newSite(new Vector2(x, z));
+			}
 		}
+	}
+
+	private void newSite(Vector2 xy) {
+		sites.Add(new Site(6, AIBusiness.UNOWNED));
+		sites[sites.Count - 1].placeSite(new Vector3 (xy.x, 1.0f, xy.y));
 	}
 }

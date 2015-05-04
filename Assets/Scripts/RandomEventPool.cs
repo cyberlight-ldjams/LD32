@@ -8,7 +8,6 @@ public class RandomEventPool : List<RandomEvent> {
 	public static RandomEventPool get(List<Business> businesses, List<Site> sites) {
 
 		RandomEventPool rep = new RandomEventPool ();
-		//TODO: JASON
 		/*
 		 * This is a generic, random event : it can affect any business and any type of resource
 		 */
@@ -25,15 +24,7 @@ public class RandomEventPool : List<RandomEvent> {
 		Business business = businesses[randBiz];
 		
 		Resource resource = (Resource) ((int) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length - 0.0001f));
-		string resourceName = Enum.GetName(typeof(Resource), resource);
-		for (int i = 1; i < resourceName.Length; i++) {
-			if (Char.IsUpper(resourceName[i])) {
-				string half = resourceName.Substring(0,i);
-				half = half + " " + resourceName.Substring(i, resourceName.Length);
-				resourceName = half;
-				i++;
-			}
-		}
+		string resourceName = getResourceName(resource);
 		
 		title = resourceName + " Crisis!";
 		description = "The " + resourceName + " bubble has burst! And by that we mean that employees were claiming we had more inventory than we really had... " 
@@ -78,8 +69,24 @@ public class RandomEventPool : List<RandomEvent> {
 		rep.Add(re);
 
 
+		// -------------------------------------------------------- //
+
+
 		/** at the end */
 		return rep;
 	}
 
+
+	private static string getResourceName(Resource res) {
+		string resourceName = Enum.GetName(typeof(Resource), res);
+		for (int i = 1; i < resourceName.Length; i++) {
+			if (Char.IsUpper(resourceName[i])) {
+				string half = resourceName.Substring(0,i);
+				half = half + " " + resourceName.Substring(i, resourceName.Length);
+				resourceName = half;
+				i++;
+			}
+		}
+		return resourceName;
+	}
 }

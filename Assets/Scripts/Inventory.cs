@@ -10,20 +10,20 @@ public class Inventory {
 	private double genericCurrency;
 
 	/** contains all valid resource items */
-	private List<Item> items; 
+	private Dictionary<ItemKey, double> items; 
 
 	/** Create a new inventory (only needed by business class) */
-	public Inventory(double genericCurrency, List<Item> items) {
+	public Inventory(double genericCurrency) {
 
 		this.genericCurrency = genericCurrency;
-		this.items = items;
+		this.items = new Dictionary<ItemKey, double>();
 
 	}
 
 	/** get the items in your inventory
 	 * @return a list of <Item>s
 	 */
-	private List<Item> getInventory() {
+	private Dictionary<ItemKey, double> getInventory() {
 			return items;
 	}
 
@@ -41,25 +41,16 @@ public class Inventory {
 	}
 
 	public double getAmountOfAt(Resource resource, Site site) {
-		foreach(Item i in items) {
-			if(i.itemType.Equals(resource)) {
-				return i.quantity;
-			}
-		}
-		return 0.0;
+		ItemKey tuple = new ItemKey { itemType = resource, location = site };
+		if (items.ContainsKey(tuple))
+			return items[tuple];
+		else
+			return 0.0;
 	}
 
 	public void setAmountOfAt(Resource resource, Site site, double amount) {
-		foreach (Item i in items) {
-			if(i.itemType.Equals(resource) && i.location.Equals(site)) {
-				i.quantity = amount;
-				return;
-			}
-		}
-
-		// At this point, we've found that "resource" doesn't already exist in "items"
-
-		items.Add(new Item(resource, amount, site));
+		ItemKey tuple = new ItemKey { itemType = resource, location = site };
+		items[tuple] = amount;
 	}
 
 	private Dictionary<Site, int> employees = new Dictionary<Site, int>();
@@ -75,25 +66,9 @@ public class Inventory {
 		employees[site] = numEmployees;
 	}
 
-	/** Container object for inventory items */
-	public class Item {
-
-			public Resource itemType { get; private set; }
-
-			public double quantity { get; set; }
-
-			public Site location { get; private set; }
-
-			/** Creates a new item
-			 * @param int itemType the enum value of the resource
-			 * @param double quantity how much of the item we have here
-			 * @param Site the location the inventory item is in
-			 */
-			public Item (Resource itemType, double quantity, Site site) {
-				this.itemType = itemType;
-				this.quantity = quantity;
-				location = site;
-			}
-		}
+	public struct ItemKey {
+		public Resource itemType; 
+		public Site location;
+	}
 
 }
