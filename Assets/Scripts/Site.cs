@@ -12,7 +12,6 @@ public class Site {
 
 	public Site (int lotsPerSite, Business owner) {
 		name = RandomNameGenerator.generatePlaceName();
-		Debug.Log(name);
 		Lots = new List<Lot> ();
 		current = new Vector2(0, 0);
 

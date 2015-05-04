@@ -52,10 +52,44 @@ public class World : MonoBehaviour {
 				newSite(new Vector2(x, z));
 			}
 		}
+
+		connectSites ();
 	}
 
 	private void newSite(Vector2 xy) {
 		sites.Add(new Site(6, AIBusiness.UNOWNED));
 		sites[sites.Count - 1].placeSite(new Vector3 (xy.x, 1.0f, xy.y));
+	}
+
+	private void connectSites() {
+
+		Debug.Log ("I am trying to connect sites");
+
+
+		for (int i = 0; i < sites.Count -1; i++) {
+			for (int j = i + 1; j < sites.Count; j++) {
+				Vector3 s1 = sites [i].SitePlane.transform.position;
+				Vector3 s2 = sites [j].SitePlane.transform.position;
+
+				float dist = Vector3.Distance (s1, s2);
+
+
+				bool doNotConnect = false;
+				for (int k = 0; k < sites.Count; k++) {
+					if (i == k || i == j) {
+						continue;
+					}
+					Vector3 s3 = sites [k].SitePlane.transform.position;
+					if (Vector3.Distance (s1, s3) < dist && Vector3.Distance (s2, s3) < dist) {
+						doNotConnect = true;
+						break;
+					}
+
+					if (!doNotConnect) {
+						Debug.DrawLine (s1, s2);
+					}
+				}
+			}
+		}
 	}
 }

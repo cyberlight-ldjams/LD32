@@ -122,8 +122,6 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	private void moveCamera() {
-		Debug.Log(Camera.main.transform.position);
-		Debug.Log(desiredCameraPosition);
 		Vector3 distance = (desiredCameraPosition - Camera.main.transform.position) / 3;
 		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
 		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (distance.x < 0.0001f && distance.y < 0.0001f && distance.z < 0.0001f)) {
