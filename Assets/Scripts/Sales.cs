@@ -17,6 +17,7 @@ public class Sales {
 		demand = director.stager.demand;
 		resetSales ();
 	
+		quarters = new GameTime<bool>();
 		quarters.performActionRepeatedly (1, () => { demand.addQuarterSales(totalSales); resetSales(); return true;});
 	}
 
@@ -30,17 +31,19 @@ public class Sales {
 			return false;
 		}
 
+		int rLoc = (int) r;
+
 		sellerInv.setAmountOfAt (r, site, quantity);
 		float profit = demand.getPrice (r) * quantity;
 
 		sellerInv.addBaseCurrency (profit);
-		totalSales [r] = totalSales [r] + quantity;
+		totalSales [rLoc] = totalSales [rLoc] + quantity;
 
 		return true;
 	}
 
 	private void resetSales() {
-		int resourceCount = Enum.GetValues (Resource).Length;
+		int resourceCount = Enum.GetValues(typeof(Resource)).Length;
 		totalSales = new int[resourceCount];
 		for (int i = 0; i < resourceCount; i++) {
 			totalSales [i] = 0;
