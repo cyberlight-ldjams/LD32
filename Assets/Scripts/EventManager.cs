@@ -124,7 +124,6 @@ public class EventManager : MonoBehaviour {
 			return;
 		}
 		afterText.gameObject.SetActive (true);
-		Debug.Log(afterText.text);
 		buttons [3].gameObject.SetActive (true);
 		Text[] t = buttons [3].GetComponentsInChildren<Text> ();
 		t[0].text = "OK.";
@@ -145,7 +144,6 @@ public class EventManager : MonoBehaviour {
 			if(o.Count > 0) {
 				RandomEvent.Option pick = o[rand.Next(o.Count)];
 				Text[] t = buttons[i].GetComponentsInChildren<Text>();
-				Debug.Log(t[0]);
 				t[0].text = pick.optionText;
 				buttons[i].onClick.AddListener(() => { currentEvent.execute(pick); switchRandomEventUI(); });
 				o.Remove(pick);
@@ -180,7 +178,6 @@ public class EventManager : MonoBehaviour {
 		//decrement timer until 0
 		if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value > 0.0f && displayed) {
 			eventTimerSlider.value = timerTime = timerTime - Time.deltaTime;
-			Debug.Log(eventTimerSlider.value);
 		} else if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value <= 0.0f && displayed) {
 			//default choice
 			currentEvent.execute (currentEvent.defaultOption);

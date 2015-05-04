@@ -118,7 +118,6 @@ public class GameDirector : MonoBehaviour {
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
-			Debug.Log(selection);
 			selection.SetActive(true);
 			Renderer r = selection.GetComponent<Renderer>();
 			r.material.color = Color.red;
@@ -199,7 +198,6 @@ public class GameDirector : MonoBehaviour {
 			world.player = playerBusiness;
 			this.GetComponent<World>().enabled = true;
 		} else if (world.isReady) {
-			Debug.Log("World is ready!");
 			world.isReady = false;
 			this.GetComponent<EventManager>().enabled = true;
 			em = this.GetComponent<EventManager>();

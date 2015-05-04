@@ -91,10 +91,6 @@ public class World : MonoBehaviour {
 	}
 
 	private void connectSites() {
-
-		Debug.Log ("trying to connect sites");
-
-
 		for (int i = 0; i < sites.Count -1; i++) {
 			for (int j = i + 1; j < sites.Count; j++) {
 				Vector3 s1 = sites [i].SitePlane.transform.position;
