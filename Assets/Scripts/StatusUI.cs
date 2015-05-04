@@ -32,7 +32,13 @@ public class StatusUI : MonoBehaviour {
 			} else if(t.name == "Bank") {
 				t.text = "Bank: " + player.myInventory.getBaseCurrency() + " " + director.stager.currencyName;
 			} else if(t.name == "Date") {
-				t.text = "Year: " + (time.currentQuarter / 4) + " (" + ((time.currentQuarter % 4 ) + 1) + ")";
+				int currentQuarter =(time.currentQuarter % 4) ;
+
+				if(currentQuarter == 0) {
+					currentQuarter = 4;
+				}
+
+				t.text = "Year: " + ((time.currentQuarter - 1) / 4) + " (Q" + currentQuarter + ")";
 			} else {
 				t.text = Enum.GetName(typeof(Stage), director.stager.currentStage);
 			}
