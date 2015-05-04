@@ -68,6 +68,7 @@ public class GameDirector : MonoBehaviour {
 
 		GameObject [] objects = Object.FindObjectsOfType<GameObject> ();
 		GameObject blackout = null;
+		GameObject dia = null;
 
 		foreach (GameObject go in objects) {
 			if (go.name == "Blackout") {
