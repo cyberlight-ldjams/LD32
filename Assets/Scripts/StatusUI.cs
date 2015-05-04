@@ -19,7 +19,7 @@ public class StatusUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = director.playerBusiness;
-		time = new GameTime ();
+		time = GameDirector.gameTime;
 		fields = statusUI.gameObject.GetComponentsInChildren<Text> ();
 	}
 	
@@ -28,8 +28,6 @@ public class StatusUI : MonoBehaviour {
 
 		foreach (Text t in fields) {
 			if(t.name == "CompanyName") {
-				Debug.Log(player);
-				Debug.Log(t);
 				t.text = player.name;
 			} else if(t.name == "Bank") {
 				t.text = "Bank: " + player.myInventory.getBaseCurrency() + " " + director.stager.currencyName;
@@ -41,8 +39,6 @@ public class StatusUI : MonoBehaviour {
 
 
 		}
-
-		Debug.Log(fields.Length);
 	
 	}
 }
