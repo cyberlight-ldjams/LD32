@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class GameDirector : MonoBehaviour {
 
+	public bool PAUSED { get; set; }
+
 	public const int DEFAULT = 0;
 
 	public const int IGNORE_RAYCAST = 2;
@@ -23,6 +25,8 @@ public class GameDirector : MonoBehaviour {
 	public Stager stager {get; private set;}
 
 	public World world;
+
+	public Sales sales { get; set; }
 
 	public PlayerBusiness playerBusiness { get; private set; }
 
@@ -50,6 +54,8 @@ public class GameDirector : MonoBehaviour {
 		stager = new Stager();
 
 		desiredCameraPosition = HOMESITE;
+
+		Sales sales = new Sales();
 
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.layer = IGNORE_RAYCAST;
