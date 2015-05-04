@@ -17,7 +17,7 @@ public class Sales {
 		demand = director.stager.demand;
 		resetSales ();
 	
-		quarters.performActionRepeatedly (1, () => { demand.addQuarterSales(totalSales); resetSales(); });
+		quarters.performActionRepeatedly (1, () => { demand.addQuarterSales(totalSales); resetSales(); return true;});
 	}
 
 	public bool sell (Business seller, Site site, Resource r, int quantity, Business customer = null) {

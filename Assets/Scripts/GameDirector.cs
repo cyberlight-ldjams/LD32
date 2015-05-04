@@ -55,7 +55,6 @@ public class GameDirector : MonoBehaviour {
 
 		desiredCameraPosition = HOMESITE;
 
-		Sales sales = new Sales();
 
 		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.layer = IGNORE_RAYCAST;
