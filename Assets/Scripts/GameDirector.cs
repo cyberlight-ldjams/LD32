@@ -133,6 +133,7 @@ public class GameDirector : MonoBehaviour {
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
+			Debug.Log(selection);
 			selection.SetActive(true);
 			Renderer r = selection.GetComponent<Renderer>();
 			r.material.color = Color.red;
