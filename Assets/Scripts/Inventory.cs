@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Inventory {
 
-
-
 	/** the base currency, unmodified by any stage modifiers */
 	private double genericCurrency;
 
@@ -71,8 +69,12 @@ public class Inventory {
 			return 0;
 	}
 
-	public void SetEmployeesAt(Site site, int numEmployees) {
-		employees[site] = numEmployees;
+	public void SetEmployeesCap(Building b, int numEmployees) {
+		b.employees = numEmployees;
+	}
+
+	public void SetEmployeesAt(Site s, int numEmployees) {
+		employees[s] = numEmployees;
 	}
 
 	public struct ItemKey {

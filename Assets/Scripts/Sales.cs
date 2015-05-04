@@ -12,6 +12,10 @@ public class Sales {
 
 	public const int LOT_LEASE_DUE = 4; // in quarters
 
+	public const int BUILD_COST = 500;
+
+	public const int BUILD_SELL = 150;
+
 	public int [] totalSales { get; private set; }
 
 	private GameTime quarters;
@@ -51,7 +55,11 @@ public class Sales {
 	}
 
 	public bool leaseLot(Business leasee, Lot toLease) {
-		if (leasee.myInventory.getBaseCurrency() < LOT_DOWN_PAYMENT) {
+		if (toLease.Owner != AIBusiness.UNOWNED) {
+			Debug.LogWarning ("Lot already owned");
+			return false;
+		}
+		if (!checkMoney(leasee, LOT_DOWN_PAYMENT)) {
 			Debug.LogWarning ("Lot too expensive");
 			return false;
 		} else {
@@ -62,9 +70,13 @@ public class Sales {
 	}
 
 	public void sellLease(Business leasee, Lot toLease) {
-		leasee.myInventory.addBaseCurrency(LOT_LEASE_SELL);
-		quarters.disable(toLease.leaseID);
-		toLease.leaseID = 0;
+		if (leasee == toLease.Owner) {
+			leasee.myInventory.addBaseCurrency(LOT_LEASE_SELL);
+			quarters.disable(toLease.leaseID);
+			toLease.leaseID = 0;
+
+			sellBuilding(leasee, toLease.Building);
+		}
 	}
 
 	private void resetSales() {
@@ -72,6 +84,32 @@ public class Sales {
 		totalSales = new int[resourceCount];
 		for (int i = 0; i < resourceCount; i++) {
 			totalSales [i] = 0;
+		}
+	}
+
+	private bool checkMoney(Business buyer, int amount) {
+		return buyer.myInventory.getBaseCurrency() >= amount;
+	}
+
+	public bool buyBuilding(Business buyer, Lot lot, Building build) {
+		if (buyer != lot.Owner) {
+			Debug.LogWarning ("Lot not owned by business");
+			return false;
+		}
+		if (!checkMoney(buyer, BUILD_COST)) {
+			Debug.LogWarning ("Building too expensive");
+			return false;
+		} else {
+			buyer.myInventory.spendBaseCurrency(BUILD_COST);
+			lot.InstallBuildingAt(build);
+			return true;
+		}
+	}
+
+	public void sellBuilding(Business buyer, Building build) {
+		if (buyer == build.lot.Owner) {
+			buyer.myInventory.addBaseCurrency(BUILD_SELL);
+			build.Demolish();
 		}
 	}
 }
