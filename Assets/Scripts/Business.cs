@@ -11,6 +11,6 @@ public abstract class Business {
 	public string name;
 
 	public void Init() {
-		myInventory = new Inventory(genericCurrency: 0.0, items: new List<Inventory.Item>());
+		myInventory = new Inventory(genericCurrency: 0.0);
 	}
 }
