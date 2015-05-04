@@ -8,8 +8,11 @@ public class Site {
 	public int rows = 3;
 	public int cols = 2;
 	private Vector2 current;
+	private string name;
 
 	public Site (int lotsPerSite, Business owner) {
+		name = RandomNameGenerator.generatePlaceName();
+		Debug.Log(name);
 		Lots = new List<Lot> ();
 		current = new Vector2(0, 0);
 

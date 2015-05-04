@@ -26,22 +26,11 @@ public class AIBusiness : Business {
 	 * Creates a Business AI with a random name and a random stance
 	 */
 	public AIBusiness() {
-		name = "";
+		name = RandomNameGenerator.generateBusinessName();
 
-		string[] types = {"Corp.", "Factories", "Firm", "Institute", "Venture", "Cartel", "Syndicate", "Trust", "Megacorp", "Mom and Pop", "Business", "Stores"};
-		string[] ownerFirst = {"Elmer", "Rene", "Victor", "Pamela", "Rosemarie", "Claude", "Sherri", "Al", "Cornelius", "Clyde", "Malcolm", "Oscar", "Jerome", "Elsa", "Donald", "Devin" };
-		string[] ownerLast = {"Cobb", "Saunders", "Huff", "Wilkerson", "Barker", "Beck", "Reed", "Valdez", "Jenkins", "Delgado", "Webb", "Horton", "Larson", "Cooper", "Day", "Christensen" };
+		float rand1 = Random.Range(0,6);
 
-		int rand1 = Random.Range(0,types.Length);
-		int rand2 = Random.Range(0,ownerFirst.Length);
-		int rand3 = Random.Range(0,ownerLast.Length);
-
-		name = ownerFirst[rand2] + " " + ownerLast[rand3] + " " + types[rand1];
-		Debug.Log(name);
-
-		rand1 = Random.Range(0,5);
-
-		stance = rand1;
+		stance = (int) rand1;
 	}
 
 	private AIBusiness(int i) {
