@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public abstract class Business {
 
+	public const double STARTING_CURRENCY = 10000.0;
+
 	public Inventory myInventory;
 
 	private List<Lot> myLots;
@@ -11,6 +13,10 @@ public abstract class Business {
 	public string name;
 
 	public void Init() {
-		myInventory = new Inventory(genericCurrency: 0.0);
+		myInventory = new Inventory(genericCurrency: STARTING_CURRENCY);
+	}
+
+	public void LeaseLot(Lot toLease) {
+		GameDirector.THIS.sales.leaseLot(this, toLease);
 	}
 }

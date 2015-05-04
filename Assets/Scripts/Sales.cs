@@ -4,9 +4,17 @@ using System;
 
 public class Sales {
 
+	public const int LOT_DOWN_PAYMENT = 1000;
+
+	public const int LOT_LEASE_SELL = 400;
+
+	public const int LOT_LEASE_COST = 100;
+
+	public const int LOT_LEASE_DUE = 4; // in quarters
+
 	public int [] totalSales { get; private set; }
 
-	private GameTime<bool> quarters;
+	private GameTime quarters;
 
 	private readonly Demand demand;
 
@@ -17,7 +25,7 @@ public class Sales {
 		demand = director.stager.demand;
 		resetSales ();
 	
-		quarters = new GameTime<bool>();
+		quarters = GameDirector.gameTime;
 		quarters.performActionRepeatedly (1, () => { demand.addQuarterSales(totalSales); resetSales(); return true;});
 	}
 
@@ -40,6 +48,23 @@ public class Sales {
 		totalSales [rLoc] = totalSales [rLoc] + quantity;
 
 		return true;
+	}
+
+	public bool leaseLot(Business leasee, Lot toLease) {
+		if (leasee.myInventory.getBaseCurrency() < LOT_DOWN_PAYMENT) {
+			Debug.LogWarning ("Lot too expensive");
+			return false;
+		} else {
+			leasee.myInventory.spendBaseCurrency(LOT_DOWN_PAYMENT);
+			toLease.leaseID = quarters.performActionRepeatedly (LOT_LEASE_DUE, () => { if (leasee.myInventory.spendBaseCurrency(LOT_LEASE_COST) > 0) return true; else return false;});
+			return true;
+		}
+	}
+
+	public void sellLease(Business leasee, Lot toLease) {
+		leasee.myInventory.addBaseCurrency(LOT_LEASE_SELL);
+		quarters.disable(toLease.leaseID);
+		toLease.leaseID = 0;
 	}
 
 	private void resetSales() {

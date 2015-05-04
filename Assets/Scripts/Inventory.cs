@@ -31,10 +31,19 @@ public class Inventory {
 		return genericCurrency;
 	}
 
+	/** 
+	 * Modifies the currency currently held by the business
+	 * @param double change the currency to subtract (can be postive to add funds)
+	 * @return the amount of currency the business has after the change
+	 */
+	public double spendBaseCurrency(double change) {
+		addBaseCurrency(-change);
+		return genericCurrency;
+	}
 
 	/** 
 	 * Modifies the currency currently held by the business
-	 * @param double change the currency to add (can be negative to subtrack funds)
+	 * @param double change the currency to add (can be negative to subtract funds)
 	 */
 	public void addBaseCurrency(double change) {
 		genericCurrency = genericCurrency + change;
