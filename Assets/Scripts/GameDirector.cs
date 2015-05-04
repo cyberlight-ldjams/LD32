@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -54,6 +54,8 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 		List<Business> temp = new List<Business> ();
 		temp.Add (playerBusiness);
+
+		this.gameObject.AddComponent<EventManager>();
 
 	}
 

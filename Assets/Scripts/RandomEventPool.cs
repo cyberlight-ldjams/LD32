@@ -19,11 +19,14 @@ public class RandomEventPool : List<RandomEvent> {
 		string text = "";
 		List<RandomEvent.Affect> affects = new List<RandomEvent.Affect>();
 		string result = "";
-		
-		int randBiz = (int) UnityEngine.Random.Range(0, businesses.Count - 0.0001f);
+
+		Debug.Log("Trying to get a random biz");
+
+		int randBiz = (int) UnityEngine.Random.Range(0, businesses.Count);
 		Business business = businesses[randBiz];
 		
-		Resource resource = (Resource) ((int) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length - 0.0001f));
+		Resource resource = (Resource) ((int) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length));
+		Debug.Log(resource);
 		string resourceName = getResourceName(resource);
 		
 		title = resourceName + " Crisis!";
@@ -39,7 +42,7 @@ public class RandomEventPool : List<RandomEvent> {
 			result = "Oh dear. They say honesty is the best policy. That might be true... Look at these business losses!";
 		}
 		
-		Site site = sites[((int) UnityEngine.Random.Range(0, sites.Count - 0.0001f))];
+		Site site = sites[((int) UnityEngine.Random.Range(0, sites.Count))];
 		int minMoneyDelta = (int) UnityEngine.Random.Range(40.0f * buyIt, 50.0f * buyIt);
 		int maxMoneyDelta = (int) UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
 		int minResourceDelta = (int) UnityEngine.Random.Range(40.0f, 50.0f);
@@ -70,23 +73,24 @@ public class RandomEventPool : List<RandomEvent> {
 
 
 		// -------------------------------------------------------- //
-
-
+		
 		/** at the end */
 		return rep;
 	}
 
 
 	private static string getResourceName(Resource res) {
+		Debug.Log("Trying to get a resource name");
 		string resourceName = Enum.GetName(typeof(Resource), res);
-		for (int i = 1; i < resourceName.Length; i++) {
-			if (Char.IsUpper(resourceName[i])) {
-				string half = resourceName.Substring(0,i);
-				half = half + " " + resourceName.Substring(i, resourceName.Length);
-				resourceName = half;
-				i++;
-			}
-		}
+		//for (int i = 1; i < resourceName.Length; i++) {
+		//	if (Char.IsUpper(resourceName[i])) {
+			//TODO: Fix this
+			//	string half = resourceName.Substring(0,i);
+			//	half = half + " " + resourceName.Substring(i, resourceName.Length);
+			//	resourceName = half;
+			//	i++;
+		//	}
+		//}
 		return resourceName;
 	}
 }

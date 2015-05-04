@@ -7,6 +7,8 @@ public class Stager {
 
 	public Demand demand { get; private set; }
 
+	// Determine what resources can be produced based on the age
+
 	public Stager() {
 		currentStage = Stage.Archaic;
 		demand = new Demand();

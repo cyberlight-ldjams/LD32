@@ -38,9 +38,18 @@ public class EventManager : MonoBehaviour {
 
 		sites = world.sites;
 
-		Debug.Log ("I'm alive!");
+		foreach (GameObject go in Object.FindObjectsOfType<GameObject>()) {
+			if (go.name == "Blackout") {
+				dialog = go;
+				break;
+			}
+		}
+
 		//Initialize random event info
 		buttons = new List<Button> (4);
+		for (int i = 0; i < 4; i++) {
+			buttons.Add(null);
+		}
 		choices = RandomEventPool.get (businesses, sites);
 		used = new List<RandomEvent>();
 
@@ -62,7 +71,7 @@ public class EventManager : MonoBehaviour {
 
 
 		}	
-
+		
 	Text [] temp = dialog.GetComponentsInChildren<Text> ();
 	foreach (Text t in temp) {
 		string textName = t.name;
@@ -88,6 +97,8 @@ public class EventManager : MonoBehaviour {
 		}
 	}
 
+		dialog.SetActive(false);
+
 		pick ();
 		//TODO REMOVE
 		populateRandomEventUI ();
@@ -112,10 +123,10 @@ public class EventManager : MonoBehaviour {
 		eventTimerSlider.gameObject.SetActive (false);
 
 		afterText.gameObject.SetActive (true);
-		Text t = buttons [3].GetComponent<Text> ();
+		buttons [3].gameObject.SetActive (true);
+		Text t = buttons [3].GetComponentInChildren<Text> ();
 		t.text = "OK.";
 		buttons [3].onClick.AddListener (() => { resetRandomEventUI(); });
-		buttons [3].gameObject.SetActive (true);
 	}
 
 	private void populateRandomEventUI() {
@@ -131,10 +142,11 @@ public class EventManager : MonoBehaviour {
 			//still have options left
 			if(o.Count > 0) {
 				RandomEvent.Option pick = o[rand.Next(o.Count)];
-				Text t = buttons[i].GetComponent<Text>();
+				Text t = buttons[i].GetComponentInChildren<Text>();
+				Debug.Log(t);
 				t.text = pick.optionText;
 				buttons[i].onClick.AddListener(() => { currentEvent.execute(pick); switchRandomEventUI(); });
-				
+				o.Remove(pick);
 			} else {
 				buttons[i].gameObject.SetActive(false);
 			}
@@ -173,7 +185,7 @@ public class EventManager : MonoBehaviour {
 
 	private void pick() {
 		timer = UnityEngine.Random.Range (minTimer, maxTimer);
-		currentEvent = choices [UnityEngine.Random.Range (0, choices.Count - 1)];
+		currentEvent = choices [UnityEngine.Random.Range (0, choices.Count)];
 		choices.Remove (currentEvent);
 		used.Add (currentEvent);
 
