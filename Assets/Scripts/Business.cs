@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -45,6 +45,7 @@ public abstract class Business {
 	}
 
 	public bool hireLabor(Building b, int amount) {
+		b.employees = b.employees + amount;
 		return false;
 	}
 }

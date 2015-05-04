@@ -31,6 +31,10 @@ public abstract class Quarry : Building {
 			return new StoneQuarry();
 		case Resource.Fish:
 			return new Wharf();
+		case Resource.Gold:
+			return new GoldMine();
+		case Resource.Timber:
+			return new Timberyard();
 		default:
 			throw new ArgumentException(string.Format("No quarry for resource {0}", resource));
 		}
