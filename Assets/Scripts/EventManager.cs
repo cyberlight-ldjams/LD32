@@ -167,7 +167,7 @@ public class EventManager : MonoBehaviour {
 			//TODO: Fire the random event... somehow.
 
 
-			pick ();
+			//pick ();
 		}
 
 		//decrement timer until 0

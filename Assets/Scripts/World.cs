@@ -5,17 +5,25 @@ using System.Collections.Generic;
 public class World : MonoBehaviour {
 
 	public GameObject worldPlane;
+	public GameDirector gameDirector;
 	public List<Site> sites { get; private set; }
 	public int minSites = 5;
 	public int maxSites = 8;
+	public bool isReady {get; set;}
+	public Site homesite { get; private set;}
+	public PlayerBusiness player { get; set; }
 	
 	void Start () {
+		Debug.Log(player.myInventory);
+		isReady = false;
 		sites = new List<Site>();
 		int total = (int) Random.Range(minSites, maxSites);
 		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;
 		float worldSizeZ = worldPlane.transform.localScale.z * 4.5f;
 		float x = Random.Range(-worldSizeX, worldSizeX);
 		float z = Random.Range(-worldSizeZ, worldSizeZ);
+		homesite = new Site(6, player);
+		gameDirector.setCurrentSite(homesite);
 		for (int a = 0; a < 1; a++) {
 			if (((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
 			                (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
@@ -52,6 +60,7 @@ public class World : MonoBehaviour {
 				newSite(new Vector2(x, z));
 			}
 		}
+		isReady = true;
 	}
 
 	private void newSite(Vector2 xy) {
