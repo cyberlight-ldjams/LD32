@@ -18,6 +18,7 @@ public class EventManager : MonoBehaviour {
 	private List<RandomEvent> used;
 	private RandomEvent currentEvent;
 	private float currentTime, randTime, timerTime;
+	public bool displayed { get; private set; }
 
 	public GameObject dialog;
 	
@@ -72,34 +73,32 @@ public class EventManager : MonoBehaviour {
 
 		}	
 		
-	Text [] temp = dialog.GetComponentsInChildren<Text> ();
-	foreach (Text t in temp) {
-		string textName = t.name;
-		
-		switch (textName) {
-		case "Title":
-			title = t;
-			break;
-		case "Description":
-			description = t;
-			break;
-		case "afterText":
-			afterText = t;
-			break;
+		Text [] temp = dialog.GetComponentsInChildren<Text> ();
+		foreach (Text t in temp) {
+			string textName = t.name;
+			
+			switch (textName) {
+			case "Title":
+				title = t;
+				break;
+			case "Description":
+				description = t;
+				break;
+			case "afterText":
+				afterText = t;
+				break;
+			}
 		}
-	}
 
-	Slider [] s = Object.FindObjectsOfType<Slider> ();
-	foreach (Slider s1 in s) {
-		if (s1.name.Equals ("Timer")) {
-			eventTimerSlider = s1;
-			break;
+		Slider [] s = Object.FindObjectsOfType<Slider> ();
+		foreach (Slider s1 in s) {
+			if (s1.name.Equals ("Timer")) {
+				eventTimerSlider = s1;
+				break;
+			}
 		}
-	}
 
-		pick ();
-		//TODO REMOVE
-		populateRandomEventUI ();
+		randTime = Time.time + 3.0f;
 	}
 
 	private void resetRandomEventUI() {
@@ -110,6 +109,7 @@ public class EventManager : MonoBehaviour {
 		}
 		title.gameObject.SetActive (true);
 		description.gameObject.SetActive (true);
+		displayed = false;
 	}
 
 	private void switchRandomEventUI() {
@@ -120,10 +120,16 @@ public class EventManager : MonoBehaviour {
 		}
 		eventTimerSlider.gameObject.SetActive (false);
 
+		afterText.text = currentEvent.result;
+		if (afterText.text == null || afterText.text.Trim() == "") {
+			resetRandomEventUI();
+			return;
+		}
 		afterText.gameObject.SetActive (true);
+		Debug.Log(afterText.text);
 		buttons [3].gameObject.SetActive (true);
-		Text t = buttons [3].GetComponentInChildren<Text> ();
-		t.text = "OK.";
+		Text[] t = buttons [3].GetComponentsInChildren<Text> ();
+		t[0].text = "OK.";
 		buttons [3].onClick.AddListener (() => { resetRandomEventUI(); });
 	}
 
@@ -150,28 +156,34 @@ public class EventManager : MonoBehaviour {
 			}
 		}
 
-		eventTimerSlider.maxValue = currentEvent.timer;
-		eventTimerSlider.minValue = 0.0f;
-		eventTimerSlider.value = currentEvent.timer;
-		eventTimerSlider.gameObject.SetActive (true);
-		timerTime = Time.time + currentEvent.timer;
-		dialog.SetActive (true);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-		if (currentTime >= randTime) {
-			//TODO: Fire the random event... somehow.
-
-
-			//pick ();
+		if (currentEvent.timer != RandomEvent.DISABLE_TIMER) {
+			eventTimerSlider.maxValue = currentEvent.timer;
+			eventTimerSlider.minValue = 0.0f;
+			eventTimerSlider.value = currentEvent.timer;
+			eventTimerSlider.gameObject.SetActive (true);
+			timerTime = Time.time + currentEvent.timer;
+		} else {
+			eventTimerSlider.gameObject.SetActive (false);
 		}
+	}
 
+	void Update () {
+		currentTime = Time.time;
+		if (currentTime >= randTime && !displayed) {
+			//TODO: Fire the random event... somehow.
+			
+			
+			pick ();
+
+			populateRandomEventUI();
+		} else if (!displayed) {
+			dialog.SetActive(false);
+		}
 		//decrement timer until 0
-		if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value > 0.0f) {
-			eventTimerSlider.value = Time.time - timerTime;
-		} else if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value == 0.0f) {
+		if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value > 0.0f && displayed) {
+			eventTimerSlider.value = timerTime = timerTime - Time.deltaTime;
+			Debug.Log(eventTimerSlider.value);
+		} else if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value <= 0.0f && displayed) {
 			//default choice
 			currentEvent.execute (currentEvent.defaultOption);
 			eventTimerSlider.gameObject.SetActive (false);
@@ -179,9 +191,9 @@ public class EventManager : MonoBehaviour {
 		}
 	}
 
-
-
 	private void pick() {
+		displayed = true;
+		dialog.SetActive(true);
 		timer = UnityEngine.Random.Range (minTimer, maxTimer);
 		currentEvent = choices [UnityEngine.Random.Range (0, choices.Count)];
 		choices.Remove (currentEvent);

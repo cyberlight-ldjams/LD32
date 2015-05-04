@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class RandomEvent {
 
+	public const float DISABLE_TIMER = -0.1f;
+
 	public int minTimer = 10;
 
 	public string title{ get; private set; }
