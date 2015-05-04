@@ -36,22 +36,12 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 		business = gameDirector.playerBusiness;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (GameDirector.PAUSED) {
-			return;
-		}
 
- 		/**int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
-		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
+	private void sellingUI() {
 
-		int potteryAmount = (int)business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
-		potteryText.GetComponent<Text> ().text = string.Format ("Pottery: {0}", potteryAmount);
+	}
 
-		int employees = business.myInventory.GetEmployeesAt(currentSite);
-		employeeText.GetComponent<Text>().text = string.Format ("Employees: {0}", employees);
-*/
+	private void buildingButtons() {
 		if (quarryBtn != null && workshopBtn != null) {
 			//dissalow placement before selection
 			if ((gameDirector == null || gameDirector.selectedObject == null)) {
@@ -62,6 +52,20 @@ public class HeadsUpDisplay : MonoBehaviour {
 				quarryBtn.enabled = true;
 			}
 		}
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (GameDirector.PAUSED) {
+			return;
+		}
+
+		sellingUI ();
+
+
+		buildingButtons ();
+	
+		
 	}
 
 
