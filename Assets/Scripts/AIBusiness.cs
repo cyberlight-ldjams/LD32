@@ -18,8 +18,6 @@ public class AIBusiness : Business {
 
 	public static AIBusiness UNOWNED = new AIBusiness(0);
 
-	public string name { get; private set; }
-
 	public int stance { get; private set; }
 
 	/**
