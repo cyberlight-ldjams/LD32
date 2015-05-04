@@ -250,7 +250,7 @@ public class GameDirector : MonoBehaviour {
 							goto breakout;
 						}
 						foreach (Lot l in s.Lots) {
-							if (l.getLotPlane() == selectedObject) {
+							if (l.LotPlaneIs(selectedObject)) {
 								toSite(s);
 								deselectObject();
 								goto breakout;

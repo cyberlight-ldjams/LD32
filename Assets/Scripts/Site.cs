@@ -49,9 +49,10 @@ public class Site {
 				current.y++;
 			}
 
-				l.getLotPlane().transform.position = 
+				l.RepositionLotPlane(
 					new Vector3 (current.x * 10.1f + SitePlane.transform.position.x, SitePlane.transform.position.y + 1.0f, 
-					             current.y * 10.1f + SitePlane.transform.position.z);
+					             current.y * 10.1f + SitePlane.transform.position.z)
+				);
 
 				current.x++;
 			
