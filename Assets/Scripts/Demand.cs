@@ -20,10 +20,34 @@ public class Demand {
 	/** Denotes the demand of an item is increadibly high */
 	public const int MUSTHAVE = 4;
 
+	private const float basePrice = 1000.0f;
+
 	private Dictionary<Resource, float> ageDemand { get; set; }
+
+	private List<int[]> quartersSales;
 
 	public Demand() {
 		ageDemand = new Dictionary<Resource, float>();
+		quartersSales = new List<int[]>();
+		generateAgeDemand(Stage.Archaic);
+	}
+
+	public void addQuarterSales(int[] quarterSales) {
+		quartersSales.Add(quarterSales);
+	}
+
+	public float getPrice(Resource r) {
+		int rLoc = (int) r;
+		int totalSales = 0;
+		int count = 12;
+		for (int i = quartersSales.Count - 1; i > 0 && count > 0; i++) {
+			totalSales = quartersSales[i][rLoc];
+			count--;
+		}
+
+		float priceRatio = ageDemand[r] / totalSales;
+
+		return priceRatio * basePrice;
 	}
 
 	public void generateAgeDemand(Stage age) {

@@ -8,7 +8,7 @@ public class Site {
 	public int rows = 3;
 	public int cols = 2;
 	private Vector2 current;
-	private string name;
+	public string name { get; private set; }
 	public List<Site> neighbors { get; set; }
 
 	public Site (int lotsPerSite, Business owner) {
