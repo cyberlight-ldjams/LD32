@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class GameTime<T> : MonoBehaviour {
+public class GameTime<T> {
 
 	/** Time of a quarter in seconds */
 	public const float QUARTER = 4.0f;

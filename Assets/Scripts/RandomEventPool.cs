@@ -20,13 +20,10 @@ public class RandomEventPool : List<RandomEvent> {
 		List<RandomEvent.Affect> affects = new List<RandomEvent.Affect>();
 		string result = "";
 
-		Debug.Log("Trying to get a random biz");
-
 		int randBiz = (int) UnityEngine.Random.Range(0, businesses.Count);
 		Business business = businesses[randBiz];
 		
 		Resource resource = (Resource) ((int) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length));
-		Debug.Log(resource);
 		string resourceName = getResourceName(resource);
 		
 		title = resourceName + " Crisis!";
@@ -80,7 +77,6 @@ public class RandomEventPool : List<RandomEvent> {
 
 
 	private static string getResourceName(Resource res) {
-		Debug.Log("Trying to get a resource name");
 		string resourceName = Enum.GetName(typeof(Resource), res);
 		//for (int i = 1; i < resourceName.Length; i++) {
 		//	if (Char.IsUpper(resourceName[i])) {
