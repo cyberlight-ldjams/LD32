@@ -43,7 +43,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 			return;
 		}
 
- 		int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
+ 		/**int clayAmount = (int)business.myInventory.getAmountOfAt(Resource.Clay, currentSite);
 		clayText.GetComponent<Text>().text = string.Format("Clay: {0}", clayAmount);
 
 		int potteryAmount = (int)business.myInventory.getAmountOfAt(Resource.Pottery, currentSite);
@@ -51,7 +51,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 		int employees = business.myInventory.GetEmployeesAt(currentSite);
 		employeeText.GetComponent<Text>().text = string.Format ("Employees: {0}", employees);
-
+*/
 		if (quarryBtn != null && workshopBtn != null) {
 			//dissalow placement before selection
 			if ((gameDirector == null || gameDirector.selectedObject == null)) {

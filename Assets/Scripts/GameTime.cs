@@ -11,6 +11,8 @@ public class GameTime<T> : MonoBehaviour {
 	/** The list of game timers */
 	private List<GameTimer> list;
 
+	public int currentQuarter { get; private set; }
+
 	public GameTime() {
 		list = new List<GameTimer>();
 	}
@@ -20,7 +22,6 @@ public class GameTime<T> : MonoBehaviour {
 	 * Returns the integer id of the function to get the result later
 	 */
 	public int performActionIn(int quarters, Func<T> function) {
-		int currentQuarter = (int) (Time.time / QUARTER) + 1;
 		float startTime = (currentQuarter * QUARTER) + 1;
 		float endTime = startTime + (quarters * QUARTER);
 		list.Add(new GameTimer(startTime, endTime, quarters, function));
@@ -51,6 +52,9 @@ public class GameTime<T> : MonoBehaviour {
 		if (GameDirector.PAUSED) {
 			return;
 		}
+
+		currentQuarter = (int) (Time.time / QUARTER) + 1;
+
 
 		float time = Time.time - GameDirector.timeCorrection;
 		if (list.Count > 0) {
