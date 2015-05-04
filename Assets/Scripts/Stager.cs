@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Stager {
 
@@ -9,10 +10,13 @@ public class Stager {
 
 	// Determine what resources can be produced based on the age
 
+	public List<Resource> available;
+
 	public Stager() {
 		currentStage = Stage.Archaic;
 		demand = new Demand();
 		demand.generateAgeDemand(currentStage);
+		available = new List<Resource>();
 	}
 
 	/**
@@ -21,6 +25,14 @@ public class Stager {
 	public Stage nextStage() {
 		currentStage++; // Go to the next stage
 		demand.generateAgeDemand(currentStage);
+
+
+
+
 		return currentStage;
+	}
+
+	public List<Resource> availableResources() {
+		return available;
 	}
 }

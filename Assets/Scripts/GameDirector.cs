@@ -20,6 +20,8 @@ public class GameDirector : MonoBehaviour {
 
 	private Site currentSite;
 
+	public Stager stager {get; private set;}
+
 	public World world;
 
 	public PlayerBusiness playerBusiness { get; private set; }
@@ -43,6 +45,8 @@ public class GameDirector : MonoBehaviour {
 	void Start () {
 		playerBusiness = new PlayerBusiness ();
 		//playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
+
+		stager = new Stager();
 
 		desiredCameraPosition = HOMESITE;
 
