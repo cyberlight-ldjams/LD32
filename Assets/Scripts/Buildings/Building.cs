@@ -22,6 +22,8 @@ public abstract class Building {
 	public int employees = 0;
 
 	public void Demolish() {
+		int siteEmployees = owner.myInventory.GetEmployeesAt(site);
+		owner.myInventory.SetEmployeesAt(site, siteEmployees + employees);
 		Object.Destroy (building);
 	}
 
