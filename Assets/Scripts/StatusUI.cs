@@ -10,16 +10,17 @@ public class StatusUI : MonoBehaviour {
 
 	private PlayerBusiness player;
 
-	private GameTime<bool> time;
+	private GameTime time;
 
 	private Text[] fields;
+
+	public GameObject statusUI;
 
 	// Use this for initialization
 	void Start () {
 		player = director.playerBusiness;
-		time = new GameTime<bool> ();
-		fields = this.gameObject.GetComponentsInChildren<Text> ();
-		Debug.Log (this.gameObject.name);
+		time = new GameTime ();
+		fields = statusUI.gameObject.GetComponentsInChildren<Text> ();
 	}
 	
 	// Update is called once per frame
@@ -27,6 +28,8 @@ public class StatusUI : MonoBehaviour {
 
 		foreach (Text t in fields) {
 			if(t.name == "CompanyName") {
+				Debug.Log(player);
+				Debug.Log(t);
 				t.text = player.name;
 			} else if(t.name == "Bank") {
 				t.text = "Bank: " + player.myInventory.getBaseCurrency() + " " + director.stager.currencyName;

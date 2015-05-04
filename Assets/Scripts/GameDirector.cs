@@ -223,6 +223,7 @@ public class GameDirector : MonoBehaviour {
 			headsUpDisplay = this.GetComponent<HeadsUpDisplay>();
 			setCurrentSite(currentSite);
 			this.GetComponent<HeadsUpDisplay>().enabled = true;
+			this.GetComponent<StatusUI>().enabled = true;
 		}
 
 		if (Input.GetMouseButtonDown (0)) {
