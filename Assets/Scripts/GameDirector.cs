@@ -16,7 +16,7 @@ public class GameDirector : MonoBehaviour {
 
 	public List<GameObject> enemyAI;
 	
-	private Site homesite;
+	public Site homesite {get; set;}
 
 	private Site currentSite;
 
@@ -220,11 +220,12 @@ public class GameDirector : MonoBehaviour {
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.F2)) {
+			deselectObject();
 			worldview();
 		}
 		if (Input.GetKeyDown(KeyCode.F1)) {
+			deselectObject();
 			toHomesite();
-
 		}
 		if (Camera.main.transform.position != desiredCameraPosition) {
 			moveCamera();

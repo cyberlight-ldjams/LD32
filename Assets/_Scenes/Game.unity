@@ -503,9 +503,9 @@ MonoBehaviour:
   selectedObject: {fileID: 0}
   enemyAI: []
   world: {fileID: 1051612617}
-  headsUpDisplay: {fileID: 709637722}
+  headsUpDisplay: {fileID: 0}
   sidebar: {fileID: 1381132233}
-  em: {fileID: 1448976283}
+  em: {fileID: 0}
 --- !u!4 &420523484
 Transform:
   m_ObjectHideFlags: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &507786141
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -894,49 +894,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 537928411}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &709637721
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 709637723}
-  - 114: {fileID: 709637722}
-  m_Layer: 0
-  m_Name: HeadsUpDisplay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &709637722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 709637721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5298d348aa33bb4894ed03d6baffa4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clayText: {fileID: 1136454909}
-  potteryText: {fileID: 953962905}
-  employeeText: {fileID: 1037022768}
-  gameDirector: {fileID: 420523483}
---- !u!4 &709637723
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 709637721}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
 --- !u!1 &790058608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,48 +1948,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: .5, y: .5}
---- !u!1 &1448976282
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1448976284}
-  - 114: {fileID: 1448976283}
-  m_Layer: 0
-  m_Name: EventManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1448976283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1448976282}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 178566741e6ce44fea81659a5d06e009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxTimer: 300
-  minTimer: 60
-  dialog: {fileID: 905439181}
---- !u!4 &1448976284
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1448976282}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
 --- !u!1 &1471869499
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,7 +2181,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &1661743247
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2453,8 +2368,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam gravida
-    libero arcu, ac iaculis magna facilisis in. Proin at congue enim. '
+  m_Text: 
 --- !u!222 &1756240500
 CanvasRenderer:
   m_ObjectHideFlags: 0

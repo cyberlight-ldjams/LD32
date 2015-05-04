@@ -14,7 +14,6 @@ public class World : MonoBehaviour {
 	public PlayerBusiness player { get; set; }
 	
 	void Start () {
-		Debug.Log(player.myInventory);
 		isReady = false;
 		sites = new List<Site>();
 		int total = (int) Random.Range(minSites, maxSites);
@@ -24,6 +23,7 @@ public class World : MonoBehaviour {
 		float z = Random.Range(-worldSizeZ, worldSizeZ);
 		homesite = new Site(6, player);
 		gameDirector.setCurrentSite(homesite);
+		gameDirector.homesite = homesite;
 		sites.Add(homesite);
 		for (int a = 0; a < 1; a++) {
 			if (((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
