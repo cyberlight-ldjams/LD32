@@ -8,6 +8,10 @@ public class GameDirector : MonoBehaviour {
 
 	public static bool PAUSED { get; set; }
 
+	public static GameDirector THIS { get; private set; }
+
+	public static GameTime gameTime;
+
 	public const int DEFAULT = 0;
 
 	public const int IGNORE_RAYCAST = 2;
@@ -52,6 +56,8 @@ public class GameDirector : MonoBehaviour {
 	public EventManager em;
 	// Use this for initialization
 	void Start () {
+		THIS = this;
+		gameTime = this.gameObject.AddComponent<GameTime>();
 		playerBusiness = new PlayerBusiness ();
 		//playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
 
@@ -76,9 +82,6 @@ public class GameDirector : MonoBehaviour {
 		case RuntimePlatform.LinuxPlayer:
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				Application.Quit ();
-			}
-			if (Input.GetKeyDown (KeyCode.P)) {
-				PAUSED = !PAUSED;
 			}
 			break;
 		}
@@ -193,6 +196,10 @@ public class GameDirector : MonoBehaviour {
 	void Update () {
 		platformSpecific ();
 
+		if (Input.GetKeyDown (KeyCode.P)) {
+			PAUSED = !PAUSED;
+		}
+
 		if (PAUSED) {
 			timeCorrection += Time.deltaTime;
 			if (!pauseScreen.activeSelf) {
@@ -237,7 +244,7 @@ public class GameDirector : MonoBehaviour {
 						if (s.SitePlane == selectedObject) {
 							toSite(s);
 							deselectObject();
-							break;
+							goto breakout;
 						}
 						foreach (Lot l in s.Lots) {
 							if (l.getLotPlane() == selectedObject) {
