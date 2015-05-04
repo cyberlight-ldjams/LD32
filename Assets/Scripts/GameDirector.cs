@@ -65,6 +65,21 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 		List<Business> temp = new List<Business> ();
 		temp.Add (playerBusiness);
+
+		GameObject [] objects = Object.FindObjectsOfType<GameObject> ();
+		GameObject blackout = null;
+
+		foreach (GameObject go in objects) {
+			if (go.name == "Blackout") {
+				blackout = go;
+				break;
+			}
+		}
+
+		RectTransform rect = blackout.GetComponent<RectTransform> ();
+		Debug.Log (rect.anchoredPosition);
+		rect.anchoredPosition = new Vector2 (0, 0);
+		Debug.Log ("Moved anchored Position");
 	}
 
 	private void platformSpecific() {
