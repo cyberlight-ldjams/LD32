@@ -91,8 +91,10 @@ public class GameDirector : MonoBehaviour {
 		Lot.InstallBuilding (selectedObject, currentSite, b);
 	}
 
-	public void InstallClayPit () {
-		InstallBuilding(new ClayPit());
+	public void InstallQuarry () {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+		if (lot.Resource.HasValue)
+			Lot.InstallBuilding(selectedObject, currentSite, Quarry.NewAppropriateQuarry(lot.Resource.Value));
 	}
 
 	public void InstallPotteryWorkshop () {

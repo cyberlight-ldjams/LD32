@@ -54,5 +54,7 @@ public class Lot {
 
 	public void SetResource(Resource? resource) {
 		Resource_ = resource;
+		if (resource.HasValue)
+			LotPlane.GetComponent<Renderer>().material = resource.Value.Material();
 	}
 }

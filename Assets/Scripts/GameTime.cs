@@ -54,10 +54,10 @@ public class GameTime : MonoBehaviour {
 			return;
 		}
 
-		currentQuarter = (int) (Time.time / QUARTER) + 1;
-
-
 		float time = Time.time - GameDirector.timeCorrection;
+
+		currentQuarter = (int) (time / QUARTER) + 1;
+
 		if (list.Count > 0) {
 			foreach(GameTimer timer in list) {
 				if (time >= timer.endTime) {

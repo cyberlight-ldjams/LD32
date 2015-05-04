@@ -17,4 +17,23 @@ public abstract class Quarry : Building {
 		owner.myInventory.setAmountOfAt(resourceProduced, site, oldAmount + productionRate);
 	}
 
+	public static Quarry NewAppropriateQuarry(Resource resource) {
+		switch (resource) {
+		case Resource.Clay:
+			return new ClayPit();
+		case Resource.Oil:
+			return new OilDerrik();
+		case Resource.Meat:
+			return new HuntingLodge();
+		case Resource.Iron:
+			return new IronMine();
+		case Resource.Stone:
+			return new StoneQuarry();
+		case Resource.Fish:
+			return new Wharf();
+		default:
+			throw new ArgumentException(string.Format("No quarry for resource {0}", resource));
+		}
+	}
+
 }
