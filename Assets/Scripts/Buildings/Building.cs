@@ -15,11 +15,16 @@ public abstract class Building {
 	/** The building game object */
 	private GameObject building;
 
+	/** The max employees the building takes */
+	public int laborCap { get; set; }
+
 	/** The name of the Prefab representing this building */
 
 	protected virtual string prefabName { get { return "Building"; } }
 
 	public int employees = 0;
+
+	public int employeeWage = 0;
 
 	public void Demolish() {
 		int siteEmployees = owner.myInventory.GetEmployeesAt(site);

@@ -44,8 +44,11 @@ public abstract class Business {
 		}
 	}
 
-	public bool hireLabor(Building b, int amount) {
-		b.employees = b.employees + amount;
-		return false;
+	public void setLaborCap(Building b, int amount) {
+		b.laborCap = amount;
+	}
+
+	public void setWageCap(Building b, int amount) {
+		b.employeeWage = amount;
 	}
 }
