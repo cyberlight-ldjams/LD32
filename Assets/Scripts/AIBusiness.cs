@@ -4,21 +4,33 @@ using System.Collections.Generic;
 
 public class AIBusiness : Business {
 
+	// // STANCES OF AI BUSINESSES // //
+
 	public const int AGGRESSIVE = 0;
 
 	public const int PASSIVE = 1;
 
 	public const int NEUTRAL = 2;
 
-	public const int WATER_AFFINITY = 3;
+	// // AFFINITIES FOR AI BUSINESSES (OPTIONAL) // //
 
-	public const int MINING_AFFINITY = 4;
+	public const int NO_AFFINITY = 0;
 
-	public const int FOREST_AFFINITY = 5;
+	public const int WATER_AFFINITY = 1;
 
+	public const int MINING_AFFINITY = 2;
+
+	public const int FOREST_AFFINITY = 3;
+
+
+	/** Creates an AI business to denote that a lot is unowned */
 	public static AIBusiness UNOWNED = new AIBusiness(0);
 
+	/** The business' stance */
 	public int stance { get; private set; }
+
+	/** The business' affinity */
+	public int affinity { get; private set; }
 
 	/**
 	 * Creates a Business AI with a random name and a random stance
@@ -26,11 +38,14 @@ public class AIBusiness : Business {
 	public AIBusiness() {
 		name = RandomNameGenerator.generateBusinessName();
 
-		float rand1 = Random.Range(0,6);
+		float rand1 = Random.Range(0,3);
 
 		stance = (int) rand1;
 	}
 
+	/**
+	 * Creates an "UNOWNED" business
+	 */
 	private AIBusiness(int i) {
 		name = "Unowned";
 		stance = NEUTRAL;
@@ -40,16 +55,6 @@ public class AIBusiness : Business {
 	 * Method called on the failure of an AI business
 	 */
 	public void Failure() {
-
-	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		//TODO : make this do something
 	}
 }
