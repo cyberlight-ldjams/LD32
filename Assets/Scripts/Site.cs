@@ -19,7 +19,9 @@ public class Site {
 		neighbors = new List<Site> ();
 
 		GameObject go;
-		go = (GameObject) Object.Instantiate (Resources.Load ("SitePlane"));
+		go = (GameObject) Object.Instantiate (Resources.Load ("SitePlane2"));
+		TextMesh text = go.GetComponentInChildren<TextMesh>();
+		text.text = name;
 		SitePlane = go;
 		current = new Vector2 (-rows/2.0f + 0.5f + go.transform.position.x, 
 		                       -cols/2.0f + 0.5f + go.transform.position.z);
@@ -47,9 +49,10 @@ public class Site {
 				current.y++;
 			}
 
-				l.getLotPlane().transform.position = 
+				l.RepositionLotPlane(
 					new Vector3 (current.x * 10.1f + SitePlane.transform.position.x, SitePlane.transform.position.y + 1.0f, 
-					             current.y * 10.1f + SitePlane.transform.position.z);
+					             current.y * 10.1f + SitePlane.transform.position.z)
+				);
 
 				current.x++;
 			

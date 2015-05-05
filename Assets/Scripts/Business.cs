@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -44,7 +44,11 @@ public abstract class Business {
 		}
 	}
 
-	public bool hireLabor(Building b, int amount) {
-		return false;
+	public void setLaborCap(Building b, int amount) {
+		b.laborCap = amount;
+	}
+
+	public void setWageCap(Building b, int amount) {
+		b.employeeWage = amount;
 	}
 }

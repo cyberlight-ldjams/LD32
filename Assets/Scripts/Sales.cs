@@ -65,6 +65,7 @@ public class Sales {
 		} else {
 			leasee.myInventory.spendBaseCurrency(LOT_DOWN_PAYMENT);
 			toLease.leaseID = quarters.performActionRepeatedly (LOT_LEASE_DUE, () => { if (leasee.myInventory.spendBaseCurrency(LOT_LEASE_COST) > 0) return true; else return false;});
+			toLease.Owner = leasee;
 			return true;
 		}
 	}
@@ -76,6 +77,8 @@ public class Sales {
 			toLease.leaseID = 0;
 
 			sellBuilding(leasee, toLease.Building);
+
+			toLease.Owner = AIBusiness.UNOWNED;
 		}
 	}
 

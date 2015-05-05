@@ -7,8 +7,7 @@ public class Lot {
 	public Business Owner { get; set; }
 	public Resource? Resource { get { return Resource_; } set { SetResource(value); } }
 	private Resource? Resource_;
-	private GameObject LotPlane { get { return getLotPlane (); } set { setLotPlane (value); } }
-	private GameObject LotPlane_;
+	private GameObject LotPlane;
 	public Vector3 Location { get; set; }
 	public int leaseID { get; set; }
 
@@ -44,17 +43,17 @@ public class Lot {
 		l.InstallBuildingAt(b);
 	}
 
-	public void setLotPlane(GameObject lp) {
-		LotPlane_ = lp;
-	}
-
-	public GameObject getLotPlane() {
-		return LotPlane_;
-	}
-
 	public void SetResource(Resource? resource) {
 		Resource_ = resource;
 		if (resource.HasValue)
 			LotPlane.GetComponent<Renderer>().material = resource.Value.Material();
+	}
+
+	public bool LotPlaneIs(GameObject otherObject) {
+		return LotPlane == otherObject;
+	}
+
+	public void RepositionLotPlane(Vector3 newPosition) {
+		LotPlane.transform.position = newPosition;
 	}
 }
