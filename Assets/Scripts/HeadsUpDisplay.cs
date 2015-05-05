@@ -78,7 +78,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 			
 			int qty = (int)gameDirector.playerBusiness.myInventory.getAmountOfAt(r, currentSite);
 
-			//if(qty > 0) {
+			if(qty > 0) {
 				GameObject obj = (GameObject) UnityEngine.Object.Instantiate (Resources.Load ("ResourceLineUI"));
 				ResourceUiItem script = obj.GetComponent<ResourceUiItem>();
 				script.myResource = r;
@@ -86,7 +86,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 				script.yPos = count * RESOURCE_UI_OFFSET;
 				qtyList.Add(obj);
 				count++;
-			//}
+			}
 		}
 		
 	}
