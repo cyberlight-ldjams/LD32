@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class HeadsUpDisplay : MonoBehaviour {
 
@@ -10,9 +11,14 @@ public class HeadsUpDisplay : MonoBehaviour {
 	public GameObject employeeText;
 	public PlayerBusiness business { get; private set; }
 	public Site currentSite;
+	private Site oldCurrent;
 	public GameDirector gameDirector;
 
+	public const int RESOURCE_UI_OFFSET = -32;
+
 	private GameObject resourceUIContents, buildingsUIContents;
+
+	private List<GameObject> qtyList;
 
 
 	private Button quarryBtn;
@@ -39,17 +45,49 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 		GameObject [] go = UnityEngine.Object.FindObjectsOfType<GameObject> ();
 		foreach (GameObject g in go) {
-			if(g.name == "SellResource") {
+			if(g.name == "sellingPanelContent") {
 				resourceUIContents = g;
 			} else if(g.name == "BuildingPanel") {
 				buildingsUIContents = g;
 			}
 		}
 
+		if (resourceUIContents == null || buildingsUIContents == null) {
+			Debug.LogError ("We can't find the parent UI elements");
+		}
+
 		business = gameDirector.playerBusiness;
+		qtyList = new List<GameObject> ();
 	}
 
 	private void sellingUI() {
+		int count = -6;
+		foreach(Resource r in Enum.GetValues(typeof(Resource))) {
+
+			bool has = false;
+			foreach(GameObject ob in qtyList) {
+				ResourceUiItem scriptRes = ob.GetComponent<ResourceUiItem>();
+				if (scriptRes.myResource == r) {
+					has = true;
+					break;
+				}
+			}
+			if (has) {
+				continue;
+			}
+			
+			int qty = (int)gameDirector.playerBusiness.myInventory.getAmountOfAt(r, currentSite);
+
+			//if(qty > 0) {
+				GameObject obj = (GameObject) UnityEngine.Object.Instantiate (Resources.Load ("ResourceLineUI"));
+				ResourceUiItem script = obj.GetComponent<ResourceUiItem>();
+				script.myResource = r;
+				obj.transform.SetParent (resourceUIContents.transform, false);
+				script.yPos = count * RESOURCE_UI_OFFSET;
+				qtyList.Add(obj);
+				count++;
+			//}
+		}
 		
 	}
 
@@ -72,8 +110,16 @@ public class HeadsUpDisplay : MonoBehaviour {
 			return;
 		}
 
-		sellingUI ();
-
+		if (oldCurrent != currentSite) {
+			foreach(GameObject go in qtyList) {
+				UnityEngine.Object.Destroy(go);
+			}
+			qtyList.Clear();
+			sellingUI ();
+			oldCurrent = currentSite;
+		} else {
+			//sellingUI ();
+		}
 
 		buildingButtons ();
 	
