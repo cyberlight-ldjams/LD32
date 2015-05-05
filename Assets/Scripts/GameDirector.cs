@@ -28,7 +28,7 @@ public class GameDirector : MonoBehaviour {
 	
 	public Site homesite {get; set;}
 
-	private Site currentSite;
+	public Site currentSite { get; private set; }
 
 	public Stager stager {get; private set;}
 

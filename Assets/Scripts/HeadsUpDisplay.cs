@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class HeadsUpDisplay : MonoBehaviour {
 
@@ -10,6 +11,8 @@ public class HeadsUpDisplay : MonoBehaviour {
 	public PlayerBusiness business { get; private set; }
 	public Site currentSite;
 	public GameDirector gameDirector;
+
+	private GameObject resourceUIContents, buildingsUIContents;
 
 
 	private Button quarryBtn;
@@ -34,10 +37,23 @@ public class HeadsUpDisplay : MonoBehaviour {
 			}
 		}
 
+		GameObject [] go = Object.FindObjectsOfType<GameObject> ();
+		foreach (GameObject g in go) {
+			if(g.name == "SellResource") {
+				resourceUIContents = g;
+			} else if(g.name == "BuildingPanel") {
+				buildingsUIContents = g;
+			}
+		}
+
 		business = gameDirector.playerBusiness;
 	}
 
 	private void sellingUI() {
+
+		Resource [] has = new Resource[];
+
+		foreach(
 
 	}
 
