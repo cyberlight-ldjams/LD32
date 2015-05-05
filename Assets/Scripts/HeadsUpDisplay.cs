@@ -22,7 +22,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Button[] buttons = Object.FindObjectsOfType<Button> ();
+		Button[] buttons = UnityEngine.Object.FindObjectsOfType<Button> ();
 		foreach (Button but in buttons) {
 			string butName = but.name;
 
@@ -37,7 +37,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 			}
 		}
 
-		GameObject [] go = Object.FindObjectsOfType<GameObject> ();
+		GameObject [] go = UnityEngine.Object.FindObjectsOfType<GameObject> ();
 		foreach (GameObject g in go) {
 			if(g.name == "SellResource") {
 				resourceUIContents = g;
@@ -50,11 +50,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 	}
 
 	private void sellingUI() {
-
-		Resource [] has = new Resource[];
-
-		foreach(
-
+		
 	}
 
 	private void buildingButtons() {
