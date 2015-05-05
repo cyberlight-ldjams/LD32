@@ -28,7 +28,9 @@ public abstract class Business {
 	}
 
 	public void BuyBuilding(Lot lot, Building build) {
-		sales.buyBuilding(this, lot, build);
+		if (sales.buyBuilding(this, lot, build)) {
+
+		}
 	}
 
 	public bool TransportGoods(Resource r, double quantity, Site a, Site b) {

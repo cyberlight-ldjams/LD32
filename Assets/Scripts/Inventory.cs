@@ -60,21 +60,24 @@ public class Inventory {
 		items[tuple] = amount;
 	}
 
-	private Dictionary<Site, int> employees = new Dictionary<Site, int>();
-
 	public int GetEmployeesAt(Site site) {
-		if (employees.ContainsKey(site))
-			return employees[site];
-		else
-			return 0;
+		return site.employees;
 	}
 
 	public void SetEmployeesCap(Building b, int numEmployees) {
-		b.employees = numEmployees;
+		if (numEmployees >= 0) {
+			b.laborCap = numEmployees;
+		} else {
+			b.laborCap = 0;
+		}
 	}
 
 	public void SetEmployeesAt(Site s, int numEmployees) {
-		employees[s] = numEmployees;
+		if (numEmployees >= 0) {
+			s.employees = numEmployees;
+		} else {
+			s.employees = 0;
+		}
 	}
 
 	public struct ItemKey {

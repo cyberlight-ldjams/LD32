@@ -15,6 +15,9 @@ public abstract class Building {
 	/** The building game object */
 	private GameObject building;
 
+	/** The building id from the gametime element */
+	public int buildingID { get; set; }
+
 	/** The max employees the building takes */
 	public int laborCap { get; set; }
 
