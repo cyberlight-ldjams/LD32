@@ -10,6 +10,7 @@ public class PlayerBusiness : Business {
 	 * Initializes the player business
 	 */
 	public PlayerBusiness() {
-		Init ();
+		Init();
+		businessColor = GameDirector.getBusinessColor();
 	}
 }

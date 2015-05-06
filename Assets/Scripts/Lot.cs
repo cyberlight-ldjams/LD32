@@ -22,6 +22,10 @@ public class Lot {
 		if (Building != null) {
 			Building.Demolish();
 		}
+
+		if (Owner == AIBusiness.UNOWNED) {
+			return;
+		}
 		
 		Building = newBuilding;
 		Building.Install(this, LotPlane.transform.position, LotPlane.transform.rotation);

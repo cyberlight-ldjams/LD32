@@ -697,14 +697,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b89b5052a11e660428c017dccb7d4435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lotsPerSite: 6
-  selectedObject: {fileID: 0}
   pauseScreen: {fileID: 1533857381}
-  enemyAI: []
-  world: {fileID: 1051612617}
+  world: {fileID: 0}
   headsUpDisplay: {fileID: 0}
   sidebar: {fileID: 1381132233}
-  em: {fileID: 0}
 --- !u!4 &420523484
 Transform:
   m_ObjectHideFlags: 0
@@ -747,6 +743,8 @@ MonoBehaviour:
   gameDirector: {fileID: 420523483}
   minSites: 5
   maxSites: 8
+  siteRows: 2
+  siteCols: 3
 --- !u!114 &420523487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1592,7 +1590,6 @@ GameObject:
   - 33: {fileID: 1051612615}
   - 64: {fileID: 1051612614}
   - 23: {fileID: 1051612613}
-  - 114: {fileID: 1051612617}
   m_Layer: 2
   m_Name: WorldPlane
   m_TagString: Untagged
@@ -1656,21 +1653,6 @@ Transform:
   - {fileID: 537928412}
   m_Father: {fileID: 0}
   m_RootOrder: 5
---- !u!114 &1051612617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1051612612}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06b02d002452b6c4895d4f5e7fcfe117, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldPlane: {fileID: 1051612612}
-  gameDirector: {fileID: 420523483}
-  minSites: 5
-  maxSites: 8
 --- !u!1 &1114750525
 GameObject:
   m_ObjectHideFlags: 0

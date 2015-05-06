@@ -146,7 +146,7 @@ public class GameDirector : MonoBehaviour {
 
 		if (building != null && employeesAvailable > 0) {
 			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable - 1);
-			building.employees++;
+			//building.employees++;
 		}
 	}
 
@@ -160,10 +160,56 @@ public class GameDirector : MonoBehaviour {
 		Building building = Lot.FindLot(selectedObject, currentSite).Building;
 
 		if (building != null && building.employees > 0) {
-			building.employees--;
+			//building.employees--;
 			//int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
 			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable + 1);
 		}
+	}
+
+	/** Counter for getting AI Business colors */
+	private static List<Color> usedColors = new List<Color>();
+
+	/**
+	 * Gets a color for AI businesses
+	 * 
+	 * Cycles through the 8 possible color colors
+	 * 
+	 * @return the color
+	 */
+	public static Color getBusinessColor() {
+		int tries = 0;
+		Color color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 
+			Random.Range(0.0f, 1.0f));
+		// If this color was already used, and we haven't tried 1000 times, keep getting a new one
+		while (colorUsed(color) && tries < 1000) {
+			color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 
+				Random.Range(0.0f, 1.0f));
+		}
+		return color;
+	}
+
+	/**
+	 * Lets the director know that a business has used a color
+	 */
+	public static void setBusinessColor(Color color) {
+		if (!usedColors.Contains(color)) {
+			usedColors.Add(color);
+		}
+	}
+
+	/**
+	 * Checks if this, or a similar color, has been used as a business color
+	 * 
+	 * @param color the color to check against
+	 * @return whether the color, or a similar one, was used already
+	 */
+	public static bool colorUsed(Color color) {
+		foreach (Color used in usedColors) {
+			if (Mathf.Abs(color.r - used.r) < .1f && Mathf.Abs(color.g - used.g) < .1f && Mathf.Abs(color.b - used.b) < .1f) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -178,12 +224,6 @@ public class GameDirector : MonoBehaviour {
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
-			selection.SetActive(true);
-			Renderer r = selection.GetComponent<Renderer>();
-			r.material.color = Color.red;
-			selection.transform.position = 
-				new Vector3(hit.collider.gameObject.transform.position.x, hit.collider.gameObject.transform.position.y - 0.01f, hit.collider.gameObject.transform.position.z);
-			selection.transform.localScale = new Vector3(hit.collider.gameObject.transform.localScale.x + 0.02f, 1, hit.collider.gameObject.transform.localScale.z + 0.02f);
 			return hit.collider.gameObject;
 		}
 	}
@@ -194,7 +234,10 @@ public class GameDirector : MonoBehaviour {
 	private void moveCamera() {
 		Vector3 distance = (desiredCameraPosition - Camera.main.transform.position) / 3;
 		Camera.main.transform.Translate(distance * Time.deltaTime * 20, Space.World);
-		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || (Mathf.Abs(distance.x) < 0.0001f && Mathf.Abs(distance.y) < 0.0001f && Mathf.Abs(distance.z) < 0.0001f)) {
+		// If we've done this for more than 80 frames, or 45 frames when the camera has to go up high, 
+		// or we're really close, just put the camera at the desired position
+		if (timer > 80 || (timer > 45 && desiredCameraPosition.y > 400) || 
+			(Mathf.Abs(distance.x) < 0.0001f && Mathf.Abs(distance.y) < 0.0001f && Mathf.Abs(distance.z) < 0.0001f)) {
 			Camera.main.transform.position = desiredCameraPosition;
 		}
 	}
@@ -217,6 +260,8 @@ public class GameDirector : MonoBehaviour {
 	private void worldview() {
 		timer = 0;
 
+		deselectObject();
+
 		desiredCameraPosition = WORLDVIEW;
 		sidebar.SetActive(false);
 
@@ -236,8 +281,11 @@ public class GameDirector : MonoBehaviour {
 	 */
 	private void toSite(Site s) {
 		if (s == null) {
+			Debug.LogError("Null Site");
 			return;
 		}
+
+		deselectObject();
 
 		timer = 0;
 		setCurrentSite(s);
@@ -358,34 +406,30 @@ public class GameDirector : MonoBehaviour {
 			if (selectedObject == null) {
 				// Do nothing!
 			} else {
-				if (desiredCameraPosition == WORLDVIEW) {
-					foreach (Site s in world.sites) {
-						if (s.SitePlane == selectedObject || s.SitePlane.transform.GetChild(0).gameObject == selectedObject) {
-							toSite(s);
-							deselectObject();
-							goto breakout;
-						}
+				foreach (Site s in world.sites) {
+					if (s.SitePlane == selectedObject) {
+						toSite(s);
+						goto breakout;
 					}
-				}
-				if (desiredCameraPosition == WORLDVIEW) {
-					foreach (Site s in world.sites) {
-						if (s.SitePlane == selectedObject) {
-							toSite(s);
-							deselectObject();
-							goto breakout;
-						}
-						foreach (Lot l in s.Lots) {
-							if (l.LotPlaneIs(selectedObject)) {
+					foreach (Lot l in s.Lots) {
+						if (l.LotPlaneIs(selectedObject)) {
+							if (desiredCameraPosition == WORLDVIEW) {
 								toSite(s);
-								deselectObject();
-								goto breakout;
+							} else {
+								selection.SetActive(true);
+								Renderer r = selection.GetComponent<Renderer>();
+								r.material.color = l.Owner.businessColor;
+								selection.transform.position = 
+									new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - 0.01f, selectedObject.transform.position.z);
+								selection.transform.localScale = new Vector3(selectedObject.transform.localScale.x + 0.02f, 1, selectedObject.transform.localScale.z + 0.02f);
 							}
+							goto breakout;
 						}
 					}
-					// This will display if an object on the default layer is able to be clicked but not handled
-				} else {
-					Debug.LogWarning(selectedObject + " is selectable but not used");
 				}
+				// This will display if an object on the default layer is able to be clicked but not handled
+				Debug.LogWarning(selectedObject + " is selectable but not used");
+
 				breakout :
 				{}
 			}

@@ -13,11 +13,14 @@ public abstract class Business {
 	/** The inventory of the business */
 	public Inventory myInventory;
 
+	/** The color of the business, used to color the selection plane */
+	public Color businessColor { get; protected set; }
+
 	/** The lots leased by the business */
 	private List<Lot> myLots;
 
 	/** The name of the business */
-	public string name;
+	public string name { get; protected set; }
 
 	/** Points to the GameDirector's sales unit */
 	private Sales sales;
@@ -47,7 +50,7 @@ public abstract class Business {
 	 * @param qty the amount to sell
 	 */
 	public void SellResource(Site s, Resource r, int qty) {
-		sales.sell (this, s, r, qty);
+		sales.sell(this, s, r, qty);
 	}
 
 	/**
@@ -71,7 +74,7 @@ public abstract class Business {
 	 * @param b the site to send to
 	 */
 	public bool TransportGoods(Resource r, double qty, Site a, Site b) {
-		if (myInventory.getAmountOfAt(r, a) >=  qty) {
+		if (myInventory.getAmountOfAt(r, a) >= qty) {
 			myInventory.setAmountOfAt(r, a, -qty);
 
 			//TODO: TRANSPORT TIME

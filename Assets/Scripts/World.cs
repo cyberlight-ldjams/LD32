@@ -4,24 +4,45 @@ using System.Collections.Generic;
 
 public class World : MonoBehaviour {
 
+	/** The world plane - ALL OF EXISTANCE!!! */
 	public GameObject worldPlane;
+
+	/** A reference to the GameDirector */
 	public GameDirector gameDirector;
+
+	/** An exhaustive list of every site in the world! */
 	public List<Site> sites { get; private set; }
+
+	/** The minimum number of sites allowed in the world */
 	public int minSites = 5;
+
+	/** The maximum number of sites allowed in the world */
 	public int maxSites = 8;
+
+	/** The number of rows of lots in each site */
 	public int siteRows = 2;
+
+	/** The number of columns of lots in each site */
 	public int siteCols = 3;
-	public bool isReady { get; set; }
+
+	/** Whether or not the world has been fully generated */
+	public bool isReady { get; set; } // This is later set to false by the GameDirector
+
+	/** The "home site" where the player first starts */
 	public Site homesite { get; private set; }
+
+	/** The player */
 	public PlayerBusiness player { get; set; }
-	
+
+	/**
+	 * Creates the world and all the sites and so, by extension, all the lots
+	 */
 	void Start() {
-		isReady = false;
+		isReady = false; // The world isn't ready!
 		sites = new List<Site>();
 
 		// Create the homesite
 		homesite = newSite(new Vector2(0.0f, 0.0f));
-		gameDirector.setCurrentSite(homesite);
 
 		int total = (int)Random.Range(minSites, maxSites);
 		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;
@@ -66,10 +87,15 @@ public class World : MonoBehaviour {
 			}
 		}
 
-
+		// Connect all sites together based on closest neighbors
 		connectSites();
 
-		isReady = true;
+		// Set the homesite in the game director and therefore also the HUD
+		gameDirector.setCurrentSite(homesite);
+
+		isReady = true; // The world has been made, and is therefore ready
+
+		Debug.Log("World ready!");
 	}
 
 	private Site newSite(Vector2 xy) {
