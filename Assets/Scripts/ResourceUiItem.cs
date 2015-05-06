@@ -14,41 +14,41 @@ public class ResourceUiItem : MonoBehaviour {
 	public Text resourceName, stock;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 
 
-		resourceName.text = Enum.GetName (typeof(Resource), myResource);
-		int temp = (int)(GameDirector.THIS.playerBusiness.myInventory.getAmountOfAt (myResource, GameDirector.THIS.currentSite));
-		stock.text = temp.ToString ();
+		resourceName.text = Enum.GetName(typeof(Resource), myResource);
+		int temp = (int)(GameDirector.THIS.playerBusiness.myInventory.getAmountOfAt(myResource, GameDirector.THIS.currentSite));
+		stock.text = temp.ToString();
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 
 		if (GameDirector.PAUSED) {
 			return;
 		}
 
 		//sell item
-		if(input.isFocused && input.text != "" && Input.GetKey(KeyCode.Return)) {
+		if (input.isFocused && input.text != "" && Input.GetKey(KeyCode.Return)) {
 			int amount = 0;
 			bool success = Int32.TryParse(input.text, out amount);
 
 			//was it an integer?
-			if(success) {
+			if (success) {
 				input.text = "";
 				//sell the amount of resource at site
 				GameDirector.THIS.playerBusiness.SellResource(GameDirector.THIS.currentSite, myResource, amount);
 			}
 		}
 
-		int temp = (int)(GameDirector.THIS.playerBusiness.myInventory.getAmountOfAt (myResource, GameDirector.THIS.currentSite));
-		stock.text = temp.ToString ();
+		int temp = (int)(GameDirector.THIS.playerBusiness.myInventory.getAmountOfAt(myResource, GameDirector.THIS.currentSite));
+		stock.text = temp.ToString();
 
-		RectTransform rect = this.gameObject.GetComponent<RectTransform> ();
+		RectTransform rect = this.gameObject.GetComponent<RectTransform>();
 		if (!yPosSet) {
-			Debug.Log (this.GetHashCode());
+			Debug.Log(this.GetHashCode());
 			rect.position = new Vector3(rect.position.x, yPos, rect.position.z);
 			yPosSet = !yPosSet;
 		}

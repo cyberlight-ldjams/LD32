@@ -3,11 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+/**
+ * A pool of random events
+ * 
+ * Use the EventMaker.java program for a UI for creating the code for these
+ */
 public class RandomEventPool : List<RandomEvent> {
 
+	/**
+	 * Gets the list of random events
+	 */
 	public static RandomEventPool get(List<Business> businesses, List<Site> sites) {
 
-		RandomEventPool rep = new RandomEventPool ();
+		/** Store in this list of random events */
+		RandomEventPool rep = new RandomEventPool();
+
+
 		/*
 		 * This is a generic, random event : it can affect any business and any type of resource
 		 */
@@ -20,10 +31,10 @@ public class RandomEventPool : List<RandomEvent> {
 		List<RandomEvent.Affect> affects = new List<RandomEvent.Affect>();
 		string result = "";
 
-		int randBiz = (int) UnityEngine.Random.Range(0, businesses.Count);
-		Business business = businesses[randBiz];
+		int randBiz = (int)UnityEngine.Random.Range(0, businesses.Count);
+		Business business = businesses [randBiz];
 		
-		Resource resource = (Resource) ((int) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length));
+		Resource resource = (Resource)((int)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Resource)).Length));
 		string resourceName = getResourceName(resource);
 		
 		title = resourceName + " Crisis!";
@@ -39,22 +50,23 @@ public class RandomEventPool : List<RandomEvent> {
 			result = "Oh dear. They say honesty is the best policy. That might be true... Look at these business losses!";
 		}
 		
-		Site site = sites[((int) UnityEngine.Random.Range(0, sites.Count))];
-		int minMoneyDelta = (int) UnityEngine.Random.Range(40.0f * buyIt, 50.0f * buyIt);
-		int maxMoneyDelta = (int) UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
-		int minResourceDelta = (int) UnityEngine.Random.Range(40.0f, 50.0f);
-		int maxResourceDelta = (int) UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
+		Site site = sites [((int)UnityEngine.Random.Range(0, sites.Count))];
+		int minMoneyDelta = (int)UnityEngine.Random.Range(40.0f * buyIt, 50.0f * buyIt);
+		int maxMoneyDelta = (int)UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
+		int minResourceDelta = (int)UnityEngine.Random.Range(40.0f, 50.0f);
+		int maxResourceDelta = (int)UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
 		RandomEvent.Affect affect = new RandomEvent.Affect(business, resource, site, minMoneyDelta, maxMoneyDelta, minResourceDelta, maxResourceDelta);
 		affects.Add(affect);
 		
 		RandomEvent.Option option1 = new RandomEvent.Option(text, affects, result);
 		
 		text = "Be honest. An uncommon idea in business, but at least no one can accuse us of lying twice!";
-		result = "Okay. A few of our customers sent angry letters, and we had to pay out some refunds, but at least the tax folks didn't crush us for this mistake.";
+		result = "Okay. A few of our customers sent angry letters, and we had to pay out some refunds, " 
+			+ "but at least the tax folks didn't crush us for this mistake.";
 		buyIt = 1.0f;
-		minMoneyDelta = (int) UnityEngine.Random.Range(40.0f * buyIt, 50.0f * buyIt);
-		maxMoneyDelta = (int) UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
-		maxResourceDelta = (int) UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
+		minMoneyDelta = (int)UnityEngine.Random.Range(40.0f * buyIt, 50.0f * buyIt);
+		maxMoneyDelta = (int)UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
+		maxResourceDelta = (int)UnityEngine.Random.Range(100.0f * buyIt, 400.0f * buyIt);
 		
 		affects.Remove(affect);
 		affect = new RandomEvent.Affect(business, resource, site, minMoneyDelta, maxMoneyDelta, minResourceDelta, maxResourceDelta);
@@ -62,12 +74,15 @@ public class RandomEventPool : List<RandomEvent> {
 		affects.Add(affect);
 		RandomEvent.Option option2 = new RandomEvent.Option(text, affects, result);
 		
-		options.Add (option1);
-		options.Add (option2);
+		options.Add(option1);
+		options.Add(option2);
 		
 		RandomEvent re = new RandomEvent(title, description, options, time);
 		rep.Add(re);
 
+		// -------------------------------------------------------- //
+
+		// Next event here
 
 		// -------------------------------------------------------- //
 		
@@ -76,17 +91,30 @@ public class RandomEventPool : List<RandomEvent> {
 	}
 
 
+	/**
+	 * Gets the name of a resource with spaces
+	 * (i.e. "RailroadTie" becomes "Railroad Tie"
+	 * 
+	 * @param res the resource to get the name of
+	 * @return the name of the resource
+	 */
 	private static string getResourceName(Resource res) {
 		string resourceName = Enum.GetName(typeof(Resource), res);
-		//for (int i = 1; i < resourceName.Length; i++) {
-		//	if (Char.IsUpper(resourceName[i])) {
-			//TODO: Fix this
-			//	string half = resourceName.Substring(0,i);
-			//	half = half + " " + resourceName.Substring(i, resourceName.Length);
-			//	resourceName = half;
-			//	i++;
-		//	}
-		//}
+		int length = resourceName.Length;
+
+		// Search for uppercase letters, starting at index 1 because 
+		// the first will be uppercase
+		for (int i = 1; i < length; i++) {
+			// If we find an uppercase letter, put a space before it
+			if (Char.IsUpper(resourceName [i])) {
+				string half = resourceName.Substring(0, i);
+				half = half + " " + resourceName.Substring(i);
+				resourceName = half;
+				length = resourceName.Length;
+				i++; // Add 1 because we don't want to count the uppercase letter twice
+			}
+		}
+
 		return resourceName;
 	}
 }

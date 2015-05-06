@@ -31,12 +31,12 @@ public class EventManager : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 
-		World world = Object.FindObjectOfType<World> ();
-		gd = Object.FindObjectOfType < GameDirector> ();
-		businesses = new List<Business> ();
-		businesses.Add (gd.playerBusiness);
+		World world = Object.FindObjectOfType<World>();
+		gd = Object.FindObjectOfType < GameDirector>();
+		businesses = new List<Business>();
+		businesses.Add(gd.playerBusiness);
 
 		sites = world.sites;
 
@@ -48,52 +48,52 @@ public class EventManager : MonoBehaviour {
 		}
 
 		//Initialize random event info
-		buttons = new List<Button> (4);
+		buttons = new List<Button>(4);
 		for (int i = 0; i < 4; i++) {
 			buttons.Add(null);
 		}
-		choices = RandomEventPool.get (businesses, sites);
+		choices = RandomEventPool.get(businesses, sites);
 		used = new List<RandomEvent>();
 
-		foreach(Button but in Object.FindObjectsOfType<Button>()) {
-			switch(but.name) {
+		foreach (Button but in Object.FindObjectsOfType<Button>()) {
+			switch (but.name) {
 				case "REButton1":
-				buttons[0] = but;
-				break;
+					buttons [0] = but;
+					break;
 				case "REButton2":
-				buttons[1] = but;
-				break;
+					buttons [1] = but;
+					break;
 				case "REButton3":
-				buttons[2] = but;
-				break;
+					buttons [2] = but;
+					break;
 				case "REButton4":
-				buttons[3] = but;
-				break;
+					buttons [3] = but;
+					break;
 			}
 
 
 		}	
 		
-		Text [] temp = dialog.GetComponentsInChildren<Text> ();
+		Text [] temp = dialog.GetComponentsInChildren<Text>();
 		foreach (Text t in temp) {
 			string textName = t.name;
 			
 			switch (textName) {
-			case "Title":
-				title = t;
-				break;
-			case "Description":
-				description = t;
-				break;
-			case "afterText":
-				afterText = t;
-				break;
+				case "Title":
+					title = t;
+					break;
+				case "Description":
+					description = t;
+					break;
+				case "afterText":
+					afterText = t;
+					break;
 			}
 		}
 
-		Slider [] s = Object.FindObjectsOfType<Slider> ();
+		Slider [] s = Object.FindObjectsOfType<Slider>();
 		foreach (Slider s1 in s) {
-			if (s1.name.Equals ("Timer")) {
+			if (s1.name.Equals("Timer")) {
 				eventTimerSlider = s1;
 				break;
 			}
@@ -101,55 +101,58 @@ public class EventManager : MonoBehaviour {
 	}
 
 	private void resetRandomEventUI() {
-		dialog.SetActive (false);
-		afterText.gameObject.SetActive (false);
+		dialog.SetActive(false);
+		afterText.gameObject.SetActive(false);
 		foreach (Button b in buttons) {
-			b.gameObject.SetActive (true);
+			b.gameObject.SetActive(true);
 		}
-		title.gameObject.SetActive (true);
-		description.gameObject.SetActive (true);
+		title.gameObject.SetActive(true);
+		description.gameObject.SetActive(true);
 		displayed = false;
 	}
 
 	private void switchRandomEventUI() {
-		title.gameObject.SetActive (false);
-		description.gameObject.SetActive (false);
+		title.gameObject.SetActive(false);
+		description.gameObject.SetActive(false);
 		foreach (Button b in buttons) {
-			b.gameObject.SetActive (false);
+			b.gameObject.SetActive(false);
 		}
-		eventTimerSlider.gameObject.SetActive (false);
+		eventTimerSlider.gameObject.SetActive(false);
 
 		afterText.text = currentEvent.result;
 		if (afterText.text == null || afterText.text.Trim() == "") {
 			resetRandomEventUI();
 			return;
 		}
-		afterText.gameObject.SetActive (true);
-		buttons [3].gameObject.SetActive (true);
-		Text[] t = buttons [3].GetComponentsInChildren<Text> ();
-		t[0].text = "OK.";
-		buttons [3].onClick.AddListener (() => { resetRandomEventUI(); });
+		afterText.gameObject.SetActive(true);
+		buttons [3].gameObject.SetActive(true);
+		Text[] t = buttons [3].GetComponentsInChildren<Text>();
+		t [0].text = "OK.";
+		buttons [3].onClick.AddListener(() => {
+			resetRandomEventUI(); });
 	}
 
 	private void populateRandomEventUI() {
 		title.text = currentEvent.title;
 		description.text = currentEvent.description;
 		afterText.text = currentEvent.result;
-		afterText.gameObject.SetActive (false);
+		afterText.gameObject.SetActive(false);
 
 		List<RandomEvent.Option> o = currentEvent.options;
 
-		System.Random rand = new System.Random ();
+		System.Random rand = new System.Random();
 		for (int i = 0; i < buttons.Count; i++) {
 			//still have options left
-			if(o.Count > 0) {
-				RandomEvent.Option pick = o[rand.Next(o.Count)];
-				Text[] t = buttons[i].GetComponentsInChildren<Text>();
-				t[0].text = pick.optionText;
-				buttons[i].onClick.AddListener(() => { currentEvent.execute(pick); switchRandomEventUI(); });
+			if (o.Count > 0) {
+				RandomEvent.Option pick = o [rand.Next(o.Count)];
+				Text[] t = buttons [i].GetComponentsInChildren<Text>();
+				t [0].text = pick.optionText;
+				buttons [i].onClick.AddListener(() => {
+					currentEvent.execute(pick);
+					switchRandomEventUI(); });
 				o.Remove(pick);
 			} else {
-				buttons[i].gameObject.SetActive(false);
+				buttons [i].gameObject.SetActive(false);
 			}
 		}
 
@@ -157,18 +160,18 @@ public class EventManager : MonoBehaviour {
 			eventTimerSlider.maxValue = currentEvent.timer;
 			eventTimerSlider.minValue = 0.0f;
 			eventTimerSlider.value = currentEvent.timer;
-			eventTimerSlider.gameObject.SetActive (true);
+			eventTimerSlider.gameObject.SetActive(true);
 			timerTime = Time.time + currentEvent.timer;
 		} else {
-			eventTimerSlider.gameObject.SetActive (false);
+			eventTimerSlider.gameObject.SetActive(false);
 		}
 	}
 
-	void Update () {
-		if (GameDirector.PAUSED || gd.stager.currentStage == Stage.Archaic) {
+	void Update() {
+		if (GameDirector.PAUSED || gd.stager == null || gd.stager.currentStage == Stage.Archaic) {
 			if (dialog.activeSelf) {
-				RectTransform rect = dialog.GetComponent<RectTransform> ();
-				rect.anchoredPosition = new Vector2 (0, 0);
+				RectTransform rect = dialog.GetComponent<RectTransform>();
+				rect.anchoredPosition = new Vector2(0, 0);
 				dialog.SetActive(false);
 			}
 			return;
@@ -176,7 +179,7 @@ public class EventManager : MonoBehaviour {
 
 		currentTime = Time.time - GameDirector.timeCorrection;
 		if (currentTime >= randTime && !displayed) {
-			pick ();
+			pick();
 			populateRandomEventUI();
 		} else if (!displayed) {
 			dialog.SetActive(false);
@@ -186,8 +189,8 @@ public class EventManager : MonoBehaviour {
 			eventTimerSlider.value = timerTime = timerTime - Time.deltaTime;
 		} else if (eventTimerSlider.gameObject.activeSelf && eventTimerSlider.value <= 0.0f && displayed) {
 			//default choice
-			currentEvent.execute (currentEvent.defaultOption);
-			eventTimerSlider.gameObject.SetActive (false);
+			currentEvent.execute(currentEvent.defaultOption);
+			eventTimerSlider.gameObject.SetActive(false);
 			switchRandomEventUI();
 		}
 	}
@@ -195,13 +198,13 @@ public class EventManager : MonoBehaviour {
 	private void pick() {
 		displayed = true;
 		dialog.SetActive(true);
-		timer = UnityEngine.Random.Range (minTimer, maxTimer);
-		currentEvent = choices [UnityEngine.Random.Range (0, choices.Count)];
-		choices.Remove (currentEvent);
-		used.Add (currentEvent);
+		timer = UnityEngine.Random.Range(minTimer, maxTimer);
+		currentEvent = choices [UnityEngine.Random.Range(0, choices.Count)];
+		choices.Remove(currentEvent);
+		used.Add(currentEvent);
 
 		if (choices.Count == 0) {
-			choices = RandomEventPool.get (businesses, sites);
+			choices = RandomEventPool.get(businesses, sites);
 			used = new List<RandomEvent>();
 		}
 

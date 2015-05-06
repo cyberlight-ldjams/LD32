@@ -2,13 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * This class contains the whole world - a reference to every site, the WorldPlane
+ */
 public class World : MonoBehaviour {
 
 	/** The world plane - ALL OF EXISTANCE!!! */
-	public GameObject worldPlane;
+	public GameObject worldPlane; // Set in the Unity Editor
 
 	/** A reference to the GameDirector */
-	public GameDirector gameDirector;
+	private GameDirector gameDirector;
 
 	/** An exhaustive list of every site in the world! */
 	public List<Site> sites { get; private set; }
@@ -39,6 +42,7 @@ public class World : MonoBehaviour {
 	 */
 	void Start() {
 		isReady = false; // The world isn't ready!
+		gameDirector = GameDirector.THIS;
 		sites = new List<Site>();
 
 		// Create the homesite
@@ -90,14 +94,18 @@ public class World : MonoBehaviour {
 		// Connect all sites together based on closest neighbors
 		connectSites();
 
-		// Set the homesite in the game director and therefore also the HUD
+		// Set the current site in the game director and therefore also the HUD
 		gameDirector.setCurrentSite(homesite);
 
 		isReady = true; // The world has been made, and is therefore ready
-
-		Debug.Log("World ready!");
 	}
 
+	/**
+	 * Creates a new site at the given location
+	 * 
+	 * @param xy the location of the new site (actually x and z coordiantes)
+	 * @return the created site
+	 */
 	private Site newSite(Vector2 xy) {
 		Site site = new Site(siteRows, siteCols, AIBusiness.UNOWNED);
 		sites.Add(site);

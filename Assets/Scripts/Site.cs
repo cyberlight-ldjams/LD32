@@ -14,8 +14,13 @@ public class Site {
 	/** The default number of employees at a new site */
 	public const int DEFAULT_EMPLOYEES = 15;
 
+	/** The default number of resource lots per site */
+	public const int RESOURCE_COUNT = 3;
+
+	/** This site's SitePlane */
 	public GameObject SitePlane { get; private set; }
 
+	/** This site's lots */
 	public List<Lot> Lots { get; private set; }
 
 	/** How many rows of lots there are */
@@ -161,21 +166,20 @@ public class Site {
 	 * Moves lots to their correct possition
 	 */
 	private void MoveLots() {
-		current = new Vector2(-cols / 2.0f + 0.5f, 
-		                       -rows / 2.0f + 0.5f);
-		foreach (Lot l in Lots) {
+		// The current position of the next lot
+		current = new Vector2(-cols / 2.0f + 0.5f, -rows / 2.0f + 0.5f);
+		foreach (Lot lot in Lots) {
 			if (current.x > (cols / 2.0f)) {
 				current.x = -cols / 2.0f + 0.5f;
 				current.y++;
 			}
 
-			l.RepositionLotPlane(
-					new Vector3(current.x * 10.1f + SitePlane.transform.position.x, SitePlane.transform.position.y + 1.0f, 
-					             current.y * 10.1f + SitePlane.transform.position.z)
+			lot.RepositionLotPlane(new Vector3(current.x * 10.1f + SitePlane.transform.position.x, 
+			            SitePlane.transform.position.y + 1.0f, 
+					    current.y * 10.1f + SitePlane.transform.position.z)
 			);
 
 			current.x++;
-			
 		}
 	}
 
@@ -183,11 +187,10 @@ public class Site {
 	 * Adds resources to lots
 	 */
 	private void AddLotResources() {
-		int resourceCount = 3;
-		List<Resource> resources = ResourceExtensions.RandomResources(resourceCount);
-		List<Lot> lots = ResourceExtensions.ChooseRandom(Lots.ToArray(), resourceCount);
+		List<Resource> resources = ResourceExtensions.RandomResources(RESOURCE_COUNT);
+		List<Lot> lots = ResourceExtensions.ChooseRandom(Lots.ToArray(), RESOURCE_COUNT);
 
-		for (int i = 0; i < resourceCount; i++) {
+		for (int i = 0; i < RESOURCE_COUNT; i++) {
 			lots [i].Resource = resources [i];
 		}
 	}

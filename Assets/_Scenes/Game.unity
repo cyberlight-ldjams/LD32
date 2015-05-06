@@ -724,10 +724,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5298d348aa33bb4894ed03d6baffa4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clayText: {fileID: 0}
-  potteryText: {fileID: 0}
-  employeeText: {fileID: 0}
-  gameDirector: {fileID: 420523483}
 --- !u!114 &420523486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,7 +736,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldPlane: {fileID: 1051612612}
-  gameDirector: {fileID: 420523483}
   minSites: 5
   maxSites: 8
   siteRows: 2
@@ -756,7 +751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c26a48859de442b5b167e07095e1b82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  director: {fileID: 420523483}
   statusUI: {fileID: 262065021}
 --- !u!1001 &422071593
 Prefab:
@@ -1302,7 +1296,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
   m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 246, y: 30}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &807513054
 MonoBehaviour:

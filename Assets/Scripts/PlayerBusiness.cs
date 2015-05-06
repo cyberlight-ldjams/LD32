@@ -11,6 +11,9 @@ public class PlayerBusiness : Business {
 	 */
 	public PlayerBusiness() {
 		Init();
+
+		// For now, set a random color and name
 		businessColor = GameDirector.getBusinessColor();
+		name = RandomNameGenerator.generateBusinessName();
 	}
 }

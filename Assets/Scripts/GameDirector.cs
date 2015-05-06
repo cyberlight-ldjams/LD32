@@ -387,6 +387,7 @@ public class GameDirector : MonoBehaviour {
 			// When the world has announced it is ready, do these things
 		} else if (world.isReady) {
 			world.isReady = false; // Make sure this if only runs once
+			homesite = world.homesite;
 
 			this.GetComponent<EventManager>().enabled = true;
 			em = this.GetComponent<EventManager>();
