@@ -14,16 +14,17 @@ public class Lot {
 	public Lot(Site site, Business owner, Vector3 position, Quaternion rotation) {
 		Site = site;
 		Owner = owner;
-		LotPlane = (GameObject) Object.Instantiate (Resources.Load ("LotPlane"), position, rotation);
+		LotPlane = (GameObject)Object.Instantiate(Resources.Load("LotPlane"), position, rotation);
 		leaseID = 0;
 	}
 
 	public void InstallBuildingAt(Building newBuilding) {
-		if (Building != null)
-			Building.Demolish ();
+		if (Building != null) {
+			Building.Demolish();
+		}
 		
 		Building = newBuilding;
-		Building.Install (this, LotPlane.transform.position, LotPlane.transform.rotation);
+		Building.Install(this, LotPlane.transform.position, LotPlane.transform.rotation);
 	}
 
 	public static Lot FindLot(GameObject lotPlane, Site site) {
@@ -45,8 +46,9 @@ public class Lot {
 
 	public void SetResource(Resource? resource) {
 		Resource_ = resource;
-		if (resource.HasValue)
+		if (resource.HasValue) {
 			LotPlane.GetComponent<Renderer>().material = resource.Value.Material();
+		}
 	}
 
 	public bool LotPlaneIs(GameObject otherObject) {

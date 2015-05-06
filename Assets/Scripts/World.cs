@@ -9,24 +9,29 @@ public class World : MonoBehaviour {
 	public List<Site> sites { get; private set; }
 	public int minSites = 5;
 	public int maxSites = 8;
-	public bool isReady {get; set;}
-	public Site homesite { get; private set;}
+	public int siteRows = 2;
+	public int siteCols = 3;
+	public bool isReady { get; set; }
+	public Site homesite { get; private set; }
 	public PlayerBusiness player { get; set; }
 	
-	void Start () {
+	void Start() {
 		isReady = false;
 		sites = new List<Site>();
-		int total = (int) Random.Range(minSites, maxSites);
+
+		// Create the homesite
+		homesite = newSite(new Vector2(0.0f, 0.0f));
+		gameDirector.setCurrentSite(homesite);
+
+		int total = (int)Random.Range(minSites, maxSites);
 		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;
 		float worldSizeZ = worldPlane.transform.localScale.z * 4.5f;
 		float x = Random.Range(-worldSizeX, worldSizeX);
 		float z = Random.Range(-worldSizeZ, worldSizeZ);
-		homesite = new Site(6, player);
-		gameDirector.setCurrentSite(homesite);
-		sites.Add(homesite);
+
 		for (int a = 0; a < 1; a++) {
 			if (((Mathf.Abs(0 - x) < worldSizeX / 6.0f) && 
-			                (Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
+				(Mathf.Abs(0 - z) < worldSizeZ / 6.0f))) {
 				a = -1; // -2 because 1 is added before the next iteration
 				x = Random.Range(-worldSizeX, worldSizeX);
 				z = Random.Range(-worldSizeZ, worldSizeZ);
@@ -48,8 +53,8 @@ public class World : MonoBehaviour {
 					x = 0;
 					z = 0;
 					continue;
-				} else if ((Mathf.Abs(sites[j].getPlaneLocation().x - x) < worldSizeX / 6.0f) && 
-				           (Mathf.Abs(sites[j].getPlaneLocation().z - z) < worldSizeZ / 6.0f)) {
+				} else if ((Mathf.Abs(sites [j].getPlaneLocation().x - x) < worldSizeX / 6.0f) && 
+					(Mathf.Abs(sites [j].getPlaneLocation().z - z) < worldSizeZ / 6.0f)) {
 					x = Random.Range(-worldSizeX, worldSizeX);
 					z = Random.Range(-worldSizeZ, worldSizeZ);
 					j = -1;
@@ -62,14 +67,16 @@ public class World : MonoBehaviour {
 		}
 
 
-		connectSites ();
+		connectSites();
 
 		isReady = true;
 	}
 
-	private void newSite(Vector2 xy) {
-		sites.Add(new Site(6, AIBusiness.UNOWNED));
-		sites[sites.Count - 1].placeSite(new Vector3 (xy.x, 1.0f, xy.y));
+	private Site newSite(Vector2 xy) {
+		Site site = new Site(siteRows, siteCols, AIBusiness.UNOWNED);
+		sites.Add(site);
+		sites [sites.Count - 1].placeSite(new Vector3(xy.x, 1.0f, xy.y));
+		return site;
 	}
 
 	void Update() {
@@ -78,11 +85,11 @@ public class World : MonoBehaviour {
 		}
 
 		foreach (Site s in sites) {
-			if(s.neighbors == null ) {
+			if (s.neighbors == null) {
 				Debug.Log("No Neighbors");
 				continue;
 			}
-			foreach(Site s1 in s.neighbors) {
+			foreach (Site s1 in s.neighbors) {
 				Debug.DrawLine(s1.SitePlane.transform.position, s.SitePlane.transform.position);
 			}
 
@@ -95,7 +102,7 @@ public class World : MonoBehaviour {
 				Vector3 s1 = sites [i].SitePlane.transform.position;
 				Vector3 s2 = sites [j].SitePlane.transform.position;
 
-				float dist = Vector3.Distance (s1, s2);
+				float dist = Vector3.Distance(s1, s2);
 
 
 				bool doNotConnect = false;
@@ -104,14 +111,14 @@ public class World : MonoBehaviour {
 						continue;
 					}
 					Vector3 s3 = sites [k].SitePlane.transform.position;
-					if (Vector3.Distance (s1, s3) < dist && Vector3.Distance (s2, s3) < dist) {
+					if (Vector3.Distance(s1, s3) < dist && Vector3.Distance(s2, s3) < dist) {
 						doNotConnect = true;
 						break;
 					}
 				}
 				if (!doNotConnect) {
-					sites[i].neighbors.Add(sites[j]);
-					sites[j].neighbors.Add(sites[i]);
+					sites [i].neighbors.Add(sites [j]);
+					sites [j].neighbors.Add(sites [i]);
 				}
 				
 			}

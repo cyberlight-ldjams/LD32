@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * The inventory of a business
+ */
 public class Inventory {
 
 	/** the base currency, unmodified by any stage modifiers */
@@ -22,7 +25,7 @@ public class Inventory {
 	 * @return a list of <Item>s
 	 */
 	private Dictionary<ItemKey, double> getInventory() {
-			return items;
+		return items;
 	}
 
 	public double getBaseCurrency() {
@@ -49,21 +52,31 @@ public class Inventory {
 
 	public double getAmountOfAt(Resource resource, Site site) {
 		ItemKey tuple = new ItemKey { itemType = resource, location = site };
-		if (items.ContainsKey(tuple))
-			return items[tuple];
-		else
+		if (items.ContainsKey(tuple)) {
+			return items [tuple];
+		} else {
 			return 0.0;
+		}
 	}
 
 	public void setAmountOfAt(Resource resource, Site site, double amount) {
 		ItemKey tuple = new ItemKey { itemType = resource, location = site };
-		items[tuple] = amount;
+		items [tuple] = amount;
 	}
 
+	/**
+	 * Gets the number of employees at the site
+	 */
 	public int GetEmployeesAt(Site site) {
 		return site.employees;
 	}
 
+	/**
+	 * Sets the labor cap at the specified building to numEmployees
+	 * 
+	 * @param b the building
+	 * @param numEmployees the labor cap
+	 */
 	public void SetEmployeesCap(Building b, int numEmployees) {
 		if (numEmployees >= 0) {
 			b.laborCap = numEmployees;
@@ -72,14 +85,11 @@ public class Inventory {
 		}
 	}
 
-	public void SetEmployeesAt(Site s, int numEmployees) {
-		if (numEmployees >= 0) {
-			s.employees = numEmployees;
-		} else {
-			s.employees = 0;
-		}
-	}
 
+	/**
+	 * The structure of an item key
+	 * A resource and its location at a site
+	 */
 	public struct ItemKey {
 		public Resource itemType; 
 		public Site location;

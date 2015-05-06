@@ -22,15 +22,15 @@ public class RandomEvent {
 
 
 	public RandomEvent(string title, string desc, List<Option> options, float timeSec) {
-		int optNum = Random.Range (0, options.Count - 1);
+		int optNum = Random.Range(0, options.Count - 1);
 		defaultOption = options [optNum];
 		this.title = title;
 		description = desc;
 		this.options = options;
 
 		if (timer < minTimer) {
-				timer = minTimer;
-			}
+			timer = minTimer;
+		}
 
 	}
 
@@ -54,7 +54,7 @@ public class RandomEvent {
 
 		public string afterText{ get; private set; }
 
-		public Option (string opText, List<Affect> affects, string result) {
+		public Option(string opText, List<Affect> affects, string result) {
 			optionText = opText;
 			this.affects = affects;
 			afterText = result;
@@ -78,7 +78,7 @@ public class RandomEvent {
 
 		private Site affectedSite;
 
-		public Affect (Business b, Resource? r = null, Site site = null, int minCurrencyChange =0, int maxCurrencyChange =0, int minResourceChange =0, int maxResourceChange = 0) {
+		public Affect(Business b, Resource? r = null, Site site = null, int minCurrencyChange =0, int maxCurrencyChange =0, int minResourceChange =0, int maxResourceChange = 0) {
 
 			affectedBusiness = b;
 			affectedResource = r;
@@ -99,8 +99,8 @@ public class RandomEvent {
 				maxResourceChange = temp;
 			}
 			
-			currencyChange = Random.Range (minCurrencyChange, maxCurrencyChange);
-			resourceChange = Random.Range (minResourceChange, maxResourceChange);
+			currencyChange = Random.Range(minCurrencyChange, maxCurrencyChange);
+			resourceChange = Random.Range(minResourceChange, maxResourceChange);
 
 		}
 
@@ -112,7 +112,7 @@ public class RandomEvent {
 			//resource adjustments
 			if (affectedResource != null) {
 
-				double currentResource = affectedBusiness.myInventory.getAmountOfAt ((Resource)affectedResource, affectedSite);
+				double currentResource = affectedBusiness.myInventory.getAmountOfAt((Resource)affectedResource, affectedSite);
 				double adjustedResource = currentResource + this.resourceChange;
 
 				//no negative
@@ -120,11 +120,11 @@ public class RandomEvent {
 					adjustedResource = 0.0;
 				}
 
-				affectedBusiness.myInventory.setAmountOfAt ((Resource)affectedResource, affectedSite, adjustedResource);
+				affectedBusiness.myInventory.setAmountOfAt((Resource)affectedResource, affectedSite, adjustedResource);
 			}
 
 			//currency adjustments
-			affectedBusiness.myInventory.addBaseCurrency (currencyChange);
+			affectedBusiness.myInventory.addBaseCurrency(currencyChange);
 
 		}
 	}

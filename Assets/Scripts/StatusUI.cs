@@ -17,24 +17,24 @@ public class StatusUI : MonoBehaviour {
 	public GameObject statusUI;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 		player = director.playerBusiness;
 		time = GameDirector.gameTime;
-		fields = statusUI.gameObject.GetComponentsInChildren<Text> ();
+		fields = statusUI.gameObject.GetComponentsInChildren<Text>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 
 		foreach (Text t in fields) {
-			if(t.name == "CompanyName") {
+			if (t.name == "CompanyName") {
 				t.text = player.name;
-			} else if(t.name == "Bank") {
+			} else if (t.name == "Bank") {
 				t.text = "Bank: " + player.myInventory.getBaseCurrency() + " " + director.stager.currencyName;
-			} else if(t.name == "Date") {
-				int currentQuarter =(time.currentQuarter % 4) ;
+			} else if (t.name == "Date") {
+				int currentQuarter = (time.currentQuarter % 4);
 
-				if(currentQuarter == 0) {
+				if (currentQuarter == 0) {
 					currentQuarter = 4;
 				}
 

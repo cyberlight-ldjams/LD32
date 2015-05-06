@@ -31,12 +31,6 @@ public class GameDirector : MonoBehaviour {
 	/** The value of the "Ignore Raycast" layer */
 	public const int IGNORE_RAYCAST = 2;
 
-	/** How many columns of lots each site should have */
-	public int lotColumns;
-
-	/** How many rows of lots each site should have */
-	public int lotRows;
-
 	/** The event manager for handling random events */	
 	public EventManager em { get; private set; }
 
@@ -50,13 +44,13 @@ public class GameDirector : MonoBehaviour {
 	public World world; // Set in the Unity Editor
 
 	/** The home site at 0,0 */
-	public Site homesite {get; private set;}
+	public Site homesite { get; private set; }
 
 	/** The current site */
 	public Site currentSite { get; private set; }
 
 	/** The Stager for moving through the stages */
-	public Stager stager {get; private set;}
+	public Stager stager { get; private set; }
 
 	/** The Sales item for handling buying and selling */
 	public Sales sales { get; private set; }
@@ -94,10 +88,10 @@ public class GameDirector : MonoBehaviour {
 	/**
 	 * Initializes the game
 	 */
-	void Start () {
+	void Start() {
 		THIS = this;
 		gameTime = this.gameObject.AddComponent<GameTime>();
-		playerBusiness = new PlayerBusiness ();
+		playerBusiness = new PlayerBusiness();
 		//playerBusiness.myInventory.SetEmployeesAt(homesite, 8);
 
 		stager = new Stager();
@@ -107,18 +101,18 @@ public class GameDirector : MonoBehaviour {
 		sales = new Sales(this);
 		timeCorrection = 0.0f;
 
-		selection = (GameObject) GameObject.CreatePrimitive(PrimitiveType.Plane);
+		selection = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Plane);
 		selection.layer = IGNORE_RAYCAST;
 		selection.SetActive(false);
-		List<Business> temp = new List<Business> ();
-		temp.Add (playerBusiness);
+		List<Business> temp = new List<Business>();
+		temp.Add(playerBusiness);
 	}
 
 	/**
 	 * Installs a building on the selected lot
 	 */
-	public void InstallBuilding (Building b) {
-		Lot.InstallBuilding (selectedObject, currentSite, b);
+	public void InstallBuilding(Building b) {
+		Lot.InstallBuilding(selectedObject, currentSite, b);
 	}
 
 	/** 
@@ -126,20 +120,24 @@ public class GameDirector : MonoBehaviour {
 	 * 
 	 * If the lot has no resource, no quarry is installed
 	 */
-	public void InstallQuarry () {
+	public void InstallQuarry() {
 		Lot lot = Lot.FindLot(selectedObject, currentSite);
-		if (lot.Resource.HasValue)
+		if (lot.Resource.HasValue) {
 			Lot.InstallBuilding(selectedObject, currentSite, Quarry.NewAppropriateQuarry(lot.Resource.Value));
+		}
 	}
 
 	/**
 	 * Installs a pottery workshop on the selected lot
 	 */
-	public void InstallPotteryWorkshop () {
+	public void InstallPotteryWorkshop() {
 		InstallBuilding(new PotteryWorkshop());
 	}
 
 	/**
+	 * Labor distribution is now being determined by the offered wage in the Site class
+	 * This method may not be needed...
+	 * 
 	 * Deplays an employee
 	 */
 	public void DeployEmployee() {
@@ -147,12 +145,15 @@ public class GameDirector : MonoBehaviour {
 		int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
 
 		if (building != null && employeesAvailable > 0) {
-			playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable - 1);
+			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable - 1);
 			building.employees++;
 		}
 	}
 
 	/**
+	 * Labor distribution is now being determined by the offered wage in the Site class
+	 * This method may not be needed...
+	 *
 	 * Recalls an employee
 	 */
 	public void RecallEmployee() {
@@ -160,8 +161,8 @@ public class GameDirector : MonoBehaviour {
 
 		if (building != null && building.employees > 0) {
 			building.employees--;
-			int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
-			playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable + 1);
+			//int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
+			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable + 1);
 		}
 	}
 
@@ -171,9 +172,9 @@ public class GameDirector : MonoBehaviour {
 	 * If they did, selects it with the "selection" plane
 	 */
 	private GameObject calculateSelectedObject() {
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
-		Physics.Raycast (ray, out hit);
+		Physics.Raycast(ray, out hit);
 		if (hit.collider == null) {
 			return selectedObject;
 		} else {
@@ -227,7 +228,7 @@ public class GameDirector : MonoBehaviour {
 	 * Shortcut to calling "toSite(homesite)"
 	 */
 	private void toHomesite() {
-		toSite (homesite);
+		toSite(homesite);
 	}
 
 	/**
@@ -244,7 +245,7 @@ public class GameDirector : MonoBehaviour {
 		float x = s.SitePlane.transform.position.x;
 		float z = s.SitePlane.transform.position.z;
 
-		sidebar.SetActive (true);
+		sidebar.SetActive(true);
 		desiredCameraPosition = new Vector3(x + 5.0f, SITE_CAMERA_HEIGHT, z + -5.0f);
 
 		// Make the site objects non-selectable
@@ -258,7 +259,7 @@ public class GameDirector : MonoBehaviour {
 	 */
 	public void setCurrentSite(Site s) {
 		currentSite = s;
-		if (headsUpDisplay != null ) {
+		if (headsUpDisplay != null) {
 			headsUpDisplay.currentSite = s;
 		}
 	}
@@ -276,14 +277,14 @@ public class GameDirector : MonoBehaviour {
 	 */
 	private void platformSpecific() {
 		switch (Application.platform) {
-		case RuntimePlatform.OSXPlayer:
-		case RuntimePlatform.WindowsPlayer:
-		case RuntimePlatform.LinuxPlayer:
+			case RuntimePlatform.OSXPlayer:
+			case RuntimePlatform.WindowsPlayer:
+			case RuntimePlatform.LinuxPlayer:
 			// Esc quits the game
-			if (Input.GetKeyDown (KeyCode.Escape)) {
-				Application.Quit ();
-			}
-			break;
+				if (Input.GetKeyDown(KeyCode.Escape)) {
+					Application.Quit();
+				}
+				break;
 		}
 	}
 
@@ -295,17 +296,17 @@ public class GameDirector : MonoBehaviour {
 	 * 
 	 * If a behavior here is specific to one game element, consider moving it to a more appropriate update
 	 */
-	void Update () {
+	void Update() {
 		// Handle platform spectific behaviors
 		// Press ESC to quit is run here, even before pausing is checked
-		platformSpecific ();
+		platformSpecific();
 
 
 		// // PAUSE BEHAVIORS // //
 
 
 		// Pause/unpause the game when 'P' is pressed
-		if (Input.GetKeyDown (KeyCode.P)) {
+		if (Input.GetKeyDown(KeyCode.P)) {
 			PAUSED = !PAUSED;
 		}
 
@@ -320,7 +321,7 @@ public class GameDirector : MonoBehaviour {
 			timeCorrection += Time.deltaTime;
 			return;
 
-		// If the game is not paused, but the pause screen is active, turn it off
+			// If the game is not paused, but the pause screen is active, turn it off
 		} else if (pauseScreen.activeSelf) {
 			pauseScreen.SetActive(false);
 		}
@@ -335,7 +336,7 @@ public class GameDirector : MonoBehaviour {
 			world.player = playerBusiness;
 			this.GetComponent<World>().enabled = true;
 
-		// When the world has announced it is ready, do these things
+			// When the world has announced it is ready, do these things
 		} else if (world.isReady) {
 			world.isReady = false; // Make sure this if only runs once
 
@@ -352,8 +353,8 @@ public class GameDirector : MonoBehaviour {
 
 
 		// When the left mouse button is clicked
-		if (Input.GetMouseButtonDown (0)) {
-			selectedObject = calculateSelectedObject ();
+		if (Input.GetMouseButtonDown(0)) {
+			selectedObject = calculateSelectedObject();
 			if (selectedObject == null) {
 				// Do nothing!
 			} else {
@@ -381,11 +382,12 @@ public class GameDirector : MonoBehaviour {
 							}
 						}
 					}
-				// This will display if an object on the default layer is able to be clicked but not handled
+					// This will display if an object on the default layer is able to be clicked but not handled
 				} else {
 					Debug.LogWarning(selectedObject + " is selectable but not used");
 				}
-			breakout : {}
+				breakout :
+				{}
 			}
 		}
 
