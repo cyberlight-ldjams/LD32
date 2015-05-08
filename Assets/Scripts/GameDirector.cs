@@ -84,6 +84,8 @@ public class GameDirector : MonoBehaviour {
 	/** Timer for moving the camera */
 	private int timer;
 
+	/** Currently appropriate quarry to make, or null if there is none */
+	public Quarry appropriateQuarry { get; private set; }
 
 	/**
 	 * Initializes the game
@@ -112,7 +114,12 @@ public class GameDirector : MonoBehaviour {
 	 * Installs a building on the selected lot
 	 */
 	public void InstallBuilding(Building b) {
-		Lot.InstallBuilding(selectedObject, currentSite, b);
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+
+		// Only install the building if the player can afford it
+		if (sales.buyBuilding(playerBusiness, lot, b)) {
+			//Lot.InstallBuilding(selectedObject, currentSite, b);
+		}
 	}
 
 	/** 
@@ -121,9 +128,9 @@ public class GameDirector : MonoBehaviour {
 	 * If the lot has no resource, no quarry is installed
 	 */
 	public void InstallQuarry() {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-		if (lot.Resource.HasValue) {
-			Lot.InstallBuilding(selectedObject, currentSite, Quarry.NewAppropriateQuarry(lot.Resource.Value));
+		if (appropriateQuarry != null) {
+			InstallBuilding(appropriateQuarry);
+			appropriateQuarry = null;
 		}
 	}
 
@@ -132,6 +139,16 @@ public class GameDirector : MonoBehaviour {
 	 */
 	public void InstallPotteryWorkshop() {
 		InstallBuilding(new PotteryWorkshop());
+	}
+
+	/**
+	 * Leases the selected lot
+	 */
+	public void LeaseSelectedLot() {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+		if (!sales.leaseLot(playerBusiness, lot)) {
+			// Do something if the lot wasn't leased
+		}
 	}
 
 	/**
@@ -423,6 +440,13 @@ public class GameDirector : MonoBehaviour {
 								selection.transform.position = 
 									new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - 0.01f, selectedObject.transform.position.z);
 								selection.transform.localScale = new Vector3(selectedObject.transform.localScale.x + 0.02f, 1, selectedObject.transform.localScale.z + 0.02f);
+
+								// If the lot is an empty lot with resources, let the user make a quarry there
+								if (l.Resource.HasValue && l.Building == null) {
+									appropriateQuarry = Quarry.NewAppropriateQuarry(l.Resource.Value);
+								} else {
+									appropriateQuarry = null;
+								}
 							}
 							goto breakout;
 						}

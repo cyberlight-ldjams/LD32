@@ -47,6 +47,9 @@ public class World : MonoBehaviour {
 
 		// Create the homesite
 		homesite = newSite(new Vector2(0.0f, 0.0f));
+		foreach (Lot lot in homesite.Lots) {
+			lot.Owner = player;
+		}
 
 		int total = (int)Random.Range(minSites, maxSites);
 		float worldSizeX = worldPlane.transform.localScale.x * 4.5f;

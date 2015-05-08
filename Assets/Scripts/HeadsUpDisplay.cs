@@ -27,14 +27,23 @@ public class HeadsUpDisplay : MonoBehaviour {
 	/** The resource UI and building UI */
 	private GameObject resourceUIContents, buildingsUIContents;
 
+	/** The titles of the resourceUI and buildingUI elements */
+	private Text resourceTitle, buildingTitle;
+
 	/** A list of the quantities for the resrouce UI */
 	private List<GameObject> qtyList;
 
 	/** The quarry making button */
 	private Button quarryBtn;
 
+	/** The currently appropriate quarry, or null if there is none */
+	public Quarry appropriateQuarry { get; set; }
+
 	/** The workshop making button */
 	private Button workshopBtn;
+
+	/** The button for puchasing a lot */
+	private Button leaseBtn;
 
 	/**
 	 * Creates the HUD
@@ -42,7 +51,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 	void Start() {
 		gameDirector = GameDirector.THIS;
 
-		// Creates the quarry and workshop buttons
+		// Finds the quarry, workshop, and purchase lot buttons
 		Button[] buttons = UnityEngine.Object.FindObjectsOfType<Button>();
 		foreach (Button but in buttons) {
 			string butName = but.name;
@@ -54,7 +63,9 @@ public class HeadsUpDisplay : MonoBehaviour {
 				case "WorkshopButton":
 					workshopBtn = but;
 					break;
-			
+				case "LeaseLotButton":
+					leaseBtn = but;
+					break;
 			}
 		}
 
@@ -64,6 +75,14 @@ public class HeadsUpDisplay : MonoBehaviour {
 				resourceUIContents = g;
 			} else if (g.name == "BuildingPanel") {
 				buildingsUIContents = g;
+				buildingTitle = buildingsUIContents.GetComponentInChildren<Text>();
+			} else if (g.name == "SellingPanel") {
+				Text[] text = g.GetComponentsInChildren<Text>();
+				foreach (Text t in text) {
+					if (t.gameObject.name == "Stock") {
+						resourceTitle = t;
+					}
+				}
 			}
 		}
 
@@ -79,7 +98,9 @@ public class HeadsUpDisplay : MonoBehaviour {
 	 * Creates the selling UI
 	 */
 	private void sellingUI() {
-		int count = -6;
+		resourceTitle.text = currentSite.name + " Stock";
+		int count = -6; // This shouldn't be needed, but is for some reason
+		// TODO : Find out why we need this...
 		foreach (Resource r in Enum.GetValues(typeof(Resource))) {
 
 			bool has = false;
@@ -106,7 +127,39 @@ public class HeadsUpDisplay : MonoBehaviour {
 				count++;
 			}
 		}
-		
+	}
+
+	/**
+	 * Enable/disable the quarry button
+	 * 
+	 * @param enable whether to enable (true) or disable (false) the quarry button
+	 */
+	private void enableQuarryButton(bool enable) {
+		Text quarryText = quarryBtn.GetComponentInChildren<Text>();
+		if (!enable && quarryBtn.IsActive()) {
+			quarryText = quarryBtn.GetComponentInChildren<Text>();
+			quarryText.text = "Quarry";
+			quarryBtn.gameObject.SetActive(false);
+			quarryBtn.enabled = false;
+		} else if (enable && !quarryBtn.IsActive()) {
+			quarryBtn.enabled = true;
+			quarryBtn.gameObject.SetActive(true);
+			quarryText = quarryBtn.GetComponentInChildren<Text>();
+			quarryText.text = gameDirector.appropriateQuarry.GetType().Name;
+		}
+	}
+
+	/**
+	 * Disables both of the building buttons if they are active
+	 */
+	private void disableBuildingButtons() {
+		if (quarryBtn.isActiveAndEnabled) {
+			enableQuarryButton(false);
+		}
+		if (workshopBtn.isActiveAndEnabled) {
+			workshopBtn.gameObject.SetActive(false);
+			workshopBtn.enabled = false;
+		}
 	}
 
 	/**
@@ -114,13 +167,73 @@ public class HeadsUpDisplay : MonoBehaviour {
 	 */
 	private void buildingButtons() {
 		if (quarryBtn != null && workshopBtn != null) {
-			//dissalow placement before selection
+			//disallow placement before selection
 			if ((gameDirector == null || gameDirector.selectedObject == null)) {
-				quarryBtn.enabled = false;
-				workshopBtn.enabled = false;
+				disableBuildingButtons();
+				if (leaseBtn.isActiveAndEnabled) {
+					leaseBtn.gameObject.SetActive(false);
+					leaseBtn.enabled = false;
+				}
+				buildingsUIContents.SetActive(false);
+			} else if (Lot.FindLot(gameDirector.selectedObject, currentSite).Owner != 
+				gameDirector.playerBusiness) {
+				buildingsUIContents.SetActive(true);
+				disableBuildingButtons();
+				if (!leaseBtn.isActiveAndEnabled) {
+					leaseBtn.gameObject.SetActive(true);
+					leaseBtn.enabled = true;
+				}
+				buildingTitle.text = "Lease Lot";
+				leaseBtn.enabled = true;
+
+				// Set the button's two text elements
+				Text[] text = leaseBtn.GetComponentsInChildren<Text>();
+				foreach (Text t in text) {
+					if (t.gameObject.name == "DownPayText") {
+						t.text = Sales.LOT_DOWN_PAYMENT + " " + gameDirector.stager.currencyName;
+					} else {
+						t.text = "(" + Sales.LOT_LEASE_COST + " per " + 
+							Sales.LOT_LEASE_DUE + " quarters)";
+					}
+				}
 			} else {
-				quarryBtn.enabled = true;
-				quarryBtn.enabled = true;
+				buildingsUIContents.SetActive(true);
+				if (leaseBtn.isActiveAndEnabled) {
+					leaseBtn.gameObject.SetActive(false);
+					leaseBtn.enabled = false;
+				}
+
+				Lot selected = Lot.FindLot(gameDirector.selectedObject, currentSite);
+				buildingsUIContents.SetActive(true);
+				if (selected.Building != null) {
+					disableBuildingButtons();
+					if (selected.Owner == gameDirector.playerBusiness) {
+						buildingTitle.text = "Building Options";
+					} else {
+						buildingTitle.text = "Building Statistics";
+					}
+				} else {
+					buildingTitle.text = "Create Buildings";
+
+					// If there is an appropriate quarry, display the button
+					if (gameDirector.appropriateQuarry != null && !quarryBtn.IsActive()) {
+						enableQuarryButton(true);
+					} 
+
+					// If the player has selected someplace without an appropriate quarry, disable the button
+					else if (gameDirector.appropriateQuarry == null) {
+						enableQuarryButton(false);
+					}
+
+					// Check to see if the text on the quarry button needs to change
+					else if (quarryBtn.IsActive() && quarryBtn.GetComponentInChildren<Text>().text != 
+						gameDirector.appropriateQuarry.GetType().Name) {
+						Text quarryText = quarryBtn.GetComponentInChildren<Text>();
+						quarryText.text = gameDirector.appropriateQuarry.GetType().Name;
+					}
+					workshopBtn.enabled = true;
+					workshopBtn.gameObject.SetActive(true);
+				}
 			}
 		}
 	}
