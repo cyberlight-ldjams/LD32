@@ -39,7 +39,7 @@ public class Inventory {
 	 */
 	public double spendBaseCurrency(double change) {
 		addBaseCurrency(-change);
-		return genericCurrency;
+		return getBaseCurrency();
 	}
 
 	/** 

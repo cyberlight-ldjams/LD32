@@ -92,7 +92,7 @@ public class Site {
 			}
 		}
 		while (this.employees > 0 && available.Count > 0) {
-			int bestWage = 0;
+			int bestWage = 1; // Employees will not work for nothing
 			List<Building> best = new List<Building>();
 			foreach (Building b in available) {
 				if (b.employeeWage > bestWage) {
@@ -112,11 +112,11 @@ public class Site {
 			} else { 
 				Debug.Log("Multiple bests!");
 				while (this.employees > 0 && best.Count > 1) {
-					foreach (Building b in best) {
-						if (b.laborCap <= b.employees) {
-							best.Remove(b);
+					for (int i = 0; i < best.Count; i++) {
+						if (best [i].laborCap <= best [i].employees) {
+							best.Remove(best [i]);
 						} else if (this.employees > 0) {
-							b.employees++;
+							best [i].employees++;
 							this.employees--;
 						}
 					}
@@ -138,7 +138,7 @@ public class Site {
 		if (this.employees <= 0) {
 			return;
 		}
-		int needs = this.employees - building.laborCap - building.employees;
+		int needs = building.laborCap - building.employees;
 		if (this.employees >= needs) {
 			this.employees -= needs;
 			building.employees += needs;

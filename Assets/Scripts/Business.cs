@@ -7,6 +7,9 @@ using System.Collections.Generic;
  */
 public abstract class Business {
 
+	/** How often, in quarters, payday for employees occurs */
+	public const int PAYDAY = 1;
+
 	/** The default starting currency in base currency units */
 	public const double STARTING_CURRENCY = 10000.0;
 
@@ -17,7 +20,7 @@ public abstract class Business {
 	public Color businessColor { get; protected set; }
 
 	/** The lots leased by the business */
-	private List<Lot> myLots;
+	public List<Lot> myLots { get; private set; }
 
 	/** The name of the business */
 	public string name { get; protected set; }
@@ -31,6 +34,29 @@ public abstract class Business {
 	public void Init() {
 		myInventory = new Inventory(genericCurrency: STARTING_CURRENCY);
 		sales = GameDirector.THIS.sales;
+		myLots = new List<Lot>();
+
+		// Set up payday for employees
+		GameDirector.gameTime.performActionRepeatedly(PAYDAY, () => {
+			foreach (Lot l in myLots) {
+				if (l.Building != null) {
+					Building b = l.Building;
+					if (this.myInventory.spendBaseCurrency(b.employees * b.employeeWage) < 0) {
+						// If you can't pay your employees, they take what they can get and leave
+						this.myInventory.addBaseCurrency(Mathf.Abs((float)this.myInventory.getBaseCurrency()));
+						l.Site.employees += b.employees;
+						b.employees = 0;
+						b.laborCap = 0;
+						b.employeeWage = 0;
+					}
+				}
+			}
+			if (this.myInventory.getBaseCurrency() > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		});
 	}
 
 	/**

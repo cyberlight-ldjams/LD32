@@ -138,6 +138,7 @@ public class Sales {
 				}
 			});
 			toLease.Owner = leasee;
+			leasee.myLots.Add(toLease);
 			return true;
 		}
 	}
@@ -156,6 +157,7 @@ public class Sales {
 
 			sellBuilding(leasee, toLease.Building);
 
+			leasee.myLots.Remove(toLease);
 			toLease.Owner = AIBusiness.UNOWNED;
 		}
 	}
@@ -212,7 +214,7 @@ public class Sales {
 	 * @param build the building being sold
 	 */
 	public void sellBuilding(Business buyer, Building build) {
-		if (buyer == build.lot.Owner) {
+		if (build != null && buyer == build.lot.Owner) {
 			buyer.myInventory.addBaseCurrency(BUILD_SELL);
 			build.Demolish();
 		}

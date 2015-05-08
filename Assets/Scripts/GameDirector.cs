@@ -128,8 +128,9 @@ public class GameDirector : MonoBehaviour {
 	 * If the lot has no resource, no quarry is installed
 	 */
 	public void InstallQuarry() {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
 		if (appropriateQuarry != null) {
-			InstallBuilding(appropriateQuarry);
+			InstallBuilding(Quarry.NewAppropriateQuarry(lot.Resource.Value));
 			appropriateQuarry = null;
 		}
 	}
@@ -142,13 +143,45 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	/**
+	 * Sells the building at the selected lot
+	 */
+	public void SellBuildingAtSelectedLot() {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+
+		sales.sellBuilding(playerBusiness, lot.Building);
+
+		if (lot.Resource.HasValue) {
+			appropriateQuarry = Quarry.NewAppropriateQuarry(lot.Resource.Value);
+		} else {
+			appropriateQuarry = null;
+		}
+	}
+
+	/**
 	 * Leases the selected lot
 	 */
 	public void LeaseSelectedLot() {
 		Lot lot = Lot.FindLot(selectedObject, currentSite);
 		if (!sales.leaseLot(playerBusiness, lot)) {
 			// Do something if the lot wasn't leased
+		} else {
+			// Set the selection color to the player's color
+			Renderer r = selection.GetComponent<Renderer>();
+			r.material.color = lot.Owner.businessColor;
 		}
+	}
+
+	/**
+	 * Sells the lease at a lot
+	 */
+	public void SellLeaseAtSelectedLot() {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+
+		sales.sellLease(playerBusiness, lot);
+
+		// Set the selection color to the unowned color
+		Renderer r = selection.GetComponent<Renderer>();
+		r.material.color = lot.Owner.businessColor;
 	}
 
 	/**

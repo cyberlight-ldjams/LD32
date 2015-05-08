@@ -45,6 +45,12 @@ public class HeadsUpDisplay : MonoBehaviour {
 	/** The button for puchasing a lot */
 	private Button leaseBtn;
 
+	/** The buttons for selling leases and buildings */
+	private Button sellLeaseBtn, sellBuildingBtn;
+
+	/** The sliders for setting the labor and wage caps at a building */
+	private Slider laborCap, wage;
+
 	/**
 	 * Creates the HUD
 	 */
@@ -66,6 +72,21 @@ public class HeadsUpDisplay : MonoBehaviour {
 				case "LeaseLotButton":
 					leaseBtn = but;
 					break;
+				case "SellLease":
+					sellLeaseBtn = but;
+					break;
+				case "SellBuilding":
+					sellBuildingBtn = but;
+					break;
+			}
+		}
+
+		Slider[] sliders = UnityEngine.Object.FindObjectsOfType<Slider>();
+		foreach (Slider s in sliders) {
+			if (s.name == "LaborCapSlider") {
+				laborCap = s;
+			} else if (s.name == "WageSlider") {
+				wage = s;
 			}
 		}
 
@@ -75,7 +96,12 @@ public class HeadsUpDisplay : MonoBehaviour {
 				resourceUIContents = g;
 			} else if (g.name == "BuildingPanel") {
 				buildingsUIContents = g;
-				buildingTitle = buildingsUIContents.GetComponentInChildren<Text>();
+				Text[] text = g.GetComponentsInChildren<Text>();
+				foreach (Text t in text) {
+					if (t.gameObject.name == "TitleText") {
+						buildingTitle = t;
+					}
+				}
 			} else if (g.name == "SellingPanel") {
 				Text[] text = g.GetComponentsInChildren<Text>();
 				foreach (Text t in text) {
@@ -163,28 +189,74 @@ public class HeadsUpDisplay : MonoBehaviour {
 	}
 
 	/**
+	 * Disables the leasing button if active
+	 */
+	private void disableLeaseButton() {
+		if (leaseBtn.isActiveAndEnabled) {
+			leaseBtn.gameObject.SetActive(false);
+			leaseBtn.enabled = false;
+		}
+	}
+
+	/**
+	 * Disables both selling buttons if they are active
+	 */
+	private void disableSellingButtons() {
+		if (sellBuildingBtn.isActiveAndEnabled) {
+			sellBuildingBtn.gameObject.SetActive(false);
+			sellBuildingBtn.enabled = false;
+		}
+		if (sellLeaseBtn.isActiveAndEnabled) {
+			sellLeaseBtn.gameObject.SetActive(false);
+			sellLeaseBtn.enabled = false;
+		}
+	}
+
+	/**
+	 * Disables all of the sliders for wage and labor
+	 */
+	private void disableSliders() {
+		if (laborCap.isActiveAndEnabled) {
+			laborCap.gameObject.SetActive(false);
+			laborCap.enabled = false;
+		}
+		if (wage.isActiveAndEnabled) {
+			wage.gameObject.SetActive(false);
+			wage.enabled = false;
+		}
+	}
+
+	/**
+	 * Disables all the buildingUI buttons and sliders
+	 */
+	private void disableAllBuildingButtons() {
+		disableBuildingButtons();
+		disableLeaseButton();
+		disableSellingButtons();
+		disableSliders();
+	}
+
+	/**
 	 * Enables the building buttons if something is selected
 	 */
 	private void buildingButtons() {
 		if (quarryBtn != null && workshopBtn != null) {
-			//disallow placement before selection
+			// Don't display any of the buildings UI if there is nothing selected
 			if ((gameDirector == null || gameDirector.selectedObject == null)) {
-				disableBuildingButtons();
-				if (leaseBtn.isActiveAndEnabled) {
-					leaseBtn.gameObject.SetActive(false);
-					leaseBtn.enabled = false;
-				}
+				disableAllBuildingButtons();
 				buildingsUIContents.SetActive(false);
-			} else if (Lot.FindLot(gameDirector.selectedObject, currentSite).Owner != 
-				gameDirector.playerBusiness) {
+			} 
+
+			// If the selected lot does not belong to anyone, let the user lease it
+			else if (Lot.FindLot(gameDirector.selectedObject, currentSite).Owner == 
+				AIBusiness.UNOWNED) {
 				buildingsUIContents.SetActive(true);
+				disableSliders();
 				disableBuildingButtons();
-				if (!leaseBtn.isActiveAndEnabled) {
-					leaseBtn.gameObject.SetActive(true);
-					leaseBtn.enabled = true;
-				}
+				disableSellingButtons();
 				buildingTitle.text = "Lease Lot";
 				leaseBtn.enabled = true;
+				leaseBtn.gameObject.SetActive(true);
 
 				// Set the button's two text elements
 				Text[] text = leaseBtn.GetComponentsInChildren<Text>();
@@ -196,24 +268,96 @@ public class HeadsUpDisplay : MonoBehaviour {
 							Sales.LOT_LEASE_DUE + " quarters)";
 					}
 				}
-			} else {
-				buildingsUIContents.SetActive(true);
-				if (leaseBtn.isActiveAndEnabled) {
-					leaseBtn.gameObject.SetActive(false);
-					leaseBtn.enabled = false;
-				}
+			}
 
+			// Otherwise, bring up the building options
+			else {
 				Lot selected = Lot.FindLot(gameDirector.selectedObject, currentSite);
 				buildingsUIContents.SetActive(true);
+
+				// If there is a building, either display options for the player or the AI building stats
 				if (selected.Building != null) {
 					disableBuildingButtons();
-					if (selected.Owner == gameDirector.playerBusiness) {
-						buildingTitle.text = "Building Options";
-					} else {
-						buildingTitle.text = "Building Statistics";
+					disableLeaseButton();
+
+					// Display Sliders
+					if (!laborCap.isActiveAndEnabled) {
+						laborCap.enabled = true;
+						laborCap.gameObject.SetActive(true);
+						laborCap.value = selected.Building.laborCap;
+						laborCap.maxValue = selected.Site.employees;
 					}
-				} else {
+					if (!wage.isActiveAndEnabled) {
+						wage.enabled = true;
+						wage.gameObject.SetActive(true);
+						wage.value = selected.Building.employeeWage;
+					}
+
+					Text laborText = laborCap.GetComponentInChildren<Text>();
+					Text wageText = wage.GetComponentInChildren<Text>();
+
+					if (selected.Owner == gameDirector.playerBusiness) {
+						wage.interactable = true;
+						laborCap.interactable = true;
+
+						// Check to see if the user has changed the sliders
+						// If they changed the sliders, change the actual values
+						if (wage.value != selected.Building.employeeWage) {
+							selected.Building.employeeWage = (int)wage.value;
+						}
+						if (laborCap.value != selected.Building.laborCap) {
+							selected.Building.laborCap = (int)laborCap.value;
+						}
+
+						if (!sellBuildingBtn.isActiveAndEnabled) {
+							sellBuildingBtn.enabled = true;
+							sellBuildingBtn.gameObject.SetActive(true);
+							Text t = sellBuildingBtn.GetComponentInChildren<Text>();
+							t.text = "Sell Building for\n" + Sales.BUILD_SELL + " " + gameDirector.stager.currencyName;
+						}
+						if (sellLeaseBtn.isActiveAndEnabled) {
+							sellLeaseBtn.gameObject.SetActive(false);
+							sellLeaseBtn.enabled = false;
+						}
+						buildingTitle.text = selected.Building.GetType().Name + " Options";
+					} 
+
+					// If the player doesn't own this lot, display the building stats, but don't let them be edited
+					else {
+						buildingTitle.text = selected.Owner.name + "'s " + selected.Building.GetType().Name;
+						disableAllBuildingButtons();
+
+						wage.interactable = false;
+						laborCap.interactable = false;
+
+						// Update the values in case the AI has changed something
+						wage.value = selected.Building.employeeWage;
+						laborCap.maxValue = selected.Site.employees;
+						laborCap.value = selected.Building.laborCap;
+					}
+
+					wageText.text = "Workers' Wage: " + (int)wage.value;
+					laborText.text = "Desired Employees: " + (int)laborCap.value;
+				} 
+
+				// If there is no building, let the player place buildings, if they own this lot
+				else if (selected.Owner == gameDirector.playerBusiness) {
 					buildingTitle.text = "Create Buildings";
+					disableLeaseButton();
+					disableSliders();
+
+					// There's no building, so don't display the sell building button
+					if (sellBuildingBtn.isActiveAndEnabled) {
+						sellBuildingBtn.gameObject.SetActive(false);
+						sellBuildingBtn.enabled = false;
+					}
+					// But we do need the sell lease button
+					if (!sellLeaseBtn.isActiveAndEnabled) {
+						sellLeaseBtn.enabled = true;
+						sellLeaseBtn.gameObject.SetActive(true);
+						Text t = sellLeaseBtn.GetComponentInChildren<Text>();
+						t.text = "Sell Lease for\n" + Sales.LOT_LEASE_SELL + " " + gameDirector.stager.currencyName;
+					}
 
 					// If there is an appropriate quarry, display the button
 					if (gameDirector.appropriateQuarry != null && !quarryBtn.IsActive()) {
@@ -233,6 +377,12 @@ public class HeadsUpDisplay : MonoBehaviour {
 					}
 					workshopBtn.enabled = true;
 					workshopBtn.gameObject.SetActive(true);
+				} 
+
+				// If someone else owns the lot, just state who owns it
+				else if (selected.Owner != gameDirector.playerBusiness) {
+					buildingTitle.text = selected.Owner.name + "'s Lot";
+					disableAllBuildingButtons();
 				}
 			}
 		}
@@ -259,7 +409,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 			sellingUI();
 			oldCurrent = currentSite;
 		} else {
-			//sellingUI ();
+			sellingUI();
 		}
 
 		// // ENABLE/DISABLE APPROPRIATE BUTTONS // //

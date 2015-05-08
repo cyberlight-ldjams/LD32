@@ -49,6 +49,7 @@ public class World : MonoBehaviour {
 		homesite = newSite(new Vector2(0.0f, 0.0f));
 		foreach (Lot lot in homesite.Lots) {
 			lot.Owner = player;
+			player.myLots.Add(lot);
 		}
 
 		int total = (int)Random.Range(minSites, maxSites);

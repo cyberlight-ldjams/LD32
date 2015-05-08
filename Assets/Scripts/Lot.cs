@@ -12,7 +12,7 @@ public class Lot {
 	public Site Site { get; set; }
 
 	/** The building on this lot */
-	public Building Building { get; private set; }
+	public Building Building { get; set; }
 
 	/** This lot's owner - technically leasee */
 	public Business Owner { get; set; }
