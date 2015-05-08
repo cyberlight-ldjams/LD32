@@ -15,10 +15,14 @@ public abstract class Workshop : Building {
 
 	/** The goods out per goods put in */
 	public abstract float inOutRatio { get; }
-	
+
+	/** The rate at which resources are produced, given employees */
 	public virtual double productionRate { get { return 0.1 * Math.Sqrt((double)employees); } }
 
-	public override void Produce () {
+	/**
+	 * If enough input resources exist, the workshop produces things
+	 */
+	public override void Produce() {
 		double inAmount = productionRate / inOutRatio;
 
 		double oldAmountInput = owner.myInventory.getAmountOfAt(resourceUsed, site);
