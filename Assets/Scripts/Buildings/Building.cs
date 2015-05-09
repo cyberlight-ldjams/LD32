@@ -13,7 +13,7 @@ public abstract class Building {
 	public Site site { get { return lot.Site; } }
 
 	/** The building game object */
-	private GameObject building;
+	public GameObject building { get; private set; }
 
 	/** The building id from the gametime element */
 	public int buildingID { get; set; }

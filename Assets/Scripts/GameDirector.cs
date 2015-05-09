@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -42,6 +43,9 @@ public class GameDirector : MonoBehaviour {
 
 	/** The whole World on the World Plane */
 	public World world; // Set in the Unity Editor
+
+	/** The UI event system */
+	public EventSystem eventSystem; // Set in the Unity Editor
 
 	/** The home site at 0,0 */
 	public Site homesite { get; private set; }
@@ -87,6 +91,9 @@ public class GameDirector : MonoBehaviour {
 	/** Currently appropriate quarry to make, or null if there is none */
 	public Quarry appropriateQuarry { get; private set; }
 
+	/** Whether or not the player has clicked on the Workshop button */
+	public bool requestWorkshop { get; set; }
+
 	/**
 	 * Initializes the game
 	 */
@@ -120,6 +127,7 @@ public class GameDirector : MonoBehaviour {
 		if (sales.buyBuilding(playerBusiness, lot, b)) {
 			//Lot.InstallBuilding(selectedObject, currentSite, b);
 		}
+		requestWorkshop = false;
 	}
 
 	/** 
@@ -133,13 +141,6 @@ public class GameDirector : MonoBehaviour {
 			InstallBuilding(Quarry.NewAppropriateQuarry(lot.Resource.Value));
 			appropriateQuarry = null;
 		}
-	}
-
-	/**
-	 * Installs a pottery workshop on the selected lot
-	 */
-	public void InstallPotteryWorkshop() {
-		InstallBuilding(new PotteryWorkshop());
 	}
 
 	/**
@@ -453,7 +454,13 @@ public class GameDirector : MonoBehaviour {
 
 		// When the left mouse button is clicked
 		if (Input.GetMouseButtonDown(0)) {
+			// If the player clicked on some button or field in the UI, don't count that click
+			if (eventSystem.currentSelectedGameObject != null) {
+				return;
+			}
+
 			selectedObject = calculateSelectedObject();
+
 			if (selectedObject == null) {
 				// Do nothing!
 			} else {
@@ -463,7 +470,18 @@ public class GameDirector : MonoBehaviour {
 						goto breakout;
 					}
 					foreach (Lot l in s.Lots) {
+
+						// Check to see if the player clicked on the lot's building
+						// If so, select the lot
+						if (l.Building != null) {
+							if (l.Building.building == selectedObject) {
+								selectedObject = l.LotPlane;
+							}
+						}
+
+						// Check to see if the player selected this lot
 						if (l.LotPlaneIs(selectedObject)) {
+							requestWorkshop = false;
 							if (desiredCameraPosition == WORLDVIEW) {
 								toSite(s);
 							} else {
@@ -516,5 +534,71 @@ public class GameDirector : MonoBehaviour {
 			moveCamera();
 			timer++;
 		}
+	}
+
+
+	// // WORKSHOP TYPES TO INSTALL - METHODS USED BY WORKSHOP BUTTONS // //
+
+	/**
+	 * Installs a pottery workshop on the selected lot
+	 */
+	public void InstallPotteryWorkshop() {
+		InstallBuilding(new PotteryWorkshop());
+	}
+
+	/**
+	 * Installs a weapon smith on the selected lot
+	 */
+	public void InstallWeaponSmith() {
+		InstallBuilding(new WeaponSmith());
+	}
+
+	/**
+	 * Installs a brick works on the selected lot
+	 */
+	public void InstallBrickworks() {
+		InstallBuilding(new Brickworks());
+	}
+
+	/**
+	 * Installs a furniture workshop on the selected lot
+	 */
+	public void InstallFurnitureWorkshop() {
+		InstallBuilding(new FurnitureWorkshop());
+	}
+
+	/**
+	 * Installs a computer chip factory on the selected lot
+	 */
+	public void InstallChipFactory() {
+		InstallBuilding(new ChipFactory());
+	}
+
+	/**
+	 * Installs a lamp maker on the selected lot
+	 */
+	public void InstallLampMaker() {
+		InstallBuilding(new LampMaker());
+	}
+
+	/**
+	 * Installs a steakhouse on the selected lot
+	 */
+	public void InstallSteakhouse() {
+		InstallBuilding(new Steakhouse());
+	}
+
+	/**
+	 * Installs a fish fry on the selected lot
+	 */
+	public void InstallFishFry() {
+		InstallBuilding(new FishFry());
+	}
+
+	/**
+	 * Installs a train track maker on the selected lot
+	 */
+	public void InstallTrackMaker() {
+		InstallBuilding(new TrackMaker());
 	}
 }

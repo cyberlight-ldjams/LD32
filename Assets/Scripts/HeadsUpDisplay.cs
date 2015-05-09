@@ -25,7 +25,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 	private GameDirector gameDirector;
 
 	/** The resource UI and building UI */
-	private GameObject resourceUIContents, buildingsUIContents;
+	private GameObject resourceUIContents, buildingsUIContents, workshopPanel;
 
 	/** The titles of the resourceUI and buildingUI elements */
 	private Text resourceTitle, buildingTitle;
@@ -50,6 +50,12 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 	/** The sliders for setting the labor and wage caps at a building */
 	private Slider laborCap, wage;
+
+	/** The currently selected lot, or null if none selected */
+	private Lot selectedLot;
+
+	/** The previously selected lot */
+	private Lot prevSelected;
 
 	/**
 	 * Creates the HUD
@@ -109,6 +115,8 @@ public class HeadsUpDisplay : MonoBehaviour {
 						resourceTitle = t;
 					}
 				}
+			} else if (g.name == "WorkshopPanel") {
+				workshopPanel = g;
 			}
 		}
 
@@ -234,6 +242,9 @@ public class HeadsUpDisplay : MonoBehaviour {
 		disableLeaseButton();
 		disableSellingButtons();
 		disableSliders();
+		if (workshopPanel.activeSelf) {
+			workshopPanel.SetActive(false);
+		}
 	}
 
 	/**
@@ -245,16 +256,26 @@ public class HeadsUpDisplay : MonoBehaviour {
 			if ((gameDirector == null || gameDirector.selectedObject == null)) {
 				disableAllBuildingButtons();
 				buildingsUIContents.SetActive(false);
-			} 
+				prevSelected = selectedLot;
+				selectedLot = null;
+				return;
+			}
+
+			prevSelected = selectedLot;
+			selectedLot = Lot.FindLot(gameDirector.selectedObject, currentSite);
 
 			// If the selected lot does not belong to anyone, let the user lease it
-			else if (Lot.FindLot(gameDirector.selectedObject, currentSite).Owner == 
-				AIBusiness.UNOWNED) {
+			if (selectedLot.Owner == AIBusiness.UNOWNED) {
 				buildingsUIContents.SetActive(true);
 				disableSliders();
 				disableBuildingButtons();
 				disableSellingButtons();
+				if (workshopPanel.activeSelf) {
+					workshopPanel.SetActive(false);
+				}
 				buildingTitle.text = "Lease Lot";
+
+				// Enable the lease button
 				leaseBtn.enabled = true;
 				leaseBtn.gameObject.SetActive(true);
 
@@ -272,41 +293,52 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 			// Otherwise, bring up the building options
 			else {
-				Lot selected = Lot.FindLot(gameDirector.selectedObject, currentSite);
 				buildingsUIContents.SetActive(true);
 
 				// If there is a building, either display options for the player or the AI building stats
-				if (selected.Building != null) {
+				if (selectedLot.Building != null) {
 					disableBuildingButtons();
 					disableLeaseButton();
+					if (workshopPanel.activeSelf) {
+						workshopPanel.SetActive(false);
+					}
 
-					// Display Sliders
-					if (!laborCap.isActiveAndEnabled) {
+					// Display Sliders, make sure to update them if we change lots
+					if (!laborCap.isActiveAndEnabled || prevSelected != selectedLot) {
 						laborCap.enabled = true;
 						laborCap.gameObject.SetActive(true);
-						laborCap.value = selected.Building.laborCap;
-						laborCap.maxValue = selected.Site.employees;
+						laborCap.value = selectedLot.Building.laborCap;
+						int employCount = 0;
+						foreach (Lot l in selectedLot.Site.Lots) {
+							if (l.Building != null) {
+								employCount += l.Building.employees;
+							}
+						}
+						laborCap.maxValue = selectedLot.Site.employees + employCount;
 					}
-					if (!wage.isActiveAndEnabled) {
+					if (!wage.isActiveAndEnabled || prevSelected != selectedLot) {
 						wage.enabled = true;
 						wage.gameObject.SetActive(true);
-						wage.value = selected.Building.employeeWage;
+						wage.value = selectedLot.Building.employeeWage;
 					}
 
+					// Get the labor and wage slider text elements
 					Text laborText = laborCap.GetComponentInChildren<Text>();
 					Text wageText = wage.GetComponentInChildren<Text>();
 
-					if (selected.Owner == gameDirector.playerBusiness) {
+					// If this lot is owned by the player, let them interact with the sliders
+					// Also display the sell building button
+					if (selectedLot.Owner == gameDirector.playerBusiness) {
 						wage.interactable = true;
 						laborCap.interactable = true;
 
 						// Check to see if the user has changed the sliders
 						// If they changed the sliders, change the actual values
-						if (wage.value != selected.Building.employeeWage) {
-							selected.Building.employeeWage = (int)wage.value;
+						if (wage.value != selectedLot.Building.employeeWage) {
+							selectedLot.Building.employeeWage = (int)wage.value;
 						}
-						if (laborCap.value != selected.Building.laborCap) {
-							selected.Building.laborCap = (int)laborCap.value;
+						if (laborCap.value != selectedLot.Building.laborCap) {
+							selectedLot.Building.laborCap = (int)laborCap.value;
 						}
 
 						if (!sellBuildingBtn.isActiveAndEnabled) {
@@ -319,21 +351,21 @@ public class HeadsUpDisplay : MonoBehaviour {
 							sellLeaseBtn.gameObject.SetActive(false);
 							sellLeaseBtn.enabled = false;
 						}
-						buildingTitle.text = selected.Building.GetType().Name + " Options";
+						buildingTitle.text = selectedLot.Building.GetType().Name + " Options";
 					} 
 
 					// If the player doesn't own this lot, display the building stats, but don't let them be edited
 					else {
-						buildingTitle.text = selected.Owner.name + "'s " + selected.Building.GetType().Name;
+						buildingTitle.text = selectedLot.Owner.name + "'s " + selectedLot.Building.GetType().Name;
 						disableAllBuildingButtons();
 
 						wage.interactable = false;
 						laborCap.interactable = false;
 
 						// Update the values in case the AI has changed something
-						wage.value = selected.Building.employeeWage;
-						laborCap.maxValue = selected.Site.employees;
-						laborCap.value = selected.Building.laborCap;
+						wage.value = selectedLot.Building.employeeWage;
+						laborCap.maxValue = selectedLot.Site.employees;
+						laborCap.value = selectedLot.Building.laborCap;
 					}
 
 					wageText.text = "Workers' Wage: " + (int)wage.value;
@@ -341,10 +373,21 @@ public class HeadsUpDisplay : MonoBehaviour {
 				} 
 
 				// If there is no building, let the player place buildings, if they own this lot
-				else if (selected.Owner == gameDirector.playerBusiness) {
+				else if (selectedLot.Owner == gameDirector.playerBusiness) {
 					buildingTitle.text = "Create Buildings";
 					disableLeaseButton();
 					disableSliders();
+
+					// If the player is requesting a workshop, display that panel
+					if (gameDirector.requestWorkshop) {
+						if (!workshopPanel.activeSelf) {
+							workshopPanel.SetActive(true);
+						}
+					} else {
+						if (workshopPanel.activeSelf) {
+							workshopPanel.SetActive(false);
+						}
+					}
 
 					// There's no building, so don't display the sell building button
 					if (sellBuildingBtn.isActiveAndEnabled) {
@@ -380,8 +423,9 @@ public class HeadsUpDisplay : MonoBehaviour {
 				} 
 
 				// If someone else owns the lot, just state who owns it
-				else if (selected.Owner != gameDirector.playerBusiness) {
-					buildingTitle.text = selected.Owner.name + "'s Lot";
+				// We already checked if it was unowned earlier, so that should never be the case
+				else if (selectedLot.Owner != gameDirector.playerBusiness) {
+					buildingTitle.text = selectedLot.Owner.name + "'s Lot";
 					disableAllBuildingButtons();
 				}
 			}

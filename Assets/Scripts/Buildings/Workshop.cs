@@ -26,12 +26,18 @@ public abstract class Workshop : Building {
 		double inAmount = productionRate / inOutRatio;
 
 		double oldAmountInput = owner.myInventory.getAmountOfAt(resourceUsed, site);
+		double oldAmountOutput = owner.myInventory.getAmountOfAt(goodProduced, site);
 
+		// If we have enough resources to produce at the maximum level, do that
 		if (oldAmountInput >= inAmount) {
 			owner.myInventory.setAmountOfAt(resourceUsed, site, oldAmountInput - inAmount);
+			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + (productionRate * inAmount));
+		} 
 
-			double oldAmountOutput = owner.myInventory.getAmountOfAt(goodProduced, site);
-			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + productionRate);
+		// Otherwise, use up all the rest of the resource
+		else {
+			owner.myInventory.setAmountOfAt(resourceUsed, site, 0);
+			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + (productionRate * oldAmountInput));
 		}
 	}
 }

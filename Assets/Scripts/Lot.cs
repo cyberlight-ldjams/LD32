@@ -24,7 +24,7 @@ public class Lot {
 	private Resource? Resource_;
 
 	/** This lot's LotPlane game object */
-	private GameObject LotPlane;
+	public GameObject LotPlane { get; private set; }
 
 	/** This lot's location on the site */
 	public Vector3 Location { get; set; }
