@@ -323,7 +323,15 @@ public class HeadsUpDisplay : MonoBehaviour {
 					}
 
 					// Get the labor and wage slider text elements
-					Text laborText = laborCap.GetComponentInChildren<Text>();
+					Text laborText = null;
+					Text laborCount = null;
+					foreach (Text t in laborCap.GetComponentsInChildren<Text>()) {
+						if (t.gameObject.name == "Text") {
+							laborText = t;
+						} else {
+							laborCount = t;
+						}
+					}
 					Text wageText = wage.GetComponentInChildren<Text>();
 
 					// If this lot is owned by the player, let them interact with the sliders
@@ -370,6 +378,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
 					wageText.text = "Workers' Wage: " + (int)wage.value;
 					laborText.text = "Desired Employees: " + (int)laborCap.value;
+					laborCount.text = "Current Employment: " + selectedLot.Building.employees;
 				} 
 
 				// If there is no building, let the player place buildings, if they own this lot

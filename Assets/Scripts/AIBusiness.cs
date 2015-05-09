@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -47,16 +48,16 @@ public class AIBusiness : Business {
 	 * Creates a Business AI with a random name and a random stance
 	 */
 	public AIBusiness() {
-		makeRandomBusiness();
+		MakeRandomBusiness();
 	}
 
 	/**
 	 * Makes a business with a random name and stance and color
 	 */
-	private void makeRandomBusiness() {
+	private void MakeRandomBusiness() {
 		name = RandomNameGenerator.generateBusinessName();
 
-		int rand1 = Random.Range(0, 3);
+		int rand1 = UnityEngine.Random.Range(0, 3);
 		stance = rand1;
 		
 		businessColor = GameDirector.getBusinessColor();
@@ -76,14 +77,185 @@ public class AIBusiness : Business {
 			// Let the director know we used the color
 			GameDirector.setBusinessColor(businessColor);
 		} else {
-			makeRandomBusiness();
+			MakeRandomBusiness();
 		}
 	}
+
+	/**
+	 * Randomizes the contents of a list
+	 * 
+	 * @param list the list to randomize
+	 */
+	private void randomizeList<T>(List<T> list) {
+		for (int i = 0; i < list.Count; i++) {
+			int rand = UnityEngine.Random.Range(0, list.Count);
+			T t = list [rand];
+			list [rand] = list [i];
+			list [i] = t;
+		}
+	}
+
+	/**
+	 * Causes the business to perform an action
+	 * 
+	 * As a general rule, only one action should be performed per call - so return after doing something
+	 */
+	public void performAction() {
+		// // MAKE DECISIONS BASED ON MONEY, RESOURCES, EMPLOYEES, AVAILABLE LOTS, ETC. // //
+
+
+		// // BUILDING BUYING AND LOT LEASING AI // //
+
+		// This determines the minimum amount of money the AI feels it needs in order to decide it should
+		// build a building or lease a lot
+		double minMoney = 5000.0;
+		double stanceChange = 1500.0;
+
+		if (stance == AGGRESSIVE) {
+			stanceChange *= 0;
+		} else if (stance == PASSIVE) {
+			stanceChange *= 2;
+		} // Else, NEUTRAL stance, no change, use the default value
+
+		minMoney = minMoney + stanceChange;
+
+		// If money is plentiful, place a building on an existing lot, or lease another lot
+		if (myInventory.getBaseCurrency() >= minMoney) {
+			// See if there are any owned lots without buildings, if there are, buy one
+			foreach (Lot buildOn in myLots) {
+				// If the lot already has a building, move on
+				if (buildOn.Building != null) {
+					continue;
+				}
+
+				// Get a list of all the other lots owned by this AI at this site that have a building
+				List<Lot> atSite = new List<Lot>();
+				foreach (Lot onSite in buildOn.Site.Lots) {
+					if (onSite.Owner == this && onSite.Building != null) {
+						atSite.Add(onSite);
+					}
+				}
+
+				// Check these buildings, see if any of them are quarries
+				// If we find a quarry, see if it already has a workshop for the resource
+				foreach (Lot other in atSite) {
+					if (other.Building.GetType() == typeof(Quarry)) {
+						Quarry q = (Quarry)other.Building;
+						Workshop w = null;
+						foreach (Lot workshop in atSite) {
+							if (workshop.Building.GetType() == typeof(Workshop)) {
+								w = (Workshop)workshop.Building;
+								if (q.resourceProduced == w.resourceUsed) {
+									// We found a match! Move on...
+									break;
+								} else {
+									w = null;
+									continue;
+								}
+							}
+						}
+						// If there is no compatable workshop for this quarry, build one!
+						if (w == null) {
+							try {
+								GameDirector.THIS.InstallBuilding(Workshop.NewAppropriateWorkshop(q.resourceProduced), this, buildOn);
+								return; // We built the building. Action complete.
+							} catch (ArgumentException ae) {
+								// There is no compatible workshop
+								Debug.LogWarning(ae.Message);
+							}
+						}
+					}
+				}
+
+				// If the lot has a resource that isn't being used, build a quarry there
+				if (buildOn.Resource.HasValue) {
+					GameDirector.THIS.InstallBuilding(Quarry.NewAppropriateQuarry(buildOn.Resource.Value), this, buildOn);
+					return; // We built the building, action complete.
+				} else {
+					// This lot has no resources on it, but we also don't have an appropriate workshop to build
+					// So we'll use this lot for storage and wait on building something here
+				}
+			}
+
+			// Lease a lot if we don't have a building to build
+			// So that all AIs don't rush to one lot, we randomize the order lots are searched in
+			List<Site> lotSearch = new List<Site>(GameDirector.THIS.world.sites);
+			randomizeList<Site>(lotSearch);
+
+			List<Lot> potential = new List<Lot>(); // Lots that have potential to be purchased
+			List<Lot> resourceless = new List<Lot>(); // Lots without resources, only used if there are no potential lots
+
+			// Prioritize first lots with resources, and second lots on sites where we have other lots already
+			foreach (Site s in lotSearch) {
+				foreach (Lot l in s.Lots) {
+					// If the lot isn't unowned, move on
+					if (l.Owner != UNOWNED) {
+						continue;
+					}
+					// If the lot is unowned and has a resource, it has potential
+					if (l.Resource.HasValue) {
+						potential.Add(l);
+					}
+				}
+			}
+
+			// If no lots have potential, now get the lots that have no resources
+			if (potential.Count == 0) {
+				potential = resourceless;
+			}
+
+			// Now randomize the lots also so that AIs don't have a lot purchase preference
+			randomizeList<Lot>(potential);
+
+			// See if any of these lots are on a site where another lot is owned by this business
+			foreach (Lot toBuy in potential) {
+				foreach (Lot alsoOwned in toBuy.Site.Lots) {
+					// If we own another lot at this site, that's the green-light - buy it!
+					if (alsoOwned.Owner == this) {
+						GameDirector.THIS.sales.leaseLot(this, toBuy);
+						return; // Lot purchased. Action complete.
+					}
+				}
+			}
+
+			// If we never bought a lot from all of that, buy the first lot that had potential
+			if (potential.Count > 0) {
+				GameDirector.THIS.sales.leaseLot(this, potential [0]);
+				return; // Lot purchased. Action complete.
+			}
+
+			// If we get to this point, that means that there are no lots to sell and no buildings to build
+			// Guess we need to do something else for this action...
+		}
+
+
+		// // EMPLOYMENT LABOR CAP AND WAGE AI // //
+
+		// If the business is aggressive, they should max out the labor cap and offer the lowest possible wages
+		// If the business is passive, they should offer competetive wages but have a low labor cap
+
+
+
+		// // RESOURCE SELLING AND TRANSPORTING AI // //
+
+		// If the business is aggressive, they should sell as soon as possible, probably transporting nothing
+		// If the business is passive, they should sell when they need money and be willing to transport resources to improve them
+
+
+
+		// // RUNNING LOW ON MONEY - PANIC MODE // //
+
+		// If the buisness is aggressive, they should be quick to cut wages/employees, sell buildings/leases
+		// If the business is passive, they should hold off on cutting wages/employees, selling buildings/leases
+	}
+
 
 	/**
 	 * Method called on the failure of an AI business
 	 */
 	public void Failure() {
 		//TODO : make this do something
+
+		// Probably sell all buildings, sell all lots, and sell off all resources to "pay creditors"
 	}
 }

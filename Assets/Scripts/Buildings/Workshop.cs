@@ -40,4 +40,25 @@ public abstract class Workshop : Building {
 			owner.myInventory.setAmountOfAt(goodProduced, site, oldAmountOutput + (productionRate * oldAmountInput));
 		}
 	}
+
+	public static Workshop NewAppropriateWorkshop(Resource resourceUsed) {
+		switch (resourceUsed) {
+			case Resource.Clay:
+				return new PotteryWorkshop();
+			case Resource.Oil:
+				return new LampMaker();
+			case Resource.Meat:
+				return new Steakhouse();
+			case Resource.Iron:
+				return new WeaponSmith();
+			case Resource.Stone:
+				return new ChipFactory();
+			case Resource.Fish:
+				return new FishFry();
+			case Resource.Timber:
+				return new FurnitureWorkshop();
+			default:
+				throw new ArgumentException(string.Format("No workshop for resource {0}", resourceUsed));
+		}
+	}
 }

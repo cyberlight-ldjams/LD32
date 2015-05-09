@@ -118,16 +118,29 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	/**
-	 * Installs a building on the selected lot
+	 * Installs a building on the given lot
+	 * 
+	 * @param building the building to install
+	 * @param business the business purchasing the building
+	 * @param lot the lot to install the building at
 	 */
-	public void InstallBuilding(Building b) {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-
-		// Only install the building if the player can afford it
-		if (sales.buyBuilding(playerBusiness, lot, b)) {
-			//Lot.InstallBuilding(selectedObject, currentSite, b);
+	public void InstallBuilding(Building building, Business business, Lot lot) {
+		// Only install the building if the business can afford it
+		if (sales.buyBuilding(business, lot, building)) {
+			// If the sale was successful
 		}
 		requestWorkshop = false;
+	}
+
+	/**
+	 * Install a building for the player at the currently selected site
+	 * 
+	 * @param building the building to install
+	 */
+	private void InstallBuilding(Building building) {
+		Lot lot = Lot.FindLot(selectedObject, currentSite);
+
+		InstallBuilding(building, playerBusiness, lot);
 	}
 
 	/** 
@@ -138,7 +151,7 @@ public class GameDirector : MonoBehaviour {
 	public void InstallQuarry() {
 		Lot lot = Lot.FindLot(selectedObject, currentSite);
 		if (appropriateQuarry != null) {
-			InstallBuilding(Quarry.NewAppropriateQuarry(lot.Resource.Value));
+			InstallBuilding(Quarry.NewAppropriateQuarry(lot.Resource.Value), playerBusiness, lot);
 			appropriateQuarry = null;
 		}
 	}
