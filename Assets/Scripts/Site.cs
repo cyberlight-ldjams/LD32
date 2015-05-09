@@ -91,7 +91,8 @@ public class Site {
 				available.Add(b);
 			}
 		}
-		while (this.employees > 0 && available.Count > 0) {
+		int attemptCount = 0;
+		while (this.employees > 0 && available.Count > 0 && attemptCount < 1000) {
 			int bestWage = 1; // Employees will not work for nothing
 			List<Building> best = new List<Building>();
 			foreach (Building b in available) {
@@ -113,9 +114,13 @@ public class Site {
 				Debug.Log("Multiple bests!");
 				while (this.employees > 0 && best.Count > 1) {
 					for (int i = 0; i < best.Count; i++) {
+						// If we've met the labor cap, remove this building from the list
 						if (best [i].laborCap <= best [i].employees) {
 							best.Remove(best [i]);
-						} else if (this.employees > 0) {
+						} 
+
+						// If there are any employees left, add one to this building
+						else if (this.employees > 0) {
 							best [i].employees++;
 							this.employees--;
 						}
@@ -126,6 +131,7 @@ public class Site {
 					available.Remove(best [0]);
 				}
 			}
+			attemptCount++;
 		}
 	}
 
