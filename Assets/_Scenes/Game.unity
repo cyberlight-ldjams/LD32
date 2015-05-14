@@ -1387,6 +1387,7 @@ GameObject:
   - 114: {fileID: 420523485}
   - 114: {fileID: 420523482}
   - 114: {fileID: 420523487}
+  - 114: {fileID: 420523488}
   m_Layer: 0
   m_Name: GameDirector
   m_TagString: Untagged
@@ -1421,6 +1422,7 @@ MonoBehaviour:
   world: {fileID: 1051612617}
   eventSystem: {fileID: 335831331}
   headsUpDisplay: {fileID: 0}
+  lm: {fileID: 0}
   sidebar: {fileID: 1381132233}
 --- !u!4 &420523484
 Transform:
@@ -1473,6 +1475,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusUI: {fileID: 262065021}
+--- !u!114 &420523488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 420523481}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd198eeda7cc1aa4e8a6cd1fcec20f5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &491427131
 GameObject:
   m_ObjectHideFlags: 0

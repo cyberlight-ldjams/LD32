@@ -32,7 +32,9 @@ public class AIBusiness : Business {
 
 	/** The business' affinity */
 	public int affinity { get; private set; }
-
+	
+	/** Counter for getting AI Business colors */
+	private static List<Color> usedColors;
 
 	/**
 	 * Creates a Business AI given a name, stance, and color
@@ -41,7 +43,8 @@ public class AIBusiness : Business {
 		this.name = name;
 		this.stance = stance;
 		this.businessColor = color;
-		GameDirector.setBusinessColor(color);
+		setBusinessColor(color);
+		Init();
 	}
 
 	/**
@@ -60,11 +63,12 @@ public class AIBusiness : Business {
 		int rand1 = UnityEngine.Random.Range(0, 3);
 		stance = rand1;
 		
-		businessColor = GameDirector.getBusinessColor();
+		businessColor = getBusinessColor();
+		Init();
 	}
 
 	/**
-	 * Creates an "UNOWNED" business
+	 * Creates the "UNOWNED" business
 	 */
 	private AIBusiness(bool unowned) {
 		if (unowned) {
@@ -75,7 +79,7 @@ public class AIBusiness : Business {
 			businessColor = new Color(0.8f, 0.8f, 0.8f);
 
 			// Let the director know we used the color
-			GameDirector.setBusinessColor(businessColor);
+			setBusinessColor(businessColor);
 		} else {
 			MakeRandomBusiness();
 		}
@@ -157,7 +161,7 @@ public class AIBusiness : Business {
 						// If there is no compatable workshop for this quarry, build one!
 						if (w == null) {
 							try {
-								GameDirector.THIS.InstallBuilding(Workshop.NewAppropriateWorkshop(q.resourceProduced), this, buildOn);
+								GameDirector.THIS.lm.InstallBuilding(Workshop.NewAppropriateWorkshop(q.resourceProduced), this, buildOn);
 								return; // We built the building. Action complete.
 							} catch (ArgumentException ae) {
 								// There is no compatible workshop
@@ -169,7 +173,7 @@ public class AIBusiness : Business {
 
 				// If the lot has a resource that isn't being used, build a quarry there
 				if (buildOn.Resource.HasValue) {
-					GameDirector.THIS.InstallBuilding(Quarry.NewAppropriateQuarry(buildOn.Resource.Value), this, buildOn);
+					GameDirector.THIS.lm.InstallBuilding(Quarry.NewAppropriateQuarry(buildOn.Resource.Value), this, buildOn);
 					return; // We built the building, action complete.
 				} else {
 					// This lot has no resources on it, but we also don't have an appropriate workshop to build
@@ -257,5 +261,60 @@ public class AIBusiness : Business {
 		//TODO : make this do something
 
 		// Probably sell all buildings, sell all lots, and sell off all resources to "pay creditors"
+	}
+
+	/**
+	 * Gets a color for an AI businesses
+	 * 
+	 * Generates a random color from all possible colors
+	 * 
+	 * @return the color
+	 */
+	public static Color getBusinessColor() {
+		if (usedColors == null) {
+			usedColors = new List<Color>();
+		}
+
+		int tries = 0;
+		Color color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 
+		                        UnityEngine.Random.Range(0.0f, 1.0f));
+		// If this color was already used, and we haven't tried 1000 times, keep getting a new one
+		while (colorUsed(color) && tries < 1000) {
+			color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 
+			                  UnityEngine.Random.Range(0.0f, 1.0f));
+		}
+		return color;
+	}
+	
+	/**
+	 * Lets the director know that a business has used a color
+	 */
+	private static void setBusinessColor(Color color) {
+		if (usedColors == null) {
+			usedColors = new List<Color>();
+		}
+
+		if (!usedColors.Contains(color)) {
+			usedColors.Add(color);
+		}
+	}
+	
+	/**
+	 * Checks if this, or a similar color, has been used as a business color
+	 * 
+	 * @param color the color to check against
+	 * @return whether the color, or a similar one, was used already
+	 */
+	private static bool colorUsed(Color color) {
+		if (usedColors == null) {
+			usedColors = new List<Color>();
+		}
+
+		foreach (Color used in usedColors) {
+			if (Mathf.Abs(color.r - used.r) < .1f && Mathf.Abs(color.g - used.g) < .1f && Mathf.Abs(color.b - used.b) < .1f) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

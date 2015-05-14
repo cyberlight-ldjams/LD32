@@ -179,7 +179,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 			quarryBtn.enabled = true;
 			quarryBtn.gameObject.SetActive(true);
 			quarryText = quarryBtn.GetComponentInChildren<Text>();
-			quarryText.text = gameDirector.appropriateQuarry.GetType().Name;
+			quarryText.text = gameDirector.lm.appropriateQuarry.GetType().Name;
 		}
 	}
 
@@ -412,20 +412,20 @@ public class HeadsUpDisplay : MonoBehaviour {
 					}
 
 					// If there is an appropriate quarry, display the button
-					if (gameDirector.appropriateQuarry != null && !quarryBtn.IsActive()) {
+					if (gameDirector.lm.appropriateQuarry != null && !quarryBtn.IsActive()) {
 						enableQuarryButton(true);
 					} 
 
 					// If the player has selected someplace without an appropriate quarry, disable the button
-					else if (gameDirector.appropriateQuarry == null) {
+					else if (gameDirector.lm.appropriateQuarry == null) {
 						enableQuarryButton(false);
 					}
 
 					// Check to see if the text on the quarry button needs to change
 					else if (quarryBtn.IsActive() && quarryBtn.GetComponentInChildren<Text>().text != 
-						gameDirector.appropriateQuarry.GetType().Name) {
+						gameDirector.lm.appropriateQuarry.GetType().Name) {
 						Text quarryText = quarryBtn.GetComponentInChildren<Text>();
-						quarryText.text = gameDirector.appropriateQuarry.GetType().Name;
+						quarryText.text = gameDirector.lm.appropriateQuarry.GetType().Name;
 					}
 					workshopBtn.enabled = true;
 					workshopBtn.gameObject.SetActive(true);

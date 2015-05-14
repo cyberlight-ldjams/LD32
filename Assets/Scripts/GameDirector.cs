@@ -65,11 +65,17 @@ public class GameDirector : MonoBehaviour {
 	/** The heads up display */
 	public HeadsUpDisplay headsUpDisplay;
 
+	/** The Lot Manager */
+	public LotManager lm;
+
 	/** The sidebar */
 	public GameObject sidebar;
 
 	/** The selection plane */
-	private GameObject selection;
+	public GameObject selection { get; set; }
+	
+	/** True if a request for a workshop has been made */
+	public bool requestWorkshop { get; set; }
 
 	// // CAMERA VALUES // //
 
@@ -87,12 +93,6 @@ public class GameDirector : MonoBehaviour {
 
 	/** Timer for moving the camera */
 	private int timer;
-
-	/** Currently appropriate quarry to make, or null if there is none */
-	public Quarry appropriateQuarry { get; private set; }
-
-	/** Whether or not the player has clicked on the Workshop button */
-	public bool requestWorkshop { get; set; }
 
 	/**
 	 * Initializes the game
@@ -115,165 +115,6 @@ public class GameDirector : MonoBehaviour {
 		selection.SetActive(false);
 		List<Business> temp = new List<Business>();
 		temp.Add(playerBusiness);
-	}
-
-	/**
-	 * Installs a building on the given lot
-	 * 
-	 * @param building the building to install
-	 * @param business the business purchasing the building
-	 * @param lot the lot to install the building at
-	 */
-	public void InstallBuilding(Building building, Business business, Lot lot) {
-		// Only install the building if the business can afford it
-		if (sales.buyBuilding(business, lot, building)) {
-			// If the sale was successful
-		}
-		requestWorkshop = false;
-	}
-
-	/**
-	 * Install a building for the player at the currently selected site
-	 * 
-	 * @param building the building to install
-	 */
-	private void InstallBuilding(Building building) {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-
-		InstallBuilding(building, playerBusiness, lot);
-	}
-
-	/** 
-	 * Installs a quarry based on the type of resource the lot has
-	 * 
-	 * If the lot has no resource, no quarry is installed
-	 */
-	public void InstallQuarry() {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-		if (appropriateQuarry != null) {
-			InstallBuilding(Quarry.NewAppropriateQuarry(lot.Resource.Value), playerBusiness, lot);
-			appropriateQuarry = null;
-		}
-	}
-
-	/**
-	 * Sells the building at the selected lot
-	 */
-	public void SellBuildingAtSelectedLot() {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-
-		sales.sellBuilding(playerBusiness, lot.Building);
-
-		if (lot.Resource.HasValue) {
-			appropriateQuarry = Quarry.NewAppropriateQuarry(lot.Resource.Value);
-		} else {
-			appropriateQuarry = null;
-		}
-	}
-
-	/**
-	 * Leases the selected lot
-	 */
-	public void LeaseSelectedLot() {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-		if (!sales.leaseLot(playerBusiness, lot)) {
-			// Do something if the lot wasn't leased
-		} else {
-			// Set the selection color to the player's color
-			Renderer r = selection.GetComponent<Renderer>();
-			r.material.color = lot.Owner.businessColor;
-		}
-	}
-
-	/**
-	 * Sells the lease at a lot
-	 */
-	public void SellLeaseAtSelectedLot() {
-		Lot lot = Lot.FindLot(selectedObject, currentSite);
-
-		sales.sellLease(playerBusiness, lot);
-
-		// Set the selection color to the unowned color
-		Renderer r = selection.GetComponent<Renderer>();
-		r.material.color = lot.Owner.businessColor;
-	}
-
-	/**
-	 * Labor distribution is now being determined by the offered wage in the Site class
-	 * This method may not be needed...
-	 * 
-	 * Deplays an employee
-	 */
-	public void DeployEmployee() {
-		Building building = Lot.FindLot(selectedObject, currentSite).Building;
-		int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
-
-		if (building != null && employeesAvailable > 0) {
-			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable - 1);
-			//building.employees++;
-		}
-	}
-
-	/**
-	 * Labor distribution is now being determined by the offered wage in the Site class
-	 * This method may not be needed...
-	 *
-	 * Recalls an employee
-	 */
-	public void RecallEmployee() {
-		Building building = Lot.FindLot(selectedObject, currentSite).Building;
-
-		if (building != null && building.employees > 0) {
-			//building.employees--;
-			//int employeesAvailable = playerBusiness.myInventory.GetEmployeesAt(currentSite);
-			//playerBusiness.myInventory.SetEmployeesAt(currentSite, employeesAvailable + 1);
-		}
-	}
-
-	/** Counter for getting AI Business colors */
-	private static List<Color> usedColors = new List<Color>();
-
-	/**
-	 * Gets a color for AI businesses
-	 * 
-	 * Cycles through the 8 possible color colors
-	 * 
-	 * @return the color
-	 */
-	public static Color getBusinessColor() {
-		int tries = 0;
-		Color color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 
-			Random.Range(0.0f, 1.0f));
-		// If this color was already used, and we haven't tried 1000 times, keep getting a new one
-		while (colorUsed(color) && tries < 1000) {
-			color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 
-				Random.Range(0.0f, 1.0f));
-		}
-		return color;
-	}
-
-	/**
-	 * Lets the director know that a business has used a color
-	 */
-	public static void setBusinessColor(Color color) {
-		if (!usedColors.Contains(color)) {
-			usedColors.Add(color);
-		}
-	}
-
-	/**
-	 * Checks if this, or a similar color, has been used as a business color
-	 * 
-	 * @param color the color to check against
-	 * @return whether the color, or a similar one, was used already
-	 */
-	public static bool colorUsed(Color color) {
-		foreach (Color used in usedColors) {
-			if (Mathf.Abs(color.r - used.r) < .1f && Mathf.Abs(color.g - used.g) < .1f && Mathf.Abs(color.b - used.b) < .1f) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -453,6 +294,8 @@ public class GameDirector : MonoBehaviour {
 			world.isReady = false; // Make sure this if only runs once
 			homesite = world.homesite;
 
+			this.GetComponent<LotManager>().enabled = true;
+			lm = this.GetComponent <LotManager>();
 			this.GetComponent<EventManager>().enabled = true;
 			em = this.GetComponent<EventManager>();
 			headsUpDisplay = this.GetComponent<HeadsUpDisplay>();
@@ -507,9 +350,9 @@ public class GameDirector : MonoBehaviour {
 
 								// If the lot is an empty lot with resources, let the user make a quarry there
 								if (l.Resource.HasValue && l.Building == null) {
-									appropriateQuarry = Quarry.NewAppropriateQuarry(l.Resource.Value);
+									lm.appropriateQuarry = Quarry.NewAppropriateQuarry(l.Resource.Value);
 								} else {
-									appropriateQuarry = null;
+									lm.appropriateQuarry = null;
 								}
 							}
 							goto breakout;
@@ -547,71 +390,5 @@ public class GameDirector : MonoBehaviour {
 			moveCamera();
 			timer++;
 		}
-	}
-
-
-	// // WORKSHOP TYPES TO INSTALL - METHODS USED BY WORKSHOP BUTTONS // //
-
-	/**
-	 * Installs a pottery workshop on the selected lot
-	 */
-	public void InstallPotteryWorkshop() {
-		InstallBuilding(new PotteryWorkshop());
-	}
-
-	/**
-	 * Installs a weapon smith on the selected lot
-	 */
-	public void InstallWeaponSmith() {
-		InstallBuilding(new WeaponSmith());
-	}
-
-	/**
-	 * Installs a brick works on the selected lot
-	 */
-	public void InstallBrickworks() {
-		InstallBuilding(new Brickworks());
-	}
-
-	/**
-	 * Installs a furniture workshop on the selected lot
-	 */
-	public void InstallFurnitureWorkshop() {
-		InstallBuilding(new FurnitureWorkshop());
-	}
-
-	/**
-	 * Installs a computer chip factory on the selected lot
-	 */
-	public void InstallChipFactory() {
-		InstallBuilding(new ChipFactory());
-	}
-
-	/**
-	 * Installs a lamp maker on the selected lot
-	 */
-	public void InstallLampMaker() {
-		InstallBuilding(new LampMaker());
-	}
-
-	/**
-	 * Installs a steakhouse on the selected lot
-	 */
-	public void InstallSteakhouse() {
-		InstallBuilding(new Steakhouse());
-	}
-
-	/**
-	 * Installs a fish fry on the selected lot
-	 */
-	public void InstallFishFry() {
-		InstallBuilding(new FishFry());
-	}
-
-	/**
-	 * Installs a train track maker on the selected lot
-	 */
-	public void InstallTrackMaker() {
-		InstallBuilding(new TrackMaker());
 	}
 }

@@ -13,7 +13,7 @@ public class PlayerBusiness : Business {
 		Init();
 
 		// For now, set a random color and name
-		businessColor = GameDirector.getBusinessColor();
+		businessColor = AIBusiness.getBusinessColor();
 		name = RandomNameGenerator.generateBusinessName();
 	}
 }
