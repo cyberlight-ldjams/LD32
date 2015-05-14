@@ -28,7 +28,7 @@ public class GameTime : MonoBehaviour {
 	 * @param function the function to perform
 	 * @return int the ID of this function
 	 */
-	public int performActionIn(int quarters, Func<bool> function) {
+	public int performActionIn(int quarters, Func<object> function) {
 		int currentQuarter = (int)(Time.time / QUARTER) + 1;
 		float startTime = (currentQuarter * QUARTER) + 1;
 		float endTime = startTime + (quarters * QUARTER);
@@ -36,13 +36,13 @@ public class GameTime : MonoBehaviour {
 		return (list.Count - 1);
 	}
 
-	public int performActionRepeatedly(int quarters, Func<bool> function) {
+	public int performActionRepeatedly(int quarters, Func<object> function) {
 		int i = performActionIn(quarters, function);
 		list [i].repeat = true;
 		return i;
 	}
 
-	public bool getResult(int i) {
+	public object getResult(int i) {
 		return list [i].result;
 	}
 
@@ -108,10 +108,10 @@ public class GameTime : MonoBehaviour {
 		public float endTime;
 
 		/** The function performed by this timer */
-		public Func<bool> function;
+		public Func<object> function;
 
 		/** The result of this function, either true or false */
-		public bool result;
+		public object result;
 
 		/** How many quarters to wait until the function is triggered */
 		public int quarters;
@@ -128,7 +128,7 @@ public class GameTime : MonoBehaviour {
 		 * @param function the function to perform
 		 * @param repeat whether the timer repeats, false by default
 		 */
-		public GameTimer(float startTime, float endTime, int quarters, Func<bool> function, bool repeat = false) {
+		public GameTimer(float startTime, float endTime, int quarters, Func<object> function, bool repeat = false) {
 			this.startTime = startTime;
 			this.endTime = endTime;
 			this.function = function;
