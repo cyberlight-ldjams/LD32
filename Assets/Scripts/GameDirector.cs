@@ -261,24 +261,20 @@ public class GameDirector : MonoBehaviour {
 		// Pause/unpause the game when 'P' is pressed
 		if (Input.GetKeyDown(KeyCode.P)) {
 			PAUSED = !PAUSED;
+			// If the pause screen isn't active, turn it on
+			if (!pauseScreen.activeSelf && PAUSED) {
+				pauseScreen.SetActive(true);
+			} else if (!PAUSED) {
+				pauseScreen.SetActive(false);
+			}
 		}
 
 		// When the game is paused
 		if (PAUSED) {
-			// If the pause screen isn't active, turn it on
-			if (!pauseScreen.activeSelf) {
-				pauseScreen.SetActive(true);
-			}
-
 			// Increment the time correction, but don't do other things
 			timeCorrection += Time.deltaTime;
 			return;
-
-			// If the game is not paused, but the pause screen is active, turn it off
-		} else if (pauseScreen.activeSelf) {
-			pauseScreen.SetActive(false);
 		}
-
 
 		// // INITIALIZATION OF GAME ELEMENTS IF THEY ARE NOT ENABLED // //
 
