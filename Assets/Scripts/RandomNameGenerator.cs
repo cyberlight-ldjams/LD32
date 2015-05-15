@@ -13,7 +13,8 @@ public class RandomNameGenerator {
 		"Cornelius", "Clyde", "Malcolm", "Robert", "Allison", "Oscar", "Jerome", "Elsa", "Donald", "Devin", 
 		"Murphy", "Milton", "Ivan", "Leslie", "Edgar", "Winifred", "Leo", "Gabriel", "Kelvin", "Ted", 
 		"Theodore", "Mona", "Derek", "Rodney", "Vivian", "Vera", "Samantha", "Patricia", "Stanley", "Tanner",
-		"Madeline", "Rose", "Karen", "Sandra", "Michael", "Cecilia", "Jason", "Roland"
+		"Madeline", "Rose", "Karen", "Sandra", "Michael", "Cecilia", "Jason", "Roland", "Sokka", "Katara",
+        "Aang", "Zuko", "Iroh",
 	};
 	
 	/** Possible last names */
