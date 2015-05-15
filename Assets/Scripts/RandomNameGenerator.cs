@@ -35,7 +35,7 @@ public class RandomNameGenerator {
 	private static string[] placeTypes = {
 		"bluff", "burg", "view", "ville", "shire", " Abbey", "mount", "field", "keep", "town", " City", 
 		" Lake", "hedge", "ford", "ton", " Rapids", "bury", " Place", " Creek", "chester", "land", "ston", " Run",
-		"'s Mill", "'s Hill", "'s Landing"
+		"'s Mill", "'s Hill", "'s Landing", "stead",
 	};
 
 	/** Common words to use at the start of place names */
