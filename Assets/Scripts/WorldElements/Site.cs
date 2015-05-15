@@ -89,6 +89,8 @@ public class Site {
 				this.employees += b.employees;
 				b.employees = 0;
 				available.Add(b);
+			} else if (l.Building != null && l.Building.laborCap > 0) {
+				l.Building.employees = 0;
 			}
 		}
 		int attemptCount = 0;

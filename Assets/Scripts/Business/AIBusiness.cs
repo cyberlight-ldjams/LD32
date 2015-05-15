@@ -107,6 +107,10 @@ public class AIBusiness : Business {
 	public void performAction() {
 		// // MAKE DECISIONS BASED ON MONEY, RESOURCES, EMPLOYEES, AVAILABLE LOTS, ETC. // //
 
+		// So that all AIs don't rush to one lot, we randomize the order lots are searched in each time
+		List<Site> siteSearch = new List<Site>(GameDirector.THIS.world.sites);
+		randomizeList<Site>(siteSearch);
+
 
 		// // BUILDING BUYING AND LOT LEASING AI // //
 
@@ -182,15 +186,12 @@ public class AIBusiness : Business {
 			}
 
 			// Lease a lot if we don't have a building to build
-			// So that all AIs don't rush to one lot, we randomize the order lots are searched in
-			List<Site> lotSearch = new List<Site>(GameDirector.THIS.world.sites);
-			randomizeList<Site>(lotSearch);
 
 			List<Lot> potential = new List<Lot>(); // Lots that have potential to be purchased
 			List<Lot> resourceless = new List<Lot>(); // Lots without resources, only used if there are no potential lots
 
 			// Prioritize first lots with resources, and second lots on sites where we have other lots already
-			foreach (Site s in lotSearch) {
+			foreach (Site s in siteSearch) {
 				foreach (Lot l in s.Lots) {
 					// If the lot isn't unowned, move on
 					if (l.Owner != UNOWNED) {
@@ -235,10 +236,47 @@ public class AIBusiness : Business {
 
 		// // EMPLOYMENT LABOR CAP AND WAGE AI // //
 
-		// If the business is aggressive, they should max out the labor cap and offer the lowest possible wages
+		// If the business is aggressive, they should max out the labor cap, but offer lower wages while making big changes
 		// If the business is passive, they should offer competetive wages but have a low labor cap
 
+		// The percent of the available employees to use
+		float laborCapPercent = 0.6f;
 
+		// If the actual labor is this percent of the labor cap or less, increase the wage
+		float wageUpPercent = 0.6f;
+
+		// How much to change the wage when a wage change is made
+		int wageChange = 2;
+
+		// The base wage to start at
+		int baseWage = 5;
+
+		if (stance == AGGRESSIVE) {
+			laborCapPercent = 1.0f;
+			wageUpPercent = 0.2f;
+			wageChange = 3;
+			baseWage = 1;
+		} else if (stance == PASSIVE) {
+			laborCapPercent = 0.3f;
+			wageUpPercent = 1.0f;
+			wageChange = 1;
+			baseWage = 10;
+		} // NEUTRAL stance uses the default 60% for each
+
+		// Set all the wages and labor caps
+		foreach (Lot l in myLots) {
+			if (l.Building != null) {
+				if (l.Building.laborCap != (int)(l.Site.employees * laborCapPercent)) {
+					l.Building.laborCap = (int)(l.Site.employees * laborCapPercent);
+				}
+
+				if (l.Building.employeeWage < baseWage) {
+					l.Building.employeeWage = baseWage;
+				} else if (l.Building.employees < (l.Building.laborCap * wageUpPercent)) {
+					l.Building.employeeWage += wageChange;
+				}
+			}
+		}
 
 		// // RESOURCE SELLING AND TRANSPORTING AI // //
 
