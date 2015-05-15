@@ -36,6 +36,27 @@ public class AIBusiness : Business {
 	/** Counter for getting AI Business colors */
 	private static List<Color> usedColors;
 
+
+	// // DECISION MAKING VALUES // //
+
+	/** The minimum money needed to purchase a lot or building */
+	private double minMoney = 5000.0;
+
+	/** The percent of the available employees to use */
+	private float laborCapPercent = 0.6f;
+	
+	/** If the actual labor is this percent of the labor cap or less, increase the wage */
+	private float wageUpPercent = 0.6f;
+	
+	/** How much to change the wage when a wage change is made */
+	private int wageChange = 2;
+	
+	/** The base wage to start at */
+	private int baseWage = 5;
+
+	/** The amount of inventory when the AI immediately sells */
+	private int sellNow = 50;
+
 	/**
 	 * Creates a Business AI given a name, stance, and color
 	 */
@@ -86,6 +107,34 @@ public class AIBusiness : Business {
 	}
 
 	/**
+	 * Constructs the "personality" of the AI business
+	 */
+	private void constructPersonality() {
+		// If the business is aggressive, they should max out the labor cap, but offer lower wages while making big changes
+		// If the business is passive, they should offer competetive wages but have a low labor cap
+
+		// This determines the minimum amount of money the AI feels it needs in order to decide it should
+		// build a building or lease a lot
+
+		double stanceChange = 1500.0;
+		if (stance == AGGRESSIVE) {
+			laborCapPercent = 1.0f;
+			wageUpPercent = 0.2f;
+			wageChange = 3;
+			baseWage = 1;
+			stanceChange *= 0;
+		} else if (stance == PASSIVE) {
+			laborCapPercent = 0.3f;
+			wageUpPercent = 1.0f;
+			wageChange = 1;
+			baseWage = 10;
+			stanceChange *= 2;
+		} // NEUTRAL stance uses the defaults
+		
+		minMoney = minMoney + stanceChange;
+	}
+
+	/**
 	 * Randomizes the contents of a list
 	 * 
 	 * @param list the list to randomize
@@ -113,19 +162,6 @@ public class AIBusiness : Business {
 
 
 		// // BUILDING BUYING AND LOT LEASING AI // //
-
-		// This determines the minimum amount of money the AI feels it needs in order to decide it should
-		// build a building or lease a lot
-		double minMoney = 5000.0;
-		double stanceChange = 1500.0;
-
-		if (stance == AGGRESSIVE) {
-			stanceChange *= 0;
-		} else if (stance == PASSIVE) {
-			stanceChange *= 2;
-		} // Else, NEUTRAL stance, no change, use the default value
-
-		minMoney = minMoney + stanceChange;
 
 		// If money is plentiful, place a building on an existing lot, or lease another lot
 		if (myInventory.getBaseCurrency() >= minMoney) {
@@ -236,32 +272,6 @@ public class AIBusiness : Business {
 
 		// // EMPLOYMENT LABOR CAP AND WAGE AI // //
 
-		// If the business is aggressive, they should max out the labor cap, but offer lower wages while making big changes
-		// If the business is passive, they should offer competetive wages but have a low labor cap
-
-		// The percent of the available employees to use
-		float laborCapPercent = 0.6f;
-
-		// If the actual labor is this percent of the labor cap or less, increase the wage
-		float wageUpPercent = 0.6f;
-
-		// How much to change the wage when a wage change is made
-		int wageChange = 2;
-
-		// The base wage to start at
-		int baseWage = 5;
-
-		if (stance == AGGRESSIVE) {
-			laborCapPercent = 1.0f;
-			wageUpPercent = 0.2f;
-			wageChange = 3;
-			baseWage = 1;
-		} else if (stance == PASSIVE) {
-			laborCapPercent = 0.3f;
-			wageUpPercent = 1.0f;
-			wageChange = 1;
-			baseWage = 10;
-		} // NEUTRAL stance uses the default 60% for each
 
 		// Set all the wages and labor caps
 		foreach (Lot l in myLots) {
@@ -283,7 +293,12 @@ public class AIBusiness : Business {
 		// If the business is aggressive, they should sell as soon as possible, probably transporting nothing
 		// If the business is passive, they should sell when they need money and be willing to transport resources to improve them
 
+		foreach (var v in myInventory.items) {
+			if (v.Value > sellNow) {
+				GameDirector.THIS.sales.sell(this, v.Key.location, v.Key.itemType, sellNow);
+			}
 
+		}
 
 		// // RUNNING LOW ON MONEY - PANIC MODE // //
 

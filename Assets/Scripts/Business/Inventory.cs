@@ -12,7 +12,7 @@ public class Inventory {
 	private double genericCurrency;
 
 	/** contains all valid resource items */
-	private Dictionary<ItemKey, double> items; 
+	public Dictionary<ItemKey, double> items { get; private set; }
 
     /** The maximum amount of any resource that can be stored at a lot */
     private double maxResource = 800.0;
