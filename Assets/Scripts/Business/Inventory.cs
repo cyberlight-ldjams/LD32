@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 /**
  * The inventory of a business
@@ -12,6 +13,9 @@ public class Inventory {
 
 	/** contains all valid resource items */
 	private Dictionary<ItemKey, double> items; 
+
+    /** The maximum amount of any resource that can be stored at a lot */
+    private double maxResource = 800.0;
 
 	/** Create a new inventory (only needed by business class) */
 	public Inventory(double genericCurrency) {
@@ -61,7 +65,7 @@ public class Inventory {
 
 	public void setAmountOfAt(Resource resource, Site site, double amount) {
 		ItemKey tuple = new ItemKey { itemType = resource, location = site };
-		items [tuple] = amount;
+		items [tuple] = Math.Min(amount, maxResource);
 	}
 
 	/**
