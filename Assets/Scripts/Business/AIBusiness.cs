@@ -40,10 +40,16 @@ public class AIBusiness : Business {
 	// // DECISION MAKING VALUES // //
 
 	/** The minimum money needed to purchase a lot or building */
-	private double minMoney = 5000.0;
+	private double minBuyMoney = 5000.0;
+
+	/** The amount the minimum changes based on the stance - down for aggressive, up for passive */
+	private double stanceChange = 1500.0;
 
 	/** The percent of the available employees to use */
 	private float laborCapPercent = 0.6f;
+
+	/** The original base labor cap percentage */
+	private float oriLaborCapPercent = 0.6f;
 	
 	/** If the actual labor is this percent of the labor cap or less, increase the wage */
 	private float wageUpPercent = 0.6f;
@@ -54,8 +60,14 @@ public class AIBusiness : Business {
 	/** The base wage to start at */
 	private int baseWage = 5;
 
+	/** The original base wage for this business, doesn't change */
+	private int oriBaseWage = 5;
+
 	/** The amount of inventory when the AI immediately sells */
 	private int sellNow = 50;
+
+	/** The amount of money that, when a business reaches this amount, it goes into "panic mode" */
+	private double panicMoney = 500.0;
 
 	/**
 	 * Creates a Business AI given a name, stance, and color
@@ -66,6 +78,7 @@ public class AIBusiness : Business {
 		this.businessColor = color;
 		setBusinessColor(color);
 		Init();
+		constructPersonality();
 	}
 
 	/**
@@ -86,6 +99,7 @@ public class AIBusiness : Business {
 		
 		businessColor = getBusinessColor();
 		Init();
+		constructPersonality();
 	}
 
 	/**
@@ -116,22 +130,27 @@ public class AIBusiness : Business {
 		// This determines the minimum amount of money the AI feels it needs in order to decide it should
 		// build a building or lease a lot
 
-		double stanceChange = 1500.0;
 		if (stance == AGGRESSIVE) {
 			laborCapPercent = 1.0f;
 			wageUpPercent = 0.2f;
 			wageChange = 3;
 			baseWage = 1;
 			stanceChange *= 0;
+			sellNow = 0;
+			panicMoney /= 2;
 		} else if (stance == PASSIVE) {
 			laborCapPercent = 0.3f;
 			wageUpPercent = 1.0f;
 			wageChange = 1;
 			baseWage = 10;
 			stanceChange *= 2;
+			sellNow = 100;
+			panicMoney *= 2;
 		} // NEUTRAL stance uses the defaults
 		
-		minMoney = minMoney + stanceChange;
+		minBuyMoney = minBuyMoney + stanceChange;
+
+		oriBaseWage = baseWage;
 	}
 
 	/**
@@ -151,7 +170,7 @@ public class AIBusiness : Business {
 	/**
 	 * Causes the business to perform an action
 	 * 
-	 * As a general rule, only one action should be performed per call - so return after doing something
+	 * As a general rule, only one major action should be performed per call - so return after doing something important
 	 */
 	public void performAction() {
 		// // MAKE DECISIONS BASED ON MONEY, RESOURCES, EMPLOYEES, AVAILABLE LOTS, ETC. // //
@@ -164,7 +183,7 @@ public class AIBusiness : Business {
 		// // BUILDING BUYING AND LOT LEASING AI // //
 
 		// If money is plentiful, place a building on an existing lot, or lease another lot
-		if (myInventory.getBaseCurrency() >= minMoney) {
+		if (myInventory.getBaseCurrency() >= minBuyMoney) {
 			// See if there are any owned lots without buildings, if there are, buy one
 			foreach (Lot buildOn in myLots) {
 				// If the lot already has a building, move on
@@ -298,12 +317,47 @@ public class AIBusiness : Business {
 				GameDirector.THIS.sales.sell(this, v.Key.location, v.Key.itemType, sellNow);
 			}
 
+			// TODO: Deal with item transportation
 		}
 
 		// // RUNNING LOW ON MONEY - PANIC MODE // //
 
 		// If the buisness is aggressive, they should be quick to cut wages/employees, sell buildings/leases
 		// If the business is passive, they should hold off on cutting wages/employees, selling buildings/leases
+
+		if (myInventory.getBaseCurrency() < panicMoney) {
+			// First, lower the base wage to 1 and cut the labor cap percent in half
+			baseWage = 1;
+			laborCapPercent = (oriLaborCapPercent / 2.0f);
+
+			// Cut all wages by the wage change value
+			foreach (Lot l in myLots) {
+				if (l.Building != null && l.Building.employeeWage != baseWage) {
+					l.Building.employeeWage -= wageChange;
+					if (l.Building.employeeWage < baseWage) {
+						l.Building.employeeWage = baseWage;
+					}
+				}
+			}
+
+			// If we are getting really low on money, start selling off buildings and lots...
+			if (myInventory.getBaseCurrency() < (panicMoney / 3.0)) {
+				foreach (Lot l in myLots) {
+					if (l.Building != null) {
+						GameDirector.THIS.sales.sellBuilding(this, l.Building);
+						GameDirector.THIS.sales.sellLease(this, l);
+						return;
+					} else {
+						GameDirector.THIS.sales.sellLease(this, l);
+						return;
+					}
+				}
+			}
+		} else {
+			// Bring back all the original base values
+			baseWage = oriBaseWage;
+			laborCapPercent = oriLaborCapPercent;
+		}
 	}
 
 
